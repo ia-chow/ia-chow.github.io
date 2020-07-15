@@ -99,14 +99,23 @@ for i in range(0, att_dice + 1):  # att_dice + 1 to include endpoint
 
 # print statements
 
+# summary of debate
+
 print(f'{attacker} ({att_val}) debates {defender} ({def_val}) in {language}: {att_dice} v {def_dice} dice\n')
+
+# odds of win, tie, loss
 
 print(f'{attacker} wins {round(att_win * 100, 2)}% of the time')
 print(f'Tie {round(tie * 100, 2)}% of the time')
 print(f'{defender} wins {round(def_win * 100, 2)}% of the time')
+
+# avg spaces flipped
+
 print(f'Average number of spaces flipped by debate winner: {round(abs(att_dice - def_dice) * hit_chance, 2)}')
 
 # TODO: implement debater bonuses for Aleander/Campeggio and any others
+
+# Disgraced/burned debaters
 
 if att_team == 'Protestant':
     print(f'{attacker} has a {round(def_burn * 100, 2)}% chance to disgrace {defender}')
