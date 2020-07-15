@@ -36,6 +36,10 @@ while True:
         break
 
 commit = input('Defender committed? (y/n)\n')  # TODO: want to add some error handling or try/catch here
+if att_team == 'Papal':
+    thomas_more = input('Debate called using Thomas More? (y/n)\n')  # TODO: find out all the debate dice cards
+else:
+    thomas_more = 0
 
 # get debate language:
 
@@ -45,6 +49,7 @@ if att_team == 'Protestant':
 elif def_team == 'Protestant':
     language = deb_val[deb_val['Debater'] == defender].loc[deb_val[deb_val['Debater'] == defender].index[0],
                                                            'Language']
+
 # get attacker, defender values
 
 def_val = int(deb_val[deb_val['Debater'] == defender].loc[deb_val[deb_val['Debater'] == defender].index[0], 'Value'])
@@ -55,6 +60,11 @@ att_dice = att_val + attacker_base
 
 if attacker == 'Eck':
     att_dice += 1
+if thomas_more == 'y':
+    if language == 'English':
+        att_dice += 3
+    else:
+        att_dice += 1
 
 # calculate defender dice:
 
@@ -85,16 +95,16 @@ for i in range(0, att_dice + 1):  # att_dice + 1 to include endpoint
     # hits to be burnt/disgraced (attacker must score more hits than defensive debater's rating)
 
     def_burn += att_hits_chance * def_hits_burn
-
+    # TODO: add chances of defender burning/disgracing attacker
 
 # print statements
 
-print(f'{attacker} debates {defender} in {language}:\n')
+print(f'{attacker} ({att_val}) debates {defender} ({def_val}) in {language}: {att_dice} v {def_dice} dice\n')
 
 print(f'{attacker} wins {round(att_win * 100, 2)}% of the time')
 print(f'Tie {round(tie * 100, 2)}% of the time')
 print(f'{defender} wins {round(def_win * 100, 2)}% of the time')
-print(f'Average number of spaces flipped by debate winner: {round((att_dice - def_dice) * hit_chance, 2)}')
+print(f'Average number of spaces flipped by debate winner: {round(abs(att_dice - def_dice) * hit_chance, 2)}')
 
 # TODO: implement debater bonuses for Aleander/Campeggio and any others
 
@@ -102,5 +112,3 @@ if att_team == 'Protestant':
     print(f'{attacker} has a {round(def_burn * 100, 2)}% chance to disgrace {defender}')
 elif def_team == 'Protestant':
     print(f'{attacker} has {round(def_burn * 100, 2)}% chance to burn {defender}')
-
-# TODO: Separate Papal and Protestant debaters
