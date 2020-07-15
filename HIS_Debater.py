@@ -13,7 +13,7 @@ deb_val.reset_index(drop=True, inplace=True)  # have to dropnas and reset index 
 hit_chance = 1/3  # hit chance of each roll; vanilla HIS dice are 1d6 and hit on 5 or 6
 attacker_base = 3  # extra dice for attacker; base 3 in vanilla
 commit_base = 1
-uncommit_base = 2  # extra dice for committed and uncommitted debaters, respectively
+uncommit_base = 2  # extra dice for committed and uncommitted debaters, respectively; base 1 and 2 in vanilla
 
 # take input
 
