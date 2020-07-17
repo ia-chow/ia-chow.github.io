@@ -70,7 +70,7 @@ if thomas_more == 'y':
 
 if commit == 'y':
     def_dice = def_val + commit_base
-elif commit == 'n':
+else:
     def_dice = def_val + uncommit_base
 
 # calculating odds of winning for each side:
