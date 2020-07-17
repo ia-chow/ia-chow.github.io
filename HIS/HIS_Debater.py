@@ -80,6 +80,7 @@ tie = 0
 def_win = 0
 
 def_burn = 0
+def_disgrace = 0
 
 for i in range(0, att_dice + 1):  # att_dice + 1 to include endpoint
     att_hits_chance = binom.pmf(i, att_dice, hit_chance)  # find odds of attacker getting exactly this many hits
@@ -93,8 +94,11 @@ for i in range(0, att_dice + 1):  # att_dice + 1 to include endpoint
 
     def_hits_burn = binom.cdf(i - (def_val + 1), def_dice, hit_chance)  # find odds of defender getting few enough
     # hits to be burnt/disgraced (attacker must score more hits than defensive debater's rating)
+    def_hits_disgrace = 1 - binom.cdf(i + att_val, def_dice, hit_chance)  # find odds of defender getting enough hits to
+    # burn/disgrace the attacker (defender must score more hits than offensive debater's rating)
 
     def_burn += att_hits_chance * def_hits_burn
+    def_disgrace += att_hits_chance * def_hits_disgrace
     # TODO: add chances of defender burning/disgracing attacker
 
 # print statements
@@ -111,7 +115,7 @@ print(f'{defender} wins {round(def_win * 100, 2)}% of the time')
 
 # avg spaces flipped
 
-print(f'Average number of spaces flipped by debate winner: {round(abs(att_dice - def_dice) * hit_chance, 2)}')
+print(f'Average number of spaces flipped by debate winner: {round(abs(att_dice - def_dice) * hit_chance, 2)}\n')
 
 # TODO: implement debater bonuses for Aleander/Campeggio and any others
 
@@ -119,5 +123,7 @@ print(f'Average number of spaces flipped by debate winner: {round(abs(att_dice -
 
 if att_team == 'Protestant':
     print(f'{attacker} has a {round(def_burn * 100, 2)}% chance to disgrace {defender}')
+    print(f'{defender} has a {round(def_disgrace * 100, 2)}% chance to burn {attacker}')
 elif def_team == 'Protestant':
     print(f'{attacker} has {round(def_burn * 100, 2)}% chance to burn {defender}')
+    print(f'{defender} has {round(def_disgrace * 100, 2)}% chance to disgrace {attacker}')
