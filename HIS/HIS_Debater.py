@@ -35,7 +35,7 @@ while True:
     else:
         break
 
-commit = input('Defender committed? (y/n)\n')  # TODO: want to add some error handling or try/catch here
+commit = input('Defender committed? (u/c)\n')  # TODO: want to add some error handling or try/catch here
 if att_team == 'Papal':
     thomas_more = input('Debate called using Thomas More? (y/n)\n')  # TODO: find out all the debate dice cards
 else:
@@ -68,9 +68,9 @@ if thomas_more == 'y':
 
 # calculate defender dice:
 
-if commit == 'y':
+if commit == 'c':
     def_dice = def_val + commit_base
-else:
+elif commit == 'u':
     def_dice = def_val + uncommit_base
 
 # calculating odds of winning for each side:
