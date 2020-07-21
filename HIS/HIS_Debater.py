@@ -43,7 +43,6 @@ if att_team == 'Protestant':
 elif def_team == 'Protestant':
     language = deb_val[deb_val['Debater'] == defender].loc[deb_val[deb_val['Debater'] == defender].index[0],
                                                            'Language']
-
 # get attacker, defender values
 
 att_val = int(deb_val[deb_val['Debater'] == attacker].loc[deb_val[deb_val['Debater'] == attacker].index[0], 'Value'])
