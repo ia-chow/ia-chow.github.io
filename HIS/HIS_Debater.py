@@ -26,8 +26,8 @@ while True:
         print(f'You have chosen two {att_team} debaters. Choose one Papal and one Protestant debater.')
     else:
         break
-
-commit = input('Defender committed? (y/n)\n')  # TODO: want to add some error handling or try/catch here
+        
+commit = input('Defender committed? (u/c)\n')  # TODO: want to add some error handling or try/catch here
 
 if att_team == 'Papal':
     thomas_more = input('Debate called using Thomas More? (y/n)\n')  # TODO: find out all the debate dice cards
