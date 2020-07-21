@@ -5,11 +5,7 @@ from HIS_Debater_Logic import get_dice, find_odds
 
 deb_val = pd.read_csv('debater_values.csv')
 deb_val.dropna(inplace=True)
-deb_val.reset_index(drop=True, inplace=True)  # have to dropnas and reset index or else pandas breaks
-
-# CONSTANTS:
-
-hit_chance = 1/3  # hit chance of each roll; vanilla HIS dice are 1d6 and hit on 5 or 6
+deb_val.reset_index(drop=True, inplace=True)  # have to dropnas and reset index or else pandas breaks during indexing
 
 # take input
 
