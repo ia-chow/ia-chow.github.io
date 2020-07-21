@@ -1,5 +1,4 @@
 import pandas as pd
-from scipy.stats import binom
 from HIS_Debater_Logic import get_dice, find_odds
 
 # import debater_values csv from the folder
@@ -54,8 +53,6 @@ def_val = int(deb_val[deb_val['Debater'] == defender].loc[deb_val[deb_val['Debat
 
 att_dice = get_dice(att_val, att_team, language, attacker, 'a', thomas_more, augsburg)
 def_dice = get_dice(def_val, def_team, language, defender, commit, thomas_more, augsburg)
-
-print(att_dice, def_dice)
 
 # calculate odds
 
