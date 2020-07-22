@@ -1,5 +1,4 @@
 import pandas as pd
-from scipy.stats import binom
 from HIS_Debater_Logic import get_dice, find_odds
 
 # import debater_values csv from the folder
@@ -11,6 +10,8 @@ deb_val.reset_index(drop=True, inplace=True)  # have to dropnas and reset index 
 # CONSTANTS:
 
 hit_chance = 1/3  # hit chance of each roll; vanilla HIS dice are 1d6 and hit on 5 or 6
+
+# TODO: Remove this once the avg spaces flipped function has been created and works, to streamline this file a bit
 
 # take input
 
@@ -29,6 +30,11 @@ while True:
         
 commit = input('Defender committed? (u/c)\n')  # TODO: want to add some error handling or try/catch here
 
+if commit == 'u':  # set commit status as either committed or uncommited based on stuff
+    status = 'uncommitted'
+elif commit == 'c':
+    status = 'committed'
+
 if att_team == 'Papal':
     thomas_more = input('Debate called using Thomas More? (y/n)\n')  # TODO: find out all the debate dice cards
 else:
@@ -44,7 +50,6 @@ if att_team == 'Protestant':
 elif def_team == 'Protestant':
     language = deb_val[deb_val['Debater'] == defender].loc[deb_val[deb_val['Debater'] == defender].index[0],
                                                            'Language']
-
 # get attacker, defender values
 
 att_val = int(deb_val[deb_val['Debater'] == attacker].loc[deb_val[deb_val['Debater'] == attacker].index[0], 'Value'])
@@ -55,15 +60,13 @@ def_val = int(deb_val[deb_val['Debater'] == defender].loc[deb_val[deb_val['Debat
 att_dice = get_dice(att_val, att_team, language, attacker, 'a', thomas_more, augsburg)
 def_dice = get_dice(def_val, def_team, language, defender, commit, thomas_more, augsburg)
 
-print(att_dice, def_dice)
-
 # calculate odds
 
 att_win, tie, def_win, att_burn, def_burn = find_odds(att_dice, def_dice, att_val, def_val)
 
 # summary of debate
 
-print(f'{attacker} ({att_val}) debates {defender} ({def_val}) in {language}: {att_dice} v {def_dice} dice\n')
+print(f'{attacker} ({att_val}) debates {status} {defender} ({def_val}) in {language}: {att_dice} v {def_dice} dice\n')
 
 # odds of win, tie, loss
 
@@ -75,7 +78,8 @@ print(f'{defender} wins {round(def_win * 100, 2)}% of the time')
 
 print(f'Average number of spaces flipped by debate winner: {round(abs(att_dice - def_dice) * hit_chance, 2)}\n')
 
-# TODO: implement debater bonuses for Aleander/Campeggio and any others
+# TODO: implement debater bonuses for Aleander/Campeggio and any others, add a function to compute average number of
+#  spaces flipped in a more sophisticated way
 
 # Disgraced/burned debaters
 
