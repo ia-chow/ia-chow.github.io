@@ -5,6 +5,8 @@ import numpy as np
 
 DICE_FACES = 6  # number of faces on die
 
+# todo: add handling for bible translations
+
 
 def reform_odds(atk_dice, def_dice, win_ties, bible_trans, dice_faces=DICE_FACES):
     """
