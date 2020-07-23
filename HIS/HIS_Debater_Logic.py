@@ -6,17 +6,19 @@ attacker_base = 3  # extra dice for attacker; base 3 in vanilla
 commit_base = 1
 uncommit_base = 2  # extra dice for committed and uncommitted debaters, respectively; base 1 and 2 in vanilla
 
-HIT_CHANCE = 1/3 # vanilla HIS dice hit on 5 or 6
+HIT_CHANCE = 1/3  # vanilla HIS dice hit on 5 or 6
 
 # debater/condition bonuses:
 
 eck_bonus = 1  # eck bonus dice on offense
+gardiner_bonus = 1  # gardiner bonus dice on offense (in English)
 tmore_bonus_eng = 3  # bonus dice for thomas more on offense
 tmore_bonus_other = 1
 augsburg_pen = 1  # malus dice for effects of Augsburg Confession
+inq_bonus = 2  # bonus dice for papal inquisition
 
 
-def get_dice(value, team, language, name, status, tmore, augsburg):
+def get_dice(value, team, language, name, status, tmore, inq, augsburg):
     """
     Get dice for a debater based on value and a bunch of params
 
@@ -25,7 +27,8 @@ def get_dice(value, team, language, name, status, tmore, augsburg):
     :param str language: Language of debate
     :param str name: name of the debater
     :param str status: Debater status (attacker, committed defender, uncommitted defender) (a/c/u)
-    :param str tmore: Thomas More active? (y/n)
+    :param str tmore: Debate called with Thomas More? (y/n)
+    :param str inq: Debate called with Papal Inquisition? (y/n)
     :param str augsburg: Augsburg Confession active? (y/n)
     :return: int num_dice: number of dice debater gets
     """
@@ -33,24 +36,32 @@ def get_dice(value, team, language, name, status, tmore, augsburg):
     num_dice = value  # base number of dice
 
     if status == 'a':  # check for debater status: attacking, committed defender, or uncommitted defender
-        num_dice += attacker_base
+        num_dice += attacker_base  # base
         if name == 'Eck':
-            num_dice += eck_bonus
-        if tmore == 'y' and team == 'Papal':
-            if language == 'English':
-                num_dice += tmore_bonus_eng
-            else:
-                num_dice += tmore_bonus_other
+            num_dice += eck_bonus  # eck check
+        if name == 'Gardiner' and language == 'English':
+            num_dice += gardiner_bonus  # gardiner check
 
     elif status == 'c':
-        num_dice += commit_base
+        num_dice += commit_base  # committed check
     elif status == 'u':
-        num_dice += uncommit_base
+        num_dice += uncommit_base  # uncommitted check
 
-    if team == 'Papal' and augsburg == 'y':
-        num_dice -= augsburg_pen
+    if team == 'Papal':
+        if tmore == 'y':  # thomas more check
+            if language == 'English':
+                num_dice += tmore_bonus_eng  # english bonus dice
+            else:
+                num_dice += tmore_bonus_other  # non english bonus dice
+        if inq == 'y':
+            num_dice += inq_bonus  # inquisition check
+        if augsburg == 'y':
+            num_dice -= augsburg_pen  # augsburg confession check
+
+# note that tmore and inq are set to n if papacy is not attacking
 
     return num_dice
+
 
 def find_odds(att_dice, def_dice, att_val, def_val, hit_chance=HIT_CHANCE):
     """
@@ -90,3 +101,4 @@ def find_odds(att_dice, def_dice, att_val, def_val, hit_chance=HIT_CHANCE):
         def_burn += att_hits_chance * def_hits_burn  # finding chace defender burns attacker
 
     return att_win, tie, def_win, att_burn, def_burn
+
