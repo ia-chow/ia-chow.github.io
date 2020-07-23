@@ -18,7 +18,8 @@ hit_chance = 1/3  # hit chance of each roll; vanilla HIS dice are 1d6 and hit on
 while True:
     attacker = input('Enter attacking debater:\n')
     att_team = deb_val[deb_val['Debater'] == attacker].loc[
-        deb_val[deb_val['Debater'] == attacker].index[0], 'Affiliation']
+        deb_val[deb_val['Debater'] == attacker].index[0], 'Affiliation']  # TODO: add similar while loops here so
+    # no keyerrors
 
     defender = input('Enter defending debater:\n')
     def_team = deb_val[deb_val['Debater'] == defender].loc[deb_val[deb_val['Debater'] == defender].index[0],
