@@ -38,7 +38,7 @@ prob = reform_odds(atk_dice, def_dice, win_ties, bible)
 
 # print statements:
 
-print(f'{atk_dice} vs. {def_dice}: {adv} wins ties, Bible translation bonus {trans}\n')  # summary
+print(f'{atk_dice} vs. {def_dice} dice: {adv} wins ties, Bible translation bonus {trans}\n')  # summary
 
 print(f'Attacker has {round(prob[0] * 100, 2)}% chance of winning')  # attacker's chance of winning
 print(f'Defender has {round(prob[1] * 100, 2)}% chance of winning')  # defender's chance of winning

@@ -1,6 +1,3 @@
-import pandas as pd
-import numpy as np
-
 # CONSTANTS:
 
 DICE_FACES = 6  # number of faces on die
