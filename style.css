@@ -1,0 +1,28 @@
+body {
+  margin-left: 30px;
+  margin-right: 30px;
+}
+input {
+  color: #e8e8e8;
+  background-color: #0a0a0a;
+}
+.button {
+  background-color:#2e9d2e;
+  border-radius:12px;
+  border:0;
+  cursor:pointer;
+  color:#ffffff;
+  font-size: 17px;
+  padding:6px 14px;
+  text-decoration:none;
+}
+.button:hover {
+  background-color:#257225;
+}
+.processing { background-color: #c88d00 }
+.processing:hover { background-color: #c88d00 }
+.stats { display: inline-block; margin-right: 20px }
+.error { color:#e02020 }
+.stats input[type="text"] { width: 50px }
+.stats input[type="number"] { width: 50px }
+#num_trials { width: 70px }
