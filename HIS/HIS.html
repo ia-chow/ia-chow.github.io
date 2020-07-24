@@ -7,14 +7,9 @@
     <script src="HIS_Dice.js"></script>
 </head>
 <body>
-    Display this if link from index.html works!<br>
+    Display this if link from index.html works!
+    <br>
     HIS Treatise Odds
-    <br> <br>
-    <p>Attacking side:</p>
-    <input id="papal" type="radio" name="team" value="papal">
-    <label for="papal">Papal</label>
-    <input id="protestant" type="radio" name="team" value="protestant">
-    <label for="protestant">Protestant</label>
     <br><br>
     <label for="atk_dice">Attacker Dice:</label>
     <input id="atk_dice" type="number" value="3" step="1" min="1" max="9999" name="atk_dice">
@@ -22,9 +17,20 @@
     <label for="def_dice">Defender Dice:</label>
     <input id="def_dice" type="number" value="3" step="1" min="1" max="9999" name="def_dice">
     <br><br>
-    <input id=""
+    <label for="tie_winner">Ties won by:</label>
+    <select id="tie_winner" name="tie_winner">
+        <option value="attacker">Attacker</option>
+        <option value="defender">Defender</option>
+    </select>
 
+    IGNORE THIS:
 
+    <br> <br>
+    <p>Attacking side:</p>
+    <input id="papal" type="radio" name="team" value="papal">
+    <label for="papal">Papal</label>
+    <input id="protestant" type="radio" name="team" value="protestant">
+    <label for="protestant">Protestant</label>
 
 
 </body>
