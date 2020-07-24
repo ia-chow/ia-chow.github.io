@@ -17,3 +17,4 @@ function dynamicdropdown(listindex)
         }
         return true;
     }
+    // figure out how this works as well and implement it so it works properly (the dynamic dropdown)
