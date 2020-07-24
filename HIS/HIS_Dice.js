@@ -2,5 +2,9 @@ function get_debater_dice(value, team, language, name, status, tmore, inq, augsb
     num_dice = value
 }
 function get_reform_odds(atk_dice, def_dice, win_ties, bible_trans){
-    var deb_data = JSON.parse(debater_values.json)
+    const deb_data = require("./debater_values.json")
+    return deb_data
 }
+
+console.log("Hello, World!");
+console.log(get_reform_odds(3, 3, 3, 3))
