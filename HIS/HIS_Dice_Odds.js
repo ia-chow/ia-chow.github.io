@@ -1,4 +1,5 @@
 // CONSTANTS:
+
 const DICE_FACES = 6 // number of faces on a diev (vanilla HIS uses 6 dice)
 
 function get_debater_dice(value, team, language, name, status, tmore, inq, augsburg){
