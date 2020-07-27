@@ -9,22 +9,22 @@
     <script src="HIS_Dice.js"></script>
 </head>
 <body>
-    Display this if link from index.html works!
+<h1><a href="https://www.gmtgames.com/p-508-here-i-stand-500th-anniversary-reprint-edition.aspx">Here I Stand </a>Reformation/Counter-Reformation and Debate Odds Calculator</h1>
     <br>
-    <br>
-    HIS Treatise Odds
+    <label for="attacker_dice">Attacker Dice:</label>
+    <input id="attacker_dice" type="number" value="3" step="1" min="1" max="9999" name="atk_dice">
     <br><br>
-    <label for="atk_dice">Attacker Dice:</label>
-    <input id="atk_dice" type="number" value="3" step="1" min="1" max="9999" name="atk_dice">
-    <br><br>
-    <label for="def_dice">Defender Dice:</label>
-    <input id="def_dice" type="number" value="3" step="1" min="1" max="9999" name="def_dice">
+    <label for="defender_dice">Defender Dice:</label>
+    <input id="defender_dice" type="number" value="3" step="1" min="1" max="9999" name="def_dice">
     <br><br>
     <label for="tie_winner">Ties won by:</label>
     <select id="tie_winner" name="tie_winner">
         <option value="attacker">Attacker</option>
         <option value="defender">Defender</option>
-    </select>
+    </select> <br><br>
+    <input id="ref_button" class="button" type="button" value="Calculate Reform Odds" onclick="get_reform_odds()" onkeyup="enforceMinMax(this)">
+    <section id="ref_results_atk"></section>
+    <section id="ref_results_def"></section>
 
     <p>IGNORE THIS:</p>
 

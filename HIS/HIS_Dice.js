@@ -12,13 +12,31 @@ function get_debater_dice(value, team, language, name, status, tmore, inq, augsb
     num_dice = value
 
 }
-function get_reform_odds(atk_dice, def_dice, win_ties, bible_trans, dice_faces=DICE_FACES){
+function get_reform_odds(dice_faces=DICE_FACES){
     /*
+    Gets reform odds from the page
+
     param int atk_dice: number of dice the attacker rolls
     param int def_dice: number of dice the defender rolls 
     param bool win_ties: whether attacker wins ties or not (T/F)
     param dice_faces: default param, number of dice faces
     */
+    let atk_results = document.getElementById('ref_results_atk');
+    let def_results = document.getElementById('ref_results_def');
+
+    var atk_dice = document.getElementById('attacker_dice').value;
+    const def_dice = document.getElementById('defender_dice').value;
+    const tie = document.getElementById('tie_winner').value;
+
+    //console.log(atk_results, def_results, atk_dice, def_dice, tie)
+
+    if (tie == 'attacker'){
+        win_ties = true
+    }
+    else if (tie == 'defender'){
+        win_ties = false
+    }
+
     var atk_win = 0
     var def_win = 0
     var val;
@@ -39,7 +57,19 @@ function get_reform_odds(atk_dice, def_dice, win_ties, bible_trans, dice_faces=D
         }
         //console.log(atk_win, def_win, prob_def, prob_atk_less, prob_atk_more, prob_equal);
     }
-    return [atk_win, def_win];
+    atk_results.textContent = 'Attacker has a ' + (atk_win * 100).toFixed(2) + '% chance to win'
+    def_results.textContent = 'Defender has a ' + (def_win * 100).toFixed(2) + '% chance to win'
 }
 
-console.log(get_reform_odds(3, 4, true, 3));
+function enforceMinMax(el){
+    if(el.value != ""){
+      if(parseInt(el.value) < parseInt(el.min)){
+        el.value = el.min;
+      }
+      if(parseInt(el.value) > parseInt(el.max)){
+        el.value = el.max;
+      }
+    }
+  }
+
+// console.log(get_reform_odds(3, 4, 'defender', 3));
