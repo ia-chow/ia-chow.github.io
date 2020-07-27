@@ -4,7 +4,7 @@ const DICE_FACES = 6 //number of faces on a die
 function get_debater_dice(value, team, language, name, status, tmore, inq, augsburg){
     /*
     Gets the number of dice each debater rolls in a debate
-
+    TODO: FINISH THIS STUFF
 
     */
    const deb_data = require("./debater_values.json")
@@ -57,6 +57,8 @@ function get_reform_odds(dice_faces=DICE_FACES){
 }
 
 function enforceMinMax(el){
+  // NOT CURRENTLY IN USE
+  // FIX THIS FXN AT SOME POINT
     if(el.value != ""){
       if(parseInt(el.value) < parseInt(el.min)){
         el.value = el.min;
