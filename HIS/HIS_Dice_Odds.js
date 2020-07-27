@@ -56,7 +56,8 @@ function get_reform_odds(dice_faces=DICE_FACES){
         }
         //console.log(atk_win, def_win, prob_def, prob_atk_less, prob_atk_more, prob_equal);
     }
-    console.log((atk_win * 100).toFixed(2))
+    // console.log((atk_win * 100).toFixed(2))
+    
     if(0 < (atk_win * 100).toFixed(2) && (atk_win * 100).toFixed(2) < 100){
       atk_results.textContent = 'Attacker has ' + (atk_win * 100).toFixed(2) + '% chance of winning' // print to page
       def_results.textContent = 'Defender has ' + (def_win * 100).toFixed(2) + '% chance of winning' // print to page
