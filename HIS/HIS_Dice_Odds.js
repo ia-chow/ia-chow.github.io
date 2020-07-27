@@ -1,10 +1,10 @@
 // CONSTANTS:
-const DICE_FACES = 6 //number of faces on a die
+const DICE_FACES = 6 // number of faces on a diev (vanilla HIS uses 6 dice)
 
 function get_debater_dice(value, team, language, name, status, tmore, inq, augsburg){
     /*
     Gets the number of dice each debater rolls in a debate
-
+    TODO: FINISH THIS STUFF
 
     */
    const deb_data = require("./debater_values.json")
@@ -14,21 +14,19 @@ function get_debater_dice(value, team, language, name, status, tmore, inq, augsb
 }
 function get_reform_odds(dice_faces=DICE_FACES){
     /*
-    Gets reform odds from the page
-
-    param int atk_dice: number of dice the attacker rolls
-    param int def_dice: number of dice the defender rolls 
-    param bool win_ties: whether attacker wins ties or not (T/F)
-    param dice_faces: default param, number of dice faces
+    Gets reform odds and then changes html element on the page appropriately
     */
     let atk_results = document.getElementById('ref_results_atk');
     let def_results = document.getElementById('ref_results_def');
 
-    var atk_dice = document.getElementById('attacker_dice').value;
+    const atk_dice = document.getElementById('attacker_dice').value;
     const def_dice = document.getElementById('defender_dice').value;
     const tie = document.getElementById('tie_winner').value;
 
     //console.log(atk_results, def_results, atk_dice, def_dice, tie)
+
+    // TODO: make the code a little better by doing the validation before entering anything
+    // Makes it a lot easier to see whether attacker or defender dice is the issue
 
     if (tie == 'attacker'){
         win_ties = true
@@ -57,11 +55,25 @@ function get_reform_odds(dice_faces=DICE_FACES){
         }
         //console.log(atk_win, def_win, prob_def, prob_atk_less, prob_atk_more, prob_equal);
     }
-    atk_results.textContent = 'Attacker has a ' + (atk_win * 100).toFixed(2) + '% chance to win'
-    def_results.textContent = 'Defender has a ' + (def_win * 100).toFixed(2) + '% chance to win'
+    console.log((atk_win * 100).toFixed(2))
+    if(0 < (atk_win * 100).toFixed(2) && (atk_win * 100).toFixed(2) < 100){
+      atk_results.textContent = 'Attacker has ' + (atk_win * 100).toFixed(2) + '% chance of winning' // print to page
+      def_results.textContent = 'Defender has ' + (def_win * 100).toFixed(2) + '% chance of winning' // print to page
+
+      document.getElementById('ref_results_atk').style.color = 'white' // change text to red
+      document.getElementById('ref_results_def').style.visibility = 'visible' // show element
+    }
+    else {
+      atk_results.textContent = 'Please enter a valid number of attacking and defending dice.' // print to page
+
+      document.getElementById('ref_results_atk').style.color = 'red' // change text to red
+      document.getElementById('ref_results_def').style.visibility = 'hidden' // hide element
+    }
 }
 
 function enforceMinMax(el){
+  // NOT CURRENTLY IN USE
+  // FIX THIS FXN AT SOME POINT
     if(el.value != ""){
       if(parseInt(el.value) < parseInt(el.min)){
         el.value = el.min;
