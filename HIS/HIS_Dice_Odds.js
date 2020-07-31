@@ -14,6 +14,7 @@ function get_debater_dice(value, team, language, name, status, tmore, inq, augsb
     num_dice = value
 
 }
+
 function get_reform_odds(dice_faces = DICE_FACES, bible_bonus = BIBLE_BONUS){
     /*
     Gets reform odds and then changes html element on the page appropriately
