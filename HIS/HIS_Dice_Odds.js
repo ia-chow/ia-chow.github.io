@@ -3,12 +3,14 @@
 const DICE_FACES = 6 // number of faces on a die (vanilla HIS uses 6 dice)
 const BIBLE_BONUS = 1 // +1 bonus given from bible translations
 
+function get_debater_odds(){
+
+}
+
 function get_debater_dice(value, team, language, name, status, tmore, inq, augsburg){
     /*
     Gets the number of dice each debater rolls in a debate
     */
-  
-
    const deb_data = require("./debater_values.json")
     return deb_data
     num_dice = value
