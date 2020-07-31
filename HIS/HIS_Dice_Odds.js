@@ -26,7 +26,8 @@ function get_reform_odds(dice_faces = DICE_FACES, bible_bonus = BIBLE_BONUS){
     const def_dice = document.getElementById('defender_dice').value;
     const tie = document.getElementById('tie_winner').value;
 
-    const bible = document.getElementById('bible_trans').value;
+    const bible = document.getElementById('bible_trans').checked;
+    //console.log(bible)
 
     //console.log(atk_results, def_results, atk_dice, def_dice, tie)
 
@@ -44,12 +45,14 @@ function get_reform_odds(dice_faces = DICE_FACES, bible_bonus = BIBLE_BONUS){
     var def_win = 0
     var val;
 
-    if (bible == 'bible_trans'){ // set bonus to bible bonus if bible translation active (check dice from higher value)
+    if (bible == true){ // set bonus to bible bonus if bible translation active (check dice from higher value)
       var bonus = bible_bonus;
     }
-    else {
+    else if (bible == false){
       var bonus = 0;
     }
+
+    //console.log(bonus)
 
     for (val = 1; val < dice_faces + 1; val++){
         const prob_def = ((val/dice_faces) ** def_dice) - (((val - 1)/dice_faces) ** def_dice); // probability that highest defender roll is equal to this value
