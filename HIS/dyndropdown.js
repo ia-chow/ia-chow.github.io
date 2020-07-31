@@ -1,5 +1,5 @@
 define(function (require) {
-    const debaters = require('./debater_values.json');
+    const debaters = require('./debater_values.json'); //fix this 
 });
 
 function dynamicdropdown(team) {
