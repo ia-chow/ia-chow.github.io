@@ -27,7 +27,11 @@
     <select id="tie_winner" name="tie_winner">
         <option value="attacker">Attacker</option>
         <option value="defender">Defender</option>
-    </select> <br><br>
+    </select>
+    <br> <br>
+    <input id="bible_trans" class="checkbox" type="checkbox" name="bible_trans" value="bible_trans">
+    <label for="bible_trans"> +1 from bible translation? </label>
+    <br> <br>
     <input id="ref_button" class="button" type="button" value="Calculate Reform Odds" onclick="get_reform_odds()" onkeyup="enforceMinMax(this)">
     <br>
     <section id="ref_results_atk"></section>
