@@ -1,21 +1,25 @@
 // CONSTANTS:
 
-const DICE_FACES = 6 // number of faces on a diev (vanilla HIS uses 6 dice)
+const DICE_FACES = 6 // number of faces on a die (vanilla HIS uses 6 dice)
+const BIBLE_BONUS = 1 // +1 bonus given from bible translations
 
 function get_debater_dice(value, team, language, name, status, tmore, inq, augsburg){
     /*
     Gets the number of dice each debater rolls in a debate
-    TODO: FINISH THIS STUFF
-
     */
+  
+
    const deb_data = require("./debater_values.json")
     return deb_data
     num_dice = value
 
 }
-function get_reform_odds(dice_faces=DICE_FACES){
+
+function get_reform_odds(dice_faces = DICE_FACES, bible_bonus = BIBLE_BONUS){
     /*
     Gets reform odds and then changes html element on the page appropriately
+    // TODO: HIDE THE BOX ON THE PAGE IF POSSIBLE
+    // HIDE THE CHECKBOX IF DEFENDER IS CHECKED
     */
     let atk_results = document.getElementById('ref_results_atk');
     let def_results = document.getElementById('ref_results_def');
@@ -23,6 +27,9 @@ function get_reform_odds(dice_faces=DICE_FACES){
     const atk_dice = document.getElementById('attacker_dice').value;
     const def_dice = document.getElementById('defender_dice').value;
     const tie = document.getElementById('tie_winner').value;
+
+    const bible = document.getElementById('bible_trans').checked;
+    //console.log(bible)
 
     //console.log(atk_results, def_results, atk_dice, def_dice, tie)
 
@@ -39,15 +46,26 @@ function get_reform_odds(dice_faces=DICE_FACES){
     var atk_win = 0
     var def_win = 0
     var val;
+
+    if (bible == true){ // set bonus to bible bonus if bible translation active (check dice from higher value)
+      var bonus = bible_bonus;
+    }
+    else if (bible == false){
+      var bonus = 0;
+    }
+
+    //console.log(bonus)
+
     for (val = 1; val < dice_faces + 1; val++){
         const prob_def = ((val/dice_faces) ** def_dice) - (((val - 1)/dice_faces) ** def_dice); // probability that highest defender roll is equal to this value
         
-        const prob_atk_less = ((val - 1)/dice_faces) ** atk_dice;  // probability that all defender dice are lower than this value
-        const prob_equal = (val/dice_faces) ** atk_dice - prob_atk_less; // probability that highest attacker roll is exactly equal to the given roll (tie)
+        const prob_atk_less = ((val - 1 - bonus)/dice_faces) ** atk_dice;  // probability that all attacker dice are lower than this value
+        const prob_equal = ((val - bonus)/dice_faces) ** atk_dice - prob_atk_less; // probability that highest attacker roll is exactly equal to the given roll (tie)
         const prob_atk_more = 1 - prob_atk_less - prob_equal; // probability that highest attacker roll is greater than given value
 
         atk_win += prob_def * prob_atk_more;
         def_win += prob_def * prob_atk_less;
+
         if (win_ties == true){
             atk_win += prob_equal * prob_def;
         }
