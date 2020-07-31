@@ -5,9 +5,9 @@ const DICE_FACES = 6 // number of faces on a diev (vanilla HIS uses 6 dice)
 function get_debater_dice(value, team, language, name, status, tmore, inq, augsburg){
     /*
     Gets the number of dice each debater rolls in a debate
-    TODO: FINISH THIS STUFF
-
     */
+  
+
    const deb_data = require("./debater_values.json")
     return deb_data
     num_dice = value
