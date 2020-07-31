@@ -1,8 +1,12 @@
+define(function (require) {
+    const debaters = require('./debater_values.json');
+});
+
 function dynamicdropdown(team) {
     /*
     Creates dynamic drop down list of debaters for a given team
     */
-   const debaters = require()
+   debaters = debaters
         switch (team)
         {
         case "papal" :
