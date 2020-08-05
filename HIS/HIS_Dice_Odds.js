@@ -27,6 +27,18 @@ var data = jQuery.getJSON("./debater_values.json", function(get_debaters){debate
 //console.log(debaters)
 
 function get_debater_odds(){
+  /*
+  Gets debate odds and changes html elements as appropriate
+  */
+  let deb_results_atk = document.getElementById('deb_results_atk')
+  let deb_results_def = document.getElementById('deb_results_def')
+  let elim_chance_atk = document.getElementById('elim_chance_atk')
+  let elim_chance_def = document.getElementById('elim_chance_def')
+
+  // ADD DROPDOWN FOR THOMAS MORE/PAPAL INQUISITION
+  // ADD CHECKBOX FOR AUGSBURG
+  // DISPLAY CHECKBOX FOR MARY ONLY IF ENGLISH LANGUAGE DEBATER SELECTED
+  const atk_debater = document.getElementById('')
 
 }
 

@@ -38,22 +38,22 @@ function dynamicdropdown(team) {
         case "papal" :
             // console.log(name_list)
             for (i = 0; i < pap_list.length; i++) {
-                atk_list.options[i] = new Option(pap_list[i])
+                atk_list.options[i] = new Option(pap_list[i], pap_list[i])
                 // def_list.options[i] = new Option(prot_list[i])
                 // console.log(pap_list[i])
             }
             for (i = 0; i < prot_list.length; i++){
-                def_list.options[i] = new Option(prot_list[i])
+                def_list.options[i] = new Option(prot_list[i], prot_list[i])
             }
             break;
         case "protestant" :
             for (i = 0; i < prot_list.length; i++){
-                atk_list.options[i] = new Option(prot_list[i])
+                atk_list.options[i] = new Option(prot_list[i], prot_list[i])
                 // def_list.options[i] = new Option(pap_list[i])
                 // console.log(prot_list[i])
             }
             for (i = 0; i < pap_list.length; i++){
-                def_list.options[i] = new Option(pap_list[i])
+                def_list.options[i] = new Option(pap_list[i], pap_list[i])
             }
             /* 
             document.getElementById("status").options[0]=new Option("Select status","");
@@ -62,6 +62,8 @@ function dynamicdropdown(team) {
             document.getElementById("status").options[3]=new Option("SHIPPED","shipped"); */
             break;
         }
+        console.log(atk_list)
+
         return true;
     }
     // might want to find out how to put in 
