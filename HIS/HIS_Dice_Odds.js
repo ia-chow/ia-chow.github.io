@@ -12,6 +12,7 @@ const TMORE_BONUS_ENG = 3  // bonus dice for thomas more on offense
 const TMORE_BONUS_OTHER = 1
 const AUGSBURG_PEN = 1  // malus dice for effects of Augsburg Confession
 const INQ_BONUS = 2  // bonus dice for papal inquisition
+const MARY_MULTIPLIER = 2 // multiplier for papal debater value in england if mary rules england
 
 // import json of debaters and associated values:
 
@@ -26,17 +27,21 @@ var data = jQuery.getJSON("./debater_values.json", function(get_debaters){debate
 //console.log(debaters)
 
 function get_debater_odds(){
-  
+
 }
 
-function get_debater_dice(name, language, status, tmore, inq, augsburg, atk_base = ATK_BASE, unc_base = UNC_BASE, com_base = COM_BASE, eck_bonus = ECK_BONUS, gard_bonus = GARD_BONUS, tmore_bonus_eng = TMORE_BONUS_ENG, tmore_bonus_other = TMORE_BONUS_OTHER, inq_bonus = INQ_BONUS, augsburg_pen = AUGSBURG_PEN){
+function get_debater_dice(name, language, status, tmore, inq, augsburg, mary, atk_base = ATK_BASE, unc_base = UNC_BASE, com_base = COM_BASE, eck_bonus = ECK_BONUS, gard_bonus = GARD_BONUS, tmore_bonus_eng = TMORE_BONUS_ENG, tmore_bonus_other = TMORE_BONUS_OTHER, inq_bonus = INQ_BONUS, augsburg_pen = AUGSBURG_PEN, mary_multiplier = MARY_MULTIPLIER){
     /*
     Gets the number of dice a debater rolls in a debate
     */
    // console.log(debaters)
 
    deb_data = debaters.filter(debater => debater.Debater == name)
-   const deb_val = deb_data.map(deb_name => deb_name.Value);//.map(value => value.Value);
+   let deb_val = deb_data.map(deb_name => deb_name.Value);//.map(value => value.Value);
+
+   if (mary == 'y' && language == 'English'){ // mary multiplier
+    deb_val *= mary_multiplier
+  }
 
    var tot_dice = deb_val
 
