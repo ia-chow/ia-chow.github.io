@@ -3,19 +3,28 @@
 const DICE_FACES = 6 // number of faces on a die (vanilla HIS uses 6 dice)
 const BIBLE_BONUS = 1 // +1 bonus given from bible translations
 
+const ATK_DEB = 3 // 3 dice for attacker in theological debates
+const UNC_DEB = 2 // 2 dice for uncommitted defender in theological debates
+const COM_DEB = 1 // 1 die for committed defender in theological debates
+
+// import json of debaters and associated values:
+
+var debaters;
+var data = jQuery.getJSON("./debater_values.json", function(get_debaters){debaters = get_debaters;}); // uses debater_values.json
+// creates debaters as a list of debaters
+
 function get_debater_odds(){
-
 }
 
-function get_debater_dice(value, team, language, name, status, tmore, inq, augsburg){
+function get_debater_dice(deb_name, atk_deb = ATK_DEB, unc_deb = UNC_DEB, com_deb = COM_DEB){
     /*
-    Gets the number of dice each debater rolls in a debate
+    Gets the number of dice a debater rolls in a debate
     */
-   const deb_data = require("./debater_values.json")
-    return deb_data
-    num_dice = value
-
+   base = debaters.filter(debater => debater.Name == deb_name)
+  console.log(base)
 }
+
+console.log(get_debater_dice('Eck'));
 
 function get_reform_odds(dice_faces = DICE_FACES, bible_bonus = BIBLE_BONUS){
     /*

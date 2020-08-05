@@ -37,6 +37,7 @@ function dynamicdropdown(team) {
         }
         return true;
     }
-    // figure out how this works as well and implement it so it works properly (the dynamic dropdown)
+    // might want to find out how to put in 
+    // might also want to merge this into the main his_dice_odds js file later
 
 // dynamicdropdown("papal", require("./debater_values.json"))
