@@ -5,6 +5,7 @@
     <title>HIS Odds Calculator</title>
     <link rel="stylesheet" href="../jekyll-theme-midnight.css">
     <link rel="stylesheet" href="../style.css">
+    <script src="../jquery-3.5.1.js"></script>
     <script src="dyndropdown.js"></script>
     <script src="HIS_Dice_Odds.js"></script>
 </head>
@@ -28,7 +29,7 @@
         <option value="attacker">Attacker</option>
         <option value="defender">Defender</option>
     </select>
-    <br> <br>
+    <br><br>
     <input id="bible_trans" class="checkbox" type="checkbox" name="bible_trans" value="bible_trans">
     <label for="bible_trans"> Attacker gets +1 from bible translation? </label>
     <br> <br>
@@ -40,10 +41,19 @@
 
 <h2 style="color:#2DBF3B;"> Theological Debate Odds Calculator: </h2>
     <p>Attacking side:</p>
-    <input id="papal" type="radio" name="team" value="papal">
+    <input id="papal" type="radio" name="team" value="papal" onclick="dynamicdropdown('papal')">
     <label for="papal">Papal</label>
-    <input id="protestant" type="radio" name="team" value="protestant">
+    <input id="protestant" type="radio" name="team" value="protestant" onclick="dynamicdropdown('protestant')">
     <label for="protestant">Protestant</label>
+    <br><br>
+<p><label for="atk_dropdown" name="atk_dropdown">Attacking Debater: </label></p>
+    <select id="atk_dropdown" name="atk_dropdown">
+        <option value="placeholder">Choose attacker:</option>
+    </select>
+<p><label for="def_dropdown" name="def_dropdown"> Defending Debater: </label></p>
+    <select id="def_dropdown" name="def_dropdown">
+        <option value="placeholder2">Choose attacker:</option>
+    </select>
 
 <h2 style="color:#2DBF3B;"> Battle Odds Calculator: </h2>
     WIP
