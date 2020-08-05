@@ -14,8 +14,8 @@ function dynamicdropdown(team) {
    let pap_list = debaters.filter(debater => debater.Affiliation == 'Papal').map(name => name.Debater);
    let prot_list = debaters.filter(debater => debater.Affiliation == 'Protestant').map(name => name.Debater);
 
-    console.log(pap_list)
-    console.log(prot_list)
+   //console.log(pap_list)
+   // console.log(prot_list)
 
     atk_list = document.getElementById("atk_dropdown");
     def_list = document.getElementById("def_dropdown");
@@ -27,8 +27,8 @@ function dynamicdropdown(team) {
         def_list.remove(i)
     }
 
-    console.log(atk_list)
-    console.log(def_list)
+    //console.log(atk_list)
+    //console.log(def_list)
 
         switch (team)
         {
