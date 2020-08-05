@@ -7,24 +7,25 @@ var data = jQuery.getJSON("./debater_values.json", function(get_debaters){debate
 
 function dynamicdropdown(team) {
     /*
-    Creates dynamic drop down list of debaters for a given team
+    Creates dynamic drop down lists of attacking and defending debaters given the attacking team
     */
    // console.log(debaters)
+   let pap_list = debaters.filter(debater => debater.Affiliation == 'Papal').map(name => name.Debater);
+   let prot_list = debaters.filter(debater => debater.Affiliation == 'Protestant').map(name => name.Debater);
         switch (team)
         {
         case "papal" :
-            let pap_list = debaters.filter(debater => debater.Affiliation == 'Papal').map(name => name.Debater);
             // console.log(name_list)
             for (i = 0; i < pap_list.length; i++) {
-                document.getElementById("atk_dropdown").options[i]=new Option(pap_list[i])
+                document.getElementById("atk_dropdown").options[i] = new Option(pap_list[i])
+                document.getElementById("def_dropdown").options[i] = new Option(prot_list[i])
                 // console.log(pap_list[i])
             }
             break;
-        case "protestant" : 
-            let prot_list = debaters.filter(debater => debater.Affiliation == 'Protestant').map(name => name.Debater);
-            
+        case "protestant" :
             for (i = 0;i < prot_list.length; i++){
                 document.getElementById("atk_dropdown").options[i] = new Option(prot_list[i])
+                document.getElementById("def_dropdown").options[i] = new Option(pap_list[i])
                 // console.log(prot_list[i])
             }
             /* 
