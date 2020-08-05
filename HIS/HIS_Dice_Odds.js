@@ -3,28 +3,86 @@
 const DICE_FACES = 6 // number of faces on a die (vanilla HIS uses 6 dice)
 const BIBLE_BONUS = 1 // +1 bonus given from bible translations
 
-const ATK_DEB = 3 // 3 dice for attacker in theological debates
-const UNC_DEB = 2 // 2 dice for uncommitted defender in theological debates
-const COM_DEB = 1 // 1 die for committed defender in theological debates
+const ATK_BASE = 3 // 3 dice for attacker in theological debates
+const UNC_BASE = 2 // 2 dice for uncommitted defender in theological debates
+const COM_BASE = 1 // 1 die for committed defender in theological debates
+const ECK_BONUS = 1 // bonus die for Eck
+const GARD_BONUS = 1 // bonus die for gardiner in the english language zone
+const TMORE_BONUS_ENG = 3  // bonus dice for thomas more on offense
+const TMORE_BONUS_OTHER = 1
+const AUGSBURG_PEN = 1  // malus dice for effects of Augsburg Confession
+const INQ_BONUS = 2  // bonus dice for papal inquisition
 
 // import json of debaters and associated values:
 
+// var debaters;
 var debaters;
 var data = jQuery.getJSON("./debater_values.json", function(get_debaters){debaters = get_debaters;}); // uses debater_values.json
 // creates debaters as a list of debaters
+// console.log(data)
+// console.log(debaters)
+
+//console.log(data)
+//console.log(debaters)
 
 function get_debater_odds(){
+  
 }
 
-function get_debater_dice(deb_name, atk_deb = ATK_DEB, unc_deb = UNC_DEB, com_deb = COM_DEB){
+function get_debater_dice(name, language, status, tmore, inq, augsburg, atk_base = ATK_BASE, unc_base = UNC_BASE, com_base = COM_BASE, eck_bonus = ECK_BONUS, gard_bonus = GARD_BONUS, tmore_bonus_eng = TMORE_BONUS_ENG, tmore_bonus_other = TMORE_BONUS_OTHER, inq_bonus = INQ_BONUS, augsburg_pen = AUGSBURG_PEN){
     /*
     Gets the number of dice a debater rolls in a debate
     */
-   base = debaters.filter(debater => debater.Name == deb_name)
-  console.log(base)
+   // console.log(debaters)
+
+   deb_data = debaters.filter(debater => debater.Debater == name)
+   const deb_val = deb_data.map(deb_name => deb_name.Value);//.map(value => value.Value);
+
+   var tot_dice = deb_val
+
+   /* const language = deb_data.map(deb_language => deb_language.Language)
+   console.log(base_dice)
+   console.log(language) */
+   if (status == 'atk'){
+      tot_dice += atk_base
+      if (name == 'Eck'){
+          tot_dice += eck_bonus
+      }
+      if (name == 'Gardiner' && language == 'English'){
+          tot_dice += gard_bonus
+      }
+   }
+   else if (status == 'unc'){
+     tot_dice += unc_base
+   }
+   else if (status == 'com'){
+     tot_dice += com_base
+   }
+   else{
+     throw 'Debater is in an invalid status please report'
+   }
+
+   if (team = 'Papal'){
+     if (tmore = 'y'){
+       if (language == 'English'){
+         tot_dice += tmore_bonus_eng
+       }
+       else{
+         tot_dice += tmore_bonus_other
+       }
+     }
+     if (inq = 'y'){
+       tot_dice += inq_bonus
+     }
+     if (augsburg = 'y'){
+       tot_dice -= augsburg_pen
+     }
+   }
+   return tot_dice
+
 }
 
-console.log(get_debater_dice('Eck'));
+// console.log(get_debater_dice('Eck'));
 
 function get_reform_odds(dice_faces = DICE_FACES, bible_bonus = BIBLE_BONUS){
     /*

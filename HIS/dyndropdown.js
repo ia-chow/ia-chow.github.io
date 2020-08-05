@@ -5,6 +5,9 @@
 var debaters;
 var data = jQuery.getJSON("./debater_values.json", function(get_debaters){debaters = get_debaters;}); // uses debater_values.json
 
+//console.log(data)
+//console.log(debaters)
+
 function dynamicdropdown(team) {
     /*
     Creates dynamic drop down lists of attacking and defending debaters given the attacking team
