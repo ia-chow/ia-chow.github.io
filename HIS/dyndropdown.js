@@ -2,28 +2,31 @@
     const debaters = require(); //fix this 
 });
  */
+var debaters;
+var data = jQuery.getJSON("./debater_values.json", function(get_debaters){debaters = get_debaters;}); // uses debater_values.json
+
 function dynamicdropdown(team) {
     /*
     Creates dynamic drop down list of debaters for a given team
     */
-   jQuery.get("./students.json", function(debaters){
-    }, "json");
-   // var get_debaters = JSON.parse(./debater_values.json);
-   console.log(debaters)
+   // console.log(debaters)
         switch (team)
         {
         case "papal" :
-            let name_list = debaters.filter(debater => debater.Affiliation == 'Papal').map(name => name.Debater);
-            console.log(name_list)
-            for (i = 0; i < name_list.length; i++) {
-                document.getElementById("atk_dropdown").options[i]=new Option(name_list[i])
-                console.log(name_list[i])
+            let pap_list = debaters.filter(debater => debater.Affiliation == 'Papal').map(name => name.Debater);
+            // console.log(name_list)
+            for (i = 0; i < pap_list.length; i++) {
+                document.getElementById("atk_dropdown").options[i]=new Option(pap_list[i])
+                // console.log(pap_list[i])
             }
             break;
         case "protestant" : 
-            let prot_info = debaters.filter(debater => debater.Affiliation == 'Protestant').map(name => name.Debater);
-
-            console.log(prot_info)
+            let prot_list = debaters.filter(debater => debater.Affiliation == 'Protestant').map(name => name.Debater);
+            
+            for (i = 0;i < prot_list.length; i++){
+                document.getElementById("atk_dropdown").options[i] = new Option(prot_list[i])
+                // console.log(prot_list[i])
+            }
             /* 
             document.getElementById("status").options[0]=new Option("Select status","");
             document.getElementById("status").options[1]=new Option("OPEN","open");

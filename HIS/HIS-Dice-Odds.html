@@ -5,7 +5,7 @@
     <title>HIS Odds Calculator</title>
     <link rel="stylesheet" href="../jekyll-theme-midnight.css">
     <link rel="stylesheet" href="../style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="../jquery-3.5.1.js"></script>
     <script src="dyndropdown.js"></script>
     <script src="HIS_Dice_Odds.js"></script>
 </head>
@@ -41,15 +41,15 @@
 
 <h2 style="color:#2DBF3B;"> Theological Debate Odds Calculator: </h2>
     <p>Attacking side:</p>
-    <input id="papal" type="radio" name="team" value="papal" onclick="dynamicdropdown(papal)">
+    <input id="papal" type="radio" name="team" value="papal" onclick="dynamicdropdown('papal')">
     <label for="papal">Papal</label>
-    <input id="protestant" type="radio" name="team" value="protestant" onclick="dynamicdropdown(protestant)">
+    <input id="protestant" type="radio" name="team" value="protestant" onclick="dynamicdropdown('protestant')">
     <label for="protestant">Protestant</label>
     <br><br>
-    <p><label for="atk_dropdown" name="atk_dropdown">Attacking Debater: </label></p>
+    <label for="atk_dropdown" name="atk_dropdown">Attacking Debater: </label>
     <br>
     <select id="atk_dropdown" name="atk_dropdown">
-        <option value="placeholder"> </option>
+        <option value="placeholder">Choose an attacking side:</option>
     </select>
 
 
