@@ -79,7 +79,7 @@ function get_debater_odds(){
   }
   else{
     deb_results_atk.style.color = 'red' // change text to red
-    console.log($("input[type='radio'][name='deb_team']:checked").val());
+    // console.log($("input[type='radio'][name='deb_team']:checked").val());
     if ($("input[type='radio'][name='deb_team']:checked").val() == undefined){
       deb_results_atk.textContent = 'Choose an attacking side'
       // deb_results_atk.style.color = 'red'
