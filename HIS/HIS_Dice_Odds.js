@@ -44,7 +44,8 @@ function get_debater_odds(){
   // grabbing all the data from the page
   const atk_debater = document.getElementById('atk_dropdown').value;
   const def_debater = document.getElementById('def_dropdown').value;
-  const status = $("input[type='radio'][name='commit']:checked").val(); // jquery
+  const atk_status = 'atk'
+  const def_status = $("input[type='radio'][name='commit']:checked").val(); // jquery
   // might want to fix this so whole func either uses or doesn't use jquery
   // console.log(atk_debater)
   const tmore = document.getElementById("tmore").checked;
@@ -77,13 +78,14 @@ function get_debater_odds(){
     //console.log('2')
   }
   else{
-    // throw "Error: either no protestant debater selected or array not length 1"
-
+    deb_results_atk.textContent = 'Choose two debaters' // change text to red and throw err
+    deb_results_atk.style.color = 'red'
+    throw "Error: either no protestant debater selected or array not length 1"
   }
   //console.log(language)
 
-  var deb_atk_dice = get_debater_dice(atk_debater, language, status, tmore, inq, augsburg, mary);
-  var deb_def_dice = get_debater_dice(def_debater, language, status, tmore, inq, augsburg, mary);
+  var deb_atk_dice = get_debater_dice(atk_debater, language, atk_status, tmore, inq, augsburg, mary);
+  var deb_def_dice = get_debater_dice(def_debater, language, def_status, tmore, inq, augsburg, mary);
 
   console.log(deb_atk_dice)
   console.log(deb_def_dice)
@@ -103,11 +105,16 @@ function get_debater_dice(name, language, status, tmore, inq, augsburg, mary, at
     */
    
    // console.log(debaters)
-
+   // let deb_data = debaters.filter(debater => debater.Debater == name)
    let deb_data = debaters.filter(debater => debater.Debater == name)
-   let deb_val = deb_data.map(deb_name => deb_name.Value);//.map(value => value.Value);
+
+   let deb_val = deb_data.map(deb_name => deb_name.Value)[0];//.map(value => value.Value);
+   // get the value
+   let team = deb_data.map(deb_team => deb_team.Affiliation)[0]
 
    var tot_dice = deb_val
+
+   // console.log(tot_dice)
 
    /* const language = deb_data.map(deb_language => deb_language.Language)
    console.log(base_dice)
@@ -136,7 +143,7 @@ function get_debater_dice(name, language, status, tmore, inq, augsburg, mary, at
      throw 'Error: Debater is in an invalid status please report'
    }
 
-   if (team = 'Papal'){
+   if (team == 'Papal'){
      if (tmore){
        if (language == 'English'){
          tot_dice += tmore_bonus_eng
@@ -223,15 +230,16 @@ function get_reform_odds(dice_faces = DICE_FACES, bible_bonus = BIBLE_BONUS){
       atk_results.textContent = 'Attacker has ' + (atk_win * 100).toFixed(2) + '% chance of winning' // print to page
       def_results.textContent = 'Defender has ' + (def_win * 100).toFixed(2) + '% chance of winning' // print to page
 
-      document.getElementById('ref_results_atk').style.color = 'white' // change text to red
-      document.getElementById('ref_results_def').style.visibility = 'visible' // show element
+      atk_results.style.color = 'white' // change text to red
+      def_results.style.visibility = 'visible' // show element
     }
     else {
       atk_results.textContent = 'Please enter a valid number of attacking and defending dice.' // print to page
 
-      document.getElementById('ref_results_atk').style.color = 'red' // change text to red
-      document.getElementById('ref_results_def').style.visibility = 'hidden' // hide element
+      atk_results.style.color = 'red' // change text to red
+      def_results.style.visibility = 'hidden' // hide element
     }
+    return true;
 }
 
 function enforceMinMax(el){
