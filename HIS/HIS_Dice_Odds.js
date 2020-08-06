@@ -36,26 +36,75 @@ function get_debater_odds(){
   let elim_chance_def = document.getElementById('elim_chance_def')
   // console.log('2')
 
-  // ADD DROPDOWN FOR THOMAS MORE/PAPAL INQUISITION
+  // TODO: ADD DROPDOWN FOR THOMAS MORE/PAPAL INQUISITION
   // ADD CHECKBOX FOR AUGSBURG
   // DISPLAY CHECKBOX FOR MARY ONLY IF ENGLISH LANGUAGE DEBATER SELECTED
+  // NOT SUPER HIGH PRIORITY THOUGH
+
+  // grabbing all the data from the page
   const atk_debater = document.getElementById('atk_dropdown').value;
   const def_debater = document.getElementById('def_dropdown').value;
+  const status = $("input[type='radio'][name='commit']:checked").val(); // jquery
+  // might want to fix this so whole func either uses or doesn't use jquery
   // console.log(atk_debater)
   const tmore = document.getElementById("tmore").checked;
-  console.log(tmore)
-  
+  // console.log(tmore)
+  const inq = document.getElementById('inq').checked;
+  const augsburg = document.getElementById('augsburg').checked;
+  const mary = document.getElementById('mary').checked;
+
+/*   console.log(status)
+  console.log(atk_debater)
+  console.log(def_debater) */
+
+  let atk_dat = debaters.filter(debater => debater.Debater == atk_debater)
+  let def_dat = debaters.filter(debater => debater.Debater == def_debater)
+
+/*   console.log(atk_dat)
+  console.log(def_dat)
+
+  console.log(atk_dat.map(deb_team => deb_team.Affiliation)[0]) */
+
+  // determining language of the debate
+
+  if (atk_dat.map(deb_team => deb_team.Affiliation)[0] == 'Protestant'){
+    var language = atk_dat.map(deb_lang => deb_lang.Language)[0]
+    //console.log('1')
+    //console.log(language)
+  }
+  else if (def_dat.map(deb_team => deb_team.Affiliation)[0] == 'Protestant'){
+    var language = def_dat.map(deb_lang => deb_lang.Language)[0]
+    //console.log('2')
+  }
+  else{
+    // throw "Error: either no protestant debater selected or array not length 1"
+
+  }
+  //console.log(language)
+
+  var deb_atk_dice = get_debater_dice(atk_debater, language, status, tmore, inq, augsburg, mary);
+  var deb_def_dice = get_debater_dice(def_debater, language, status, tmore, inq, augsburg, mary);
+
+  console.log(deb_atk_dice)
+  console.log(deb_def_dice)
+
+  deb_results_atk.textContent = '1' // display to page
+  deb_results_def.textContent = '2'
+  elim_chance_atk.textContent = '3'
+  elim_chance_def.textContent = '4'
+
 }
 
 function get_debater_dice(name, language, status, tmore, inq, augsburg, mary, atk_base = ATK_BASE, unc_base = UNC_BASE, com_base = COM_BASE, eck_bonus = ECK_BONUS, gard_bonus = GARD_BONUS, tmore_bonus_eng = TMORE_BONUS_ENG, tmore_bonus_other = TMORE_BONUS_OTHER, inq_bonus = INQ_BONUS, augsburg_pen = AUGSBURG_PEN, mary_multiplier = MARY_MULTIPLIER){
     /*
     Gets the number of dice a debater rolls in a debate
+    name, language, status should be strs
     tmore, inq, augsburg, mary should all be booleans
     */
    
    // console.log(debaters)
 
-   deb_data = debaters.filter(debater => debater.Debater == name)
+   let deb_data = debaters.filter(debater => debater.Debater == name)
    let deb_val = deb_data.map(deb_name => deb_name.Value);//.map(value => value.Value);
 
    var tot_dice = deb_val
@@ -71,7 +120,7 @@ function get_debater_dice(name, language, status, tmore, inq, augsburg, mary, at
        if (name == 'Gardiner'){
          tot_dice += gard_bonus
        }
-     }
+     }  
      tot_dice += atk_base
      if (name == 'Eck'){
         tot_dice += eck_bonus
@@ -84,7 +133,7 @@ function get_debater_dice(name, language, status, tmore, inq, augsburg, mary, at
      tot_dice += com_base
    }
    else{
-     throw 'Debater is in an invalid status please report'
+     throw 'Error: Debater is in an invalid status please report'
    }
 
    if (team = 'Papal'){

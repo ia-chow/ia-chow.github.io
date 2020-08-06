@@ -62,7 +62,7 @@ function dynamicdropdown(team) {
             document.getElementById("status").options[3]=new Option("SHIPPED","shipped"); */
             break;
         }
-        console.log(atk_list)
+        // console.log(atk_list)
 
         return true;
     }
