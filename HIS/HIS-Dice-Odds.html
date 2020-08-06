@@ -41,9 +41,9 @@
 
 <h2 style="color:#2DBF3B;"> Theological Debate Odds Calculator: </h2>
     <p>Attacking side:</p>
-    <input id="papal" type="radio" name="team" value="papal" onclick="dynamicdropdown('papal')">
+    <input id="papal" class="radio" type="radio" name="team" value="papal" onclick="dynamicdropdown('papal')">
     <label for="papal">Papal</label>
-    <input id="protestant" type="radio" name="team" value="protestant" onclick="dynamicdropdown('protestant')">
+    <input id="protestant" class="radio" type="radio" name="team" value="protestant" onclick="dynamicdropdown('protestant')">
     <label for="protestant">Protestant</label>
     <br><br>
 <p><label for="atk_dropdown" name="atk_dropdown">Attacking Debater: </label></p>
@@ -55,7 +55,17 @@
         <option value="placeholder2">Choose attacker:</option>
     </select>
 <br><br>
-    <input id="debate_button" class="button" type="button" value="Calculate Debate Odds" onclick="">
+    <input id="tmore" class="checkbox" type="checkbox" name="tmore" value="tmore">
+    <label for="tmore">Thomas More active?</label><br>
+    <input id="inq" class="checkbox" type="checkbox" name="inq" value="inq">
+    <label for="inq">Papal Inquisition active?</label><br>
+    <input id="augsburg" class="checkbox" type="checkbox" name="augsburg" value="augsburg">
+    <label for="augsburg">Augsburg Confession active?</label><br>
+    <input id="mary" class="checkbox" type="checkbox" name="mary" value="mary">
+    <label for="mary"> Mary I rules England?</label>
+
+<br><br>
+    <input id="debate_button" class="button" type="button" value="Calculate Debate Odds" onclick="get_debater_odds()">
 <br>
 <section id="deb_results_atk"></section>
 <section id="deb_results_def"></section>

@@ -34,26 +34,29 @@ function get_debater_odds(){
   let deb_results_def = document.getElementById('deb_results_def')
   let elim_chance_atk = document.getElementById('elim_chance_atk')
   let elim_chance_def = document.getElementById('elim_chance_def')
+  // console.log('2')
 
   // ADD DROPDOWN FOR THOMAS MORE/PAPAL INQUISITION
   // ADD CHECKBOX FOR AUGSBURG
   // DISPLAY CHECKBOX FOR MARY ONLY IF ENGLISH LANGUAGE DEBATER SELECTED
-  const atk_debater = document.getElementById('')
-
+  const atk_debater = document.getElementById('atk_dropdown').value;
+  const def_debater = document.getElementById('def_dropdown').value;
+  // console.log(atk_debater)
+  const tmore = document.getElementById("tmore").checked;
+  console.log(tmore)
+  
 }
 
 function get_debater_dice(name, language, status, tmore, inq, augsburg, mary, atk_base = ATK_BASE, unc_base = UNC_BASE, com_base = COM_BASE, eck_bonus = ECK_BONUS, gard_bonus = GARD_BONUS, tmore_bonus_eng = TMORE_BONUS_ENG, tmore_bonus_other = TMORE_BONUS_OTHER, inq_bonus = INQ_BONUS, augsburg_pen = AUGSBURG_PEN, mary_multiplier = MARY_MULTIPLIER){
     /*
     Gets the number of dice a debater rolls in a debate
+    tmore, inq, augsburg, mary should all be booleans
     */
+   
    // console.log(debaters)
 
    deb_data = debaters.filter(debater => debater.Debater == name)
    let deb_val = deb_data.map(deb_name => deb_name.Value);//.map(value => value.Value);
-
-   if (mary == 'y' && language == 'English'){ // mary multiplier
-    deb_val *= mary_multiplier
-  }
 
    var tot_dice = deb_val
 
@@ -61,12 +64,17 @@ function get_debater_dice(name, language, status, tmore, inq, augsburg, mary, at
    console.log(base_dice)
    console.log(language) */
    if (status == 'atk'){
-      tot_dice += atk_base
-      if (name == 'Eck'){
-          tot_dice += eck_bonus
-      }
-      if (name == 'Gardiner' && language == 'English'){
-          tot_dice += gard_bonus
+     if (language == 'English'){
+       if (mary){
+         tot_dice *= mary_multiplier
+       }
+       if (name == 'Gardiner'){
+         tot_dice += gard_bonus
+       }
+     }
+     tot_dice += atk_base
+     if (name == 'Eck'){
+        tot_dice += eck_bonus
       }
    }
    else if (status == 'unc'){
@@ -80,7 +88,7 @@ function get_debater_dice(name, language, status, tmore, inq, augsburg, mary, at
    }
 
    if (team = 'Papal'){
-     if (tmore = 'y'){
+     if (tmore){
        if (language == 'English'){
          tot_dice += tmore_bonus_eng
        }
@@ -88,10 +96,10 @@ function get_debater_dice(name, language, status, tmore, inq, augsburg, mary, at
          tot_dice += tmore_bonus_other
        }
      }
-     if (inq = 'y'){
+     if (inq){
        tot_dice += inq_bonus
      }
-     if (augsburg = 'y'){
+     if (augsburg){
        tot_dice -= augsburg_pen
      }
    }
