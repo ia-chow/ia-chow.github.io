@@ -35,6 +35,7 @@ function get_debater_odds(hit_chance = HIT_CHANCE){
   */
   let deb_results_atk = document.getElementById('deb_results_atk')
   let deb_results_def = document.getElementById('deb_results_def')
+  let deb_results_tie = document.getElementById('deb_results_tie')
   let elim_chance_atk = document.getElementById('elim_chance_atk')
   let elim_chance_def = document.getElementById('elim_chance_def')
   // console.log('2')
@@ -69,16 +70,20 @@ function get_debater_odds(hit_chance = HIT_CHANCE){
 
   console.log(atk_dat.map(deb_team => deb_team.Affiliation)[0]) */
 
-  // determining language of the debate
+  // determining language of the debate and whether they should burn or disgrace opponents
 
-  if (atk_dat.map(deb_team => deb_team.Affiliation)[0] == 'Protestant'){
+  if (atk_dat.map(deb_team => deb_team.Affiliation)[0] == 'Protestant'){ // if attacker is protestant
     var language = atk_dat.map(deb_lang => deb_lang.Language)[0]
     //console.log('1')
     //console.log(language)
+    var atk_msg = 'disgrace'
+    var def_msg = 'burn'
   }
-  else if (def_dat.map(deb_team => deb_team.Affiliation)[0] == 'Protestant'){
+  else if (def_dat.map(deb_team => deb_team.Affiliation)[0] == 'Protestant'){ // if defender is protestant
     var language = def_dat.map(deb_lang => deb_lang.Language)[0]
     //console.log('2')
+    var atk_msg = 'burn'
+    var def_msg = 'disgrace'
   }
   else{
     deb_results_atk.style.color = 'red' // change text to red
@@ -96,36 +101,80 @@ function get_debater_odds(hit_chance = HIT_CHANCE){
   }
   //console.log(language)
 
-  var deb_atk_dice = get_debater_dice(atk_debater, language, atk_status, tmore, inq, augsburg, mary);
-  var deb_def_dice = get_debater_dice(def_debater, language, def_status, tmore, inq, augsburg, mary);
+  var data_atk = get_debater_dice(atk_debater, language, atk_status, tmore, inq, augsburg, mary); // get debater dice and value
+  var data_def = get_debater_dice(def_debater, language, def_status, tmore, inq, augsburg, mary);
 
-  console.log(deb_atk_dice)
-  console.log(deb_def_dice)
+  var deb_atk_dice = data_atk[0]
+  var deb_def_dice = data_def[0]
+  var atk_val = data_atk[1]
+  var def_val = data_def[1]
+
+  //console.log(data_atk)
+  /* console.log(deb_atk_dice)
+  console.log(deb_def_dice) */
+  //console.log(atk_val)
+  //console.log(def_val)
 
   // add binomial distribution calculations to the js heere!
 
-  var atk_win; // odds of attacker win, tie, or def win
-  var tie;
-  var def_win;
-  var att_elim; // attacker eliminates defender
-  var def_elim; // vice versa
+  var atk_win = 0; // odds of attacker win, tie, or def win
+  var tie = 0;
+  var def_win = 0;
+  var atk_elim = 0; // attacker eliminates defender
+  var def_elim = 0; // vice versa
 
   for (i = 0; i < deb_atk_dice + 1; i++){ // deb_atk_dice + 1 to include the endpoint
-    atk_hits_chance = jStat.binomial.pdf(i, deb_atk_dice, hit_chance)
-    console.log(atk_hits_chance)
-  }
+    // console.log(i)
+    // have to check whether there are invalid cases (e.g. checking for more hits than there are dice and convert the nans to 0)
+    atk_hits_chance = NantoZero(jStat.binomial.pdf(i, deb_atk_dice, hit_chance)) // odds of attacker getting exactly this many hits
+    // console.log(atk_hits_chance)
+    def_hits_fewer = NantoZero(jStat.binomial.cdf(i - 1, deb_def_dice, hit_chance)) // odds of defender getting fewer than this many hits
+    def_hits_equal = NantoZero(jStat.binomial.pdf(i, deb_def_dice, hit_chance)) // odds of defender getting equal number of hits
+    def_hits_more = 1 - def_hits_fewer - def_hits_equal // odds of defender getting more than this many hits
 
-  deb_results_atk.textContent = '1' // display to page
+ /*    console.log(atk_hits_chance)
+    console.log(def_hits_fewer)
+    console.log(def_hits_equal)
+    console.log(def_hits_more) */
+
+    atk_win += (atk_hits_chance * def_hits_fewer) // adding chances of attacker win, tie, and defender win for this many hits
+    // console.log(atk_win)
+    tie += (atk_hits_chance * def_hits_equal)
+    def_win += (atk_hits_chance * def_hits_more)
+
+    atk_hits_elim = NantoZero(jStat.binomial.cdf(i - (def_val + 1), deb_def_dice, hit_chance)) // odds of attacker burning/disgracing defender (defender scores few enough hits)
+    def_hits_elim = NantoZero(1 - jStat.binomial.cdf(i + atk_val, deb_def_dice, hit_chance)) // odds of defender burning/disgracing attacker (defender gets enough hits)
+
+    atk_elim += atk_hits_chance * atk_hits_elim
+    def_elim += atk_hits_chance * def_hits_elim
+  }
+/* 
+  console.log(atk_win)
+  console.log(tie)
+  console.log(def_win)
+  console.log(atk_elim)
+  console.log(def_elim) */
+
+  deb_results_atk.textContent = atk_debater + ' wins ' + (atk_win * 100).toFixed(2) + '% of the time'
+  deb_results_tie.textContent = 'Tie ' + (tie * 100).toFixed(2) + '% of the time'
+  deb_results_def.textContent = def_debater + ' wins ' + (def_win * 100).toFixed(2) + '% of the time'
+
+  elim_chance_atk.textContent = atk_debater + ' has a ' + (atk_elim * 100).toFixed(2) + '% chance to ' + atk_msg + ' ' + def_debater // display to page
+  elim_chance_def.textContent = def_debater + ' has a ' + (def_elim * 100).toFixed(2) + '% chance to ' + def_msg + ' ' + atk_debater
+  // deb_results_def.textContent = '2'
+  /* elim_chance_atk.textContent = '3'
+  elim_chance_def.textContent = '4' */
+
   deb_results_atk.style.color = 'inherit'
-  deb_results_def.textContent = '2'
-  elim_chance_atk.textContent = '3'
-  elim_chance_def.textContent = '4'
 
 }
 
+function NantoZero(val){return +val || 0} // one-line function that checks if there is a nan and converts it to zero
+
 function get_debater_dice(name, language, status, tmore, inq, augsburg, mary, atk_base = ATK_BASE, unc_base = UNC_BASE, com_base = COM_BASE, eck_bonus = ECK_BONUS, gard_bonus = GARD_BONUS, tmore_bonus_eng = TMORE_BONUS_ENG, tmore_bonus_other = TMORE_BONUS_OTHER, inq_bonus = INQ_BONUS, augsburg_pen = AUGSBURG_PEN, mary_multiplier = MARY_MULTIPLIER){
     /*
-    Gets the number of dice a debater rolls in a debate
+    Gets array containing the number of dice a debater rolls in a debate and the debater value
+
     name, language, status should be strs
     tmore, inq, augsburg, mary should all be booleans
     */
@@ -185,7 +234,7 @@ function get_debater_dice(name, language, status, tmore, inq, augsburg, mary, at
        tot_dice -= augsburg_pen
      }
    }
-   return tot_dice
+   return ([tot_dice, deb_val])
 
 }
 
