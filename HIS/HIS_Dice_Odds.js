@@ -78,9 +78,18 @@ function get_debater_odds(){
     //console.log('2')
   }
   else{
-    deb_results_atk.textContent = 'Choose two debaters' // change text to red and throw err
-    deb_results_atk.style.color = 'red'
-    throw "Error: either no protestant debater selected or array not length 1"
+    deb_results_atk.style.color = 'red' // change text to red
+    console.log($("input[type='radio'][name='deb_team']:checked").val());
+    if ($("input[type='radio'][name='deb_team']:checked").val() == undefined){
+      deb_results_atk.textContent = 'Choose an attacking side'
+      // deb_results_atk.style.color = 'red'
+    }
+    else{
+      deb_results_atk.textContent = 'Choose two debaters'
+    }
+    // deb_results_atk.textContent = 'Choose two debaters' // change text to red and throw err
+    // deb_results_atk.style.color = 'red'
+    throw "Error: either no protestant debater selected or array not length 1" //throw err
   }
   //console.log(language)
 
@@ -230,7 +239,7 @@ function get_reform_odds(dice_faces = DICE_FACES, bible_bonus = BIBLE_BONUS){
       atk_results.textContent = 'Attacker has ' + (atk_win * 100).toFixed(2) + '% chance of winning' // print to page
       def_results.textContent = 'Defender has ' + (def_win * 100).toFixed(2) + '% chance of winning' // print to page
 
-      atk_results.style.color = 'white' // change text to red
+      atk_results.style.color = 'initial' // change text to red
       def_results.style.visibility = 'visible' // show element
     }
     else {
