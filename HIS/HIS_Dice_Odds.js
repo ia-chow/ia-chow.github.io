@@ -100,6 +100,7 @@ function get_debater_odds(){
   console.log(deb_def_dice)
 
   deb_results_atk.textContent = '1' // display to page
+  deb_results_atk.style.color = 'inherit'
   deb_results_def.textContent = '2'
   elim_chance_atk.textContent = '3'
   elim_chance_def.textContent = '4'
@@ -239,7 +240,7 @@ function get_reform_odds(dice_faces = DICE_FACES, bible_bonus = BIBLE_BONUS){
       atk_results.textContent = 'Attacker has ' + (atk_win * 100).toFixed(2) + '% chance of winning' // print to page
       def_results.textContent = 'Defender has ' + (def_win * 100).toFixed(2) + '% chance of winning' // print to page
 
-      atk_results.style.color = 'initial' // change text to red
+      atk_results.style.color = 'inherit' // change text to default color
       def_results.style.visibility = 'visible' // show element
     }
     else {
