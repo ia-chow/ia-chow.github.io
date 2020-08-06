@@ -1,5 +1,7 @@
 // CONSTANTS:
 
+const HIT_CHANCE = 1/3 // in vanilla HIS, 5 or 6 on a d6 is a hit for debates/battles
+
 const DICE_FACES = 6 // number of faces on a die (vanilla HIS uses 6 dice)
 const BIBLE_BONUS = 1 // +1 bonus given from bible translations
 
@@ -26,9 +28,10 @@ var data = jQuery.getJSON("./debater_values.json", function(get_debaters){debate
 //console.log(data)
 //console.log(debaters)
 
-function get_debater_odds(){
+function get_debater_odds(hit_chance = HIT_CHANCE){
   /*
   Gets debate odds and changes html elements as appropriate
+  hit chance is default param
   */
   let deb_results_atk = document.getElementById('deb_results_atk')
   let deb_results_def = document.getElementById('deb_results_def')
@@ -98,6 +101,19 @@ function get_debater_odds(){
 
   console.log(deb_atk_dice)
   console.log(deb_def_dice)
+
+  // add binomial distribution calculations to the js heere!
+
+  var atk_win; // odds of attacker win, tie, or def win
+  var tie;
+  var def_win;
+  var att_elim; // attacker eliminates defender
+  var def_elim; // vice versa
+
+  for (i = 0; i < deb_atk_dice + 1; i++){ // deb_atk_dice + 1 to include the endpoint
+    atk_hits_chance = jStat.binomial.pdf(i, deb_atk_dice, hit_chance)
+    console.log(atk_hits_chance)
+  }
 
   deb_results_atk.textContent = '1' // display to page
   deb_results_atk.style.color = 'inherit'
