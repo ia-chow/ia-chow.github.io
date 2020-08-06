@@ -320,9 +320,9 @@ function get_reform_odds(dice_faces = DICE_FACES, bible_bonus = BIBLE_BONUS){
     return true;
 }
 
+// NOT CURRENTLY IN USE
+// FIX THIS FXN AT SOME POINT
 function enforceMinMax(el){
-  // NOT CURRENTLY IN USE
-  // FIX THIS FXN AT SOME POINT
     if(el.value != ""){
       if(parseInt(el.value) < parseInt(el.min)){
         el.value = el.min;
