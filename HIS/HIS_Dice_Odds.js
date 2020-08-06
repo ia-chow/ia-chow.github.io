@@ -33,6 +33,10 @@ function get_debater_odds(hit_chance = HIT_CHANCE){
   Gets debate odds and changes html elements as appropriate
   hit chance is default param
   */
+
+  //todo: add avg number of spaces flipped in more sophisticated way, add debater bonuses for aleander/campeggio
+
+  let summary = document.getElementById('deb_summary')
   let deb_results_atk = document.getElementById('deb_results_atk')
   let deb_results_def = document.getElementById('deb_results_def')
   let deb_results_tie = document.getElementById('deb_results_tie')
@@ -86,14 +90,14 @@ function get_debater_odds(hit_chance = HIT_CHANCE){
     var def_msg = 'disgrace'
   }
   else{
-    deb_results_atk.style.color = 'red' // change text to red
+    summary.style.color = 'red' // change text to red
     // console.log($("input[type='radio'][name='deb_team']:checked").val());
     if ($("input[type='radio'][name='deb_team']:checked").val() == undefined){
-      deb_results_atk.textContent = 'Choose an attacking side'
+      summary.textContent = 'Choose an attacking side'
       // deb_results_atk.style.color = 'red'
     }
     else{
-      deb_results_atk.textContent = 'Choose two debaters'
+      summary.textContent = 'Choose two debaters'
     }
     // deb_results_atk.textContent = 'Choose two debaters' // change text to red and throw err
     // deb_results_atk.style.color = 'red'
@@ -155,6 +159,18 @@ function get_debater_odds(hit_chance = HIT_CHANCE){
   console.log(atk_elim)
   console.log(def_elim) */
 
+  if (def_status == 'unc'){
+    com_msg = 'uncommitted'
+  }
+  else if (def_status == 'com'){
+    com_msg = 'committed'
+  }
+  else{
+    throw 'Somehow defender isn\'t committed or uncommitted?'
+  }
+
+  summary.textContent = atk_debater + ' (' + atk_val + ') debates ' + com_msg + ' ' + def_debater + ' (' + def_val + ') in ' + language + ': ' + deb_atk_dice + ' v ' + deb_def_dice + ' dice'
+  // TODO: figure out how to make some of this appear in different colours
   deb_results_atk.textContent = atk_debater + ' wins ' + (atk_win * 100).toFixed(2) + '% of the time'
   deb_results_tie.textContent = 'Tie ' + (tie * 100).toFixed(2) + '% of the time'
   deb_results_def.textContent = def_debater + ' wins ' + (def_win * 100).toFixed(2) + '% of the time'
@@ -165,7 +181,7 @@ function get_debater_odds(hit_chance = HIT_CHANCE){
   /* elim_chance_atk.textContent = '3'
   elim_chance_def.textContent = '4' */
 
-  deb_results_atk.style.color = 'inherit'
+  summary.style.color = 'inherit'
 
 }
 
@@ -317,9 +333,9 @@ function get_reform_odds(dice_faces = DICE_FACES, bible_bonus = BIBLE_BONUS){
     return true;
 }
 
+// NOT CURRENTLY IN USE
+// FIX THIS FXN AT SOME POINT
 function enforceMinMax(el){
-  // NOT CURRENTLY IN USE
-  // FIX THIS FXN AT SOME POINT
     if(el.value != ""){
       if(parseInt(el.value) < parseInt(el.min)){
         el.value = el.min;
