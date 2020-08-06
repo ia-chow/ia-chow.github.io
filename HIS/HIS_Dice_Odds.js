@@ -33,6 +33,9 @@ function get_debater_odds(hit_chance = HIT_CHANCE){
   Gets debate odds and changes html elements as appropriate
   hit chance is default param
   */
+
+  //todo: add avg number of spaces flipped in more sophisticated way, add debater bonuses for aleander/campeggio
+
   let deb_results_atk = document.getElementById('deb_results_atk')
   let deb_results_def = document.getElementById('deb_results_def')
   let deb_results_tie = document.getElementById('deb_results_tie')
