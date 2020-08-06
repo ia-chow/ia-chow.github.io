@@ -211,7 +211,7 @@ function get_debater_dice(name, language, status, tmore, inq, augsburg, mary, at
    console.log(base_dice)
    console.log(language) */
    if (status == 'atk'){
-     if (language == 'English'){
+     if (language == 'English' && team == 'Papal'){
        if (mary){
          tot_dice *= mary_multiplier
        }
