@@ -70,3 +70,14 @@ function dynamicdropdown(team) {
     // might also want to merge this into the main his_dice_odds js file later
 
 // dynamicdropdown("papal", require("./debater_values.json"))
+
+function toggle_bible(){ // make 
+    let tie_winner = $("input[type='radio'][name='tie_winner']:checked").val()
+
+    if (tie_winner == 'atk'){
+        document.getElementById("bible").style.visibility = 'visible'
+    }
+    else if (tie_winner == 'def'){
+        document.getElementById("bible").style.visibility = 'hidden'
+    }
+}

@@ -26,18 +26,19 @@
     <input id="defender_dice" type="number" value="3" step="1" min="1" max="9999" name="def_dice">
     <br><br>
     Ties won by:
-    <input id="atk_tie" class="radio" type="radio" name="tie_winner" value="atk" onclick="">
+    <input id="atk_tie" class="radio" type="radio" name="tie_winner" value="atk" onclick="toggle_bible()">
     <label for="atk_tie">Attacker</label>
-    <input id="def_tie" class="radio" type="radio" name="tie_winner" value="def" onclick="">
+    <input id="def_tie" class="radio" type="radio" name="tie_winner" value="def" onclick="toggle_bible()">
     <label for="def_tie">Defender</label>
     <br><br>
-    <input id="bible_trans" class="checkbox" type="checkbox" name="bible_trans" value="bible_trans">
-    <label for="bible_trans"> Attacker gets +1 from bible translation/Calvin's Institutes? </label>
-    <br> <br>
+<div id="bible">
+    <label><input id="bible_trans" class="checkbox" type="checkbox" name="bible_trans" value="bible_trans"> Attacker gets +1 from bible translation/Calvin's Institutes? </label>
+</div>
+    <br><br>
     <input id="ref_button" class="button" type="button" value="Calculate Reform Odds" onclick="get_reform_odds()" onkeyup="enforceMinMax(this)">
     <br>
-    <section id="ref_results_atk"></section>
-    <section id="ref_results_def"></section>
+    <div id="ref_results_atk"></div>
+    <div id="ref_results_def"></div>
     <br>
 
 <h2 style="color:#2DBF3B;"> Theological Debate Odds Calculator: </h2>
@@ -73,14 +74,14 @@
 <br><br>
     <input id="debate_button" class="button" type="button" value="Calculate Debate Odds" onclick="get_debater_odds()">
 <br>
-<section id="deb_summary"></section>
+<div id="deb_summary"></div>
 <br>
-<section id="deb_results_atk"></section>
-<section id="deb_results_tie"></section>
-<section id="deb_results_def"></section>
+<div id="deb_results_atk"></div>
+<div id="deb_results_tie"></div>
+<div id="deb_results_def"></div>
 <br>
-<section id="elim_chance_atk"></section>
-<section id="elim_chance_def"></section>
+<div id="elim_chance_atk"></div>
+<div id="elim_chance_def"></div>
 
 <br>
 <p> Note: Aleander/Campeggio's debater bonuses have not been added yet</p>
