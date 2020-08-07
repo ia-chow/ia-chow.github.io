@@ -183,6 +183,7 @@ function get_debater_odds(hit_chance = HIT_CHANCE){
 
   summary.style.color = 'inherit'
 
+  return true;
 }
 
 function NantoZero(val){return +val || 0} // one-line function that checks if there is a nan and converts it to zero
