@@ -25,14 +25,14 @@
     <label for="defender_dice">Defender Dice:</label>
     <input id="defender_dice" type="number" value="3" step="1" min="1" max="9999" name="def_dice">
     <br><br>
-    <label for="tie_winner">Ties won by:</label>
-    <select id="tie_winner" name="tie_winner">
-        <option value="attacker">Attacker</option>
-        <option value="defender">Defender</option>
-    </select>
+    Ties won by:
+    <input id="atk_tie" class="radio" type="radio" name="tie_winner" value="atk" onclick="">
+    <label for="atk_tie">Attacker</label>
+    <input id="def_tie" class="radio" type="radio" name="tie_winner" value="def" onclick="">
+    <label for="def_tie">Defender</label>
     <br><br>
     <input id="bible_trans" class="checkbox" type="checkbox" name="bible_trans" value="bible_trans">
-    <label for="bible_trans"> Attacker gets +1 from bible translation? </label>
+    <label for="bible_trans"> Attacker gets +1 from bible translation/Calvin's Institutes? </label>
     <br> <br>
     <input id="ref_button" class="button" type="button" value="Calculate Reform Odds" onclick="get_reform_odds()" onkeyup="enforceMinMax(this)">
     <br>
