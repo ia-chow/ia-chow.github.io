@@ -152,7 +152,7 @@ function get_debater_odds(hit_chance = HIT_CHANCE){
     atk_elim += atk_hits_chance * atk_hits_elim
     def_elim += atk_hits_chance * def_hits_elim
   }
-  
+
 /* 
   console.log(atk_win)
   console.log(tie)
@@ -326,7 +326,7 @@ function get_reform_odds(dice_faces = DICE_FACES, bible_bonus = BIBLE_BONUS){
       atk_results.style.color = 'inherit' // change text to default color
       def_results.style.visibility = 'visible' // show element
     }
-    else {
+    else { // TODO: maybe use the css error class to handle this in the future?
       atk_results.textContent = 'Please enter a valid number of attacking and defending dice.' // print to page
 
       atk_results.style.color = 'red' // change text to red
