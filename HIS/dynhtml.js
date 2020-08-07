@@ -80,4 +80,7 @@ function toggle_bible(){ // make
     else if (tie_winner == 'def'){
         document.getElementById("bible").style.visibility = 'hidden'
     }
+    else{
+        throw 'Error: Choose a side to win ties'
+    }
 }
