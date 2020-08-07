@@ -269,7 +269,7 @@ function get_reform_odds(dice_faces = DICE_FACES, bible_bonus = BIBLE_BONUS){
 
     const atk_dice = document.getElementById('attacker_dice').value;
     const def_dice = document.getElementById('defender_dice').value;
-    const tie = document.getElementById('tie_winner').value;
+    const tie = $("input[type='radio'][name='tie_winner']:checked").val(); // ditto for this piece of jquery (see debate odds func)
 
     const bible = document.getElementById('bible_trans').checked;
     //console.log(bible)
@@ -290,10 +290,10 @@ function get_reform_odds(dice_faces = DICE_FACES, bible_bonus = BIBLE_BONUS){
     var def_win = 0
     var val;
 
-    if (bible == true){ // set bonus to bible bonus if bible translation active (check dice from higher value)
+    if (bible){ // set bonus to bible bonus if bible translation active (check dice from higher value)
       var bonus = bible_bonus;
     }
-    else if (bible == false){
+    else if (!bible){
       var bonus = 0;
     }
 
