@@ -269,7 +269,7 @@ function get_reform_odds(dice_faces = DICE_FACES, bible_bonus = BIBLE_BONUS){
 
     const atk_dice = document.getElementById('attacker_dice').value;
     const def_dice = document.getElementById('defender_dice').value;
-    const tie = document.getElementById('tie_winner').value;
+    const tie = $("input[type='radio'][name='tie_winner']:checked").val(); // ditto for this piece of jquery (see debate odds func)
 
     const bible = document.getElementById('bible_trans').checked;
     //console.log(bible)
@@ -279,21 +279,26 @@ function get_reform_odds(dice_faces = DICE_FACES, bible_bonus = BIBLE_BONUS){
     // TODO: make the code a little better by doing the validation before entering anything
     // Makes it a lot easier to see whether attacker or defender dice is the issue
 
-    if (tie == 'attacker'){
-        win_ties = true
+    if (tie == 'atk'){
+        var win_ties = true
     }
-    else if (tie == 'defender'){
-        win_ties = false
+    else if (tie == 'def'){
+        var win_ties = false
+    }
+    else{
+      atk_results.textContent = 'Choose a side to win ties'
+      atk_results.style.color = 'red'
+      throw 'Error: pick a side to win ties'
     }
 
     var atk_win = 0
     var def_win = 0
     var val;
 
-    if (bible == true){ // set bonus to bible bonus if bible translation active (check dice from higher value)
+    if (bible){ // set bonus to bible bonus if bible translation active (check dice from higher value)
       var bonus = bible_bonus;
     }
-    else if (bible == false){
+    else if (!bible){
       var bonus = 0;
     }
 
@@ -327,7 +332,7 @@ function get_reform_odds(dice_faces = DICE_FACES, bible_bonus = BIBLE_BONUS){
       def_results.style.visibility = 'visible' // show element
     }
     else { // TODO: maybe use the css error class to handle this in the future?
-      atk_results.textContent = 'Please enter a valid number of attacking and defending dice.' // print to page
+      atk_results.textContent = 'Please enter a valid number of attacking and defending dice' // print to page
 
       atk_results.style.color = 'red' // change text to red
       def_results.style.visibility = 'hidden' // hide element
