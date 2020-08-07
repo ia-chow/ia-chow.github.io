@@ -71,10 +71,12 @@ function dynamicdropdown(team) {
 
 // dynamicdropdown("papal", require("./debater_values.json"))
 
-function toggle_bible(){ // make 
-    let tie_winner = $("input[type='radio'][name='tie_winner']:checked").val()
+function toggle_vis(elem){ // make elements visible or invisible
 
-    if (tie_winner == 'atk'){
+    let elem_type = $('#' + elem).prop('tagName');
+    console.log(elem_type)
+
+    /* if (tie_winner == 'atk'){
         document.getElementById("bible").style.visibility = 'visible'
     }
     else if (tie_winner == 'def'){
@@ -82,5 +84,5 @@ function toggle_bible(){ // make
     }
     else{
         throw 'Error: Choose a side to win ties'
-    }
+    } */
 }

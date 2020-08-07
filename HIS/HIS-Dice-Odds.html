@@ -26,9 +26,9 @@
     <input id="defender_dice" type="number" value="3" step="1" min="1" max="9999" name="def_dice">
     <br><br>
     Ties won by:
-    <input id="atk_tie" class="radio" type="radio" name="tie_winner" value="atk" onclick="toggle_bible()">
+    <input id="atk_tie" class="radio" type="radio" name="tie_winner" value="atk" onclick="">
     <label for="atk_tie">Attacker</label>
-    <input id="def_tie" class="radio" type="radio" name="tie_winner" value="def" onclick="toggle_bible()">
+    <input id="def_tie" class="radio" type="radio" name="tie_winner" value="def" onclick="">
     <label for="def_tie">Defender</label>
     <br><br>
 <div id="bible">
@@ -62,14 +62,14 @@
     <input id="com" class="radio" type="radio" name="commit" value="com">
     <label for="com">Committed</label>
 <br><br>
+    <input id="augsburg" class="checkbox" type="checkbox" name="augsburg" value="augsburg">
+    <label for="augsburg">Augsburg Confession active?</label><br>
     <input id="tmore" class="checkbox" type="checkbox" name="tmore" value="tmore">
+
     <label for="tmore">Thomas More active?</label><br>
     <input id="inq" class="checkbox" type="checkbox" name="inq" value="inq">
     <label for="inq">Papal Inquisition active?</label><br>
-    <input id="augsburg" class="checkbox" type="checkbox" name="augsburg" value="augsburg">
-    <label for="augsburg">Augsburg Confession active?</label><br>
-    <input id="mary" class="checkbox" type="checkbox" name="mary" value="mary">
-    <label for="mary"> Mary I rules England?</label>
+<div id="mary"><label><input id="mary_box" class="checkbox" type="checkbox" name="mary" value="mary">Mary I rules England?</label></div>
 
 <br><br>
     <input id="debate_button" class="button" type="button" value="Calculate Debate Odds" onclick="get_debater_odds()">
