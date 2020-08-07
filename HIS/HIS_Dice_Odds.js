@@ -3,7 +3,7 @@
 const HIT_CHANCE = 1/3 // in vanilla HIS, 5 or 6 on a d6 is a hit for debates/battles
 
 const DICE_FACES = 6 // number of faces on a die (vanilla HIS uses 6 dice)
-const BIBLE_BONUS = 1 // +1 bonus given from bible translations
+const BIBLE_BONUS = 1 // +1 bonus given from bible translations/calvin's institutes
 
 const ATK_BASE = 3 // 3 dice for attacker in theological debates
 const UNC_BASE = 2 // 2 dice for uncommitted defender in theological debates
@@ -152,6 +152,7 @@ function get_debater_odds(hit_chance = HIT_CHANCE){
     atk_elim += atk_hits_chance * atk_hits_elim
     def_elim += atk_hits_chance * def_hits_elim
   }
+  
 /* 
   console.log(atk_win)
   console.log(tie)
