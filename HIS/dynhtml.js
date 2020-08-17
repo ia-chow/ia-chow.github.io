@@ -71,10 +71,25 @@ function dynamicdropdown(team) {
 
 // dynamicdropdown("papal", require("./debater_values.json"))
 
-function toggle_vis(elem){ // make elements visible or invisible
+function toggle_vis(elem, display){ // make elements visible or invisible, and uncheck it if it is a checkbox/radio
 
-    let elem_type = $('#' + elem).prop('tagName');
-    console.log(elem_type)
+    var visible = $('#' + elem).is(':visible') // checks to see if elemen is visible or not
+    // console.log(visible)
+    
+    if (display){
+        document.getElementById(elem).style.display = 'block'
+    }
+    else {
+        document.getElementById(elem).style.display = 'none'
+    }
+    /* if (style.display == 'none'){
+        document.getElementById(elem).style.display == 'inline'
+    }
+    else{
+        document.getElementById(elem).style.display == 'none'
+    } */
+    /* let elem_type = $('#' + elem).prop('tagName');
+    console.log(elem_type) */
 
     /* if (tie_winner == 'atk'){
         document.getElementById("bible").style.visibility = 'visible'

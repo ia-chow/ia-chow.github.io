@@ -11,11 +11,10 @@
     <script src="HIS_Dice_Odds.js"></script>
 </head>
 
-<body>
+<body onload="dynamicdropdown('papal')">
 <h1>Here I Stand Odds Calculator</h1>
 
     <p> This tool allows you to calculate probabilities for various actions (religious conversions, theological debates, battles, etc.) in the board game <a href="https://www.gmtgames.com/p-508-here-i-stand-500th-anniversary-reprint-edition.aspx"> Here I Stand.</a></p>
-    <br>
 
 <h2 style="color:#2DBF3B;"> Reformation/Counter-Reformation Odds Calculator: </h2>
 
@@ -26,24 +25,24 @@
     <input id="defender_dice" type="number" value="3" step="1" min="1" max="9999" name="def_dice">
     <br><br>
     Ties won by:
-    <input id="atk_tie" class="radio" type="radio" name="tie_winner" value="atk" onclick="">
+    <input id="atk_tie" class="radio" type="radio" name="tie_winner" value="atk" onclick="toggle_vis('bible', true)">
     <label for="atk_tie">Attacker</label>
-    <input id="def_tie" class="radio" type="radio" name="tie_winner" value="def" onclick="">
+    <input id="def_tie" class="radio" type="radio" name="tie_winner" value="def" onclick="toggle_vis('bible', false)">
     <label for="def_tie">Defender</label>
     <br><br>
 <div id="bible">
     <label><input id="bible_trans" class="checkbox" type="checkbox" name="bible_trans" value="bible_trans"> Attacker gets +1 from bible translation/Calvin's Institutes? </label>
 </div>
-    <br><br>
+<br>
+<div id="ref_calc">
     <input id="ref_button" class="button" type="button" value="Calculate Reform Odds" onclick="get_reform_odds()" onkeyup="enforceMinMax(this)">
+</div>
     <br>
     <div id="ref_results_atk"></div>
     <div id="ref_results_def"></div>
-    <br>
-
 <h2 style="color:#2DBF3B;"> Theological Debate Odds Calculator: </h2>
     <p>Attacking side:</p>
-    <input id="papal" class="radio" type="radio" name="deb_team" value="papal" onclick="dynamicdropdown('papal')">
+    <input id="papal" class="radio" type="radio" name="deb_team" value="papal" checked="checked" onclick="dynamicdropdown('papal')">
     <label for="papal">Papal</label>
     <input id="protestant" class="radio" type="radio" name="deb_team" value="protestant" onclick="dynamicdropdown('protestant')">
     <label for="protestant">Protestant</label>
