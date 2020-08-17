@@ -7,15 +7,14 @@
     <link rel="stylesheet" href="../style.css">
     <script src="../jquery-3.5.1.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
-    <script src="dyndropdown.js"></script>
+    <script src="dynhtml.js"></script>
     <script src="HIS_Dice_Odds.js"></script>
 </head>
 
-<body>
+<body onload="dynamicdropdown('papal')">
 <h1>Here I Stand Odds Calculator</h1>
 
     <p> This tool allows you to calculate probabilities for various actions (religious conversions, theological debates, battles, etc.) in the board game <a href="https://www.gmtgames.com/p-508-here-i-stand-500th-anniversary-reprint-edition.aspx"> Here I Stand.</a></p>
-    <br>
 
 <h2 style="color:#2DBF3B;"> Reformation/Counter-Reformation Odds Calculator: </h2>
 
@@ -26,23 +25,24 @@
     <input id="defender_dice" type="number" value="3" step="1" min="1" max="9999" name="def_dice">
     <br><br>
     Ties won by:
-    <input id="atk_tie" class="radio" type="radio" name="tie_winner" value="atk" onclick="">
+    <input id="atk_tie" class="radio" type="radio" name="tie_winner" value="atk" checked="checked" onclick="bible_vis()">
     <label for="atk_tie">Attacker</label>
-    <input id="def_tie" class="radio" type="radio" name="tie_winner" value="def" onclick="">
+    <input id="def_tie" class="radio" type="radio" name="tie_winner" value="def" onclick="bible_vis()">
     <label for="def_tie">Defender</label>
     <br><br>
-    <input id="bible_trans" class="checkbox" type="checkbox" name="bible_trans" value="bible_trans">
-    <label for="bible_trans"> Attacker gets +1 from bible translation/Calvin's Institutes? </label>
-    <br> <br>
+<div>
+    <label><input id="bible_trans" class="checkbox" type="checkbox" name="bible_trans" value="bible_trans"> Attacker gets +1 from bible translation/Calvin's Institutes? </label>
+</div>
+<br>
+<div id="ref_calc">
     <input id="ref_button" class="button" type="button" value="Calculate Reform Odds" onclick="get_reform_odds()" onkeyup="enforceMinMax(this)">
+</div>
     <br>
-    <section id="ref_results_atk"></section>
-    <section id="ref_results_def"></section>
-    <br>
-
+    <div id="ref_results_atk"></div>
+    <div id="ref_results_def"></div>
 <h2 style="color:#2DBF3B;"> Theological Debate Odds Calculator: </h2>
     <p>Attacking side:</p>
-    <input id="papal" class="radio" type="radio" name="deb_team" value="papal" onclick="dynamicdropdown('papal')">
+    <input id="papal" class="radio" type="radio" name="deb_team" value="papal" checked="checked" onclick="dynamicdropdown('papal')">
     <label for="papal">Papal</label>
     <input id="protestant" class="radio" type="radio" name="deb_team" value="protestant" onclick="dynamicdropdown('protestant')">
     <label for="protestant">Protestant</label>
@@ -61,26 +61,26 @@
     <input id="com" class="radio" type="radio" name="commit" value="com">
     <label for="com">Committed</label>
 <br><br>
+    <input id="augsburg" class="checkbox" type="checkbox" name="augsburg" value="augsburg">
+    <label for="augsburg">Augsburg Confession active?</label><br>
     <input id="tmore" class="checkbox" type="checkbox" name="tmore" value="tmore">
+
     <label for="tmore">Thomas More active?</label><br>
     <input id="inq" class="checkbox" type="checkbox" name="inq" value="inq">
     <label for="inq">Papal Inquisition active?</label><br>
-    <input id="augsburg" class="checkbox" type="checkbox" name="augsburg" value="augsburg">
-    <label for="augsburg">Augsburg Confession active?</label><br>
-    <input id="mary" class="checkbox" type="checkbox" name="mary" value="mary">
-    <label for="mary"> Mary I rules England?</label>
+<div id="mary"><label><input id="mary_box" class="checkbox" type="checkbox" name="mary" value="mary">Mary I rules England?</label></div>
 
 <br><br>
     <input id="debate_button" class="button" type="button" value="Calculate Debate Odds" onclick="get_debater_odds()">
 <br>
-<section id="deb_summary"></section>
+<div id="deb_summary"></div>
 <br>
-<section id="deb_results_atk"></section>
-<section id="deb_results_tie"></section>
-<section id="deb_results_def"></section>
+<div id="deb_results_atk"></div>
+<div id="deb_results_tie"></div>
+<div id="deb_results_def"></div>
 <br>
-<section id="elim_chance_atk"></section>
-<section id="elim_chance_def"></section>
+<div id="elim_chance_atk"></div>
+<div id="elim_chance_def"></div>
 
 <br>
 <p> Note: Aleander/Campeggio's debater bonuses have not been added yet</p>
