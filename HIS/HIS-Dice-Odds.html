@@ -25,12 +25,12 @@
     <input id="defender_dice" type="number" value="3" step="1" min="1" max="9999" name="def_dice">
     <br><br>
     Ties won by:
-    <input id="atk_tie" class="radio" type="radio" name="tie_winner" value="atk" onclick="toggle_vis('bible', true)">
+    <input id="atk_tie" class="radio" type="radio" name="tie_winner" value="atk" checked="checked" onclick="bible_vis()">
     <label for="atk_tie">Attacker</label>
-    <input id="def_tie" class="radio" type="radio" name="tie_winner" value="def" onclick="toggle_vis('bible', false)">
+    <input id="def_tie" class="radio" type="radio" name="tie_winner" value="def" onclick="bible_vis()">
     <label for="def_tie">Defender</label>
     <br><br>
-<div id="bible">
+<div
     <label><input id="bible_trans" class="checkbox" type="checkbox" name="bible_trans" value="bible_trans"> Attacker gets +1 from bible translation/Calvin's Institutes? </label>
 </div>
 <br>

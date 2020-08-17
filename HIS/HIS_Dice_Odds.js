@@ -338,16 +338,18 @@ function get_reform_odds(dice_faces = DICE_FACES, bible_bonus = BIBLE_BONUS){
       def_results.textContent = 'Defender has ' + (def_win * 100).toFixed(2) + '% chance of winning' // print to page
 
       atk_results.style.color = 'inherit' // change text to default color
-      def_results.style.visibility = 'visible' // show element
+      def_results.style.display = 'block' // show element
     }
     else { // TODO: maybe use the css error class to handle this in the future?
       atk_results.textContent = 'Please enter a valid number of attacking and defending dice' // print to page
 
       atk_results.style.color = 'red' // change text to red
-      def_results.style.visibility = 'hidden' // hide element
+      def_results.style.visibility = 'none' // hide element
     }
     return true;
 }
+
+// FUNCTIONS CURRENTLY NOT IN USE:
 
 // NOT CURRENTLY IN USE
 // FIX THIS FXN AT SOME POINT

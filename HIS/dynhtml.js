@@ -71,12 +71,31 @@ function dynamicdropdown(team) {
 
 // dynamicdropdown("papal", require("./debater_values.json"))
 
-function toggle_vis(elem, display){ // make elements visible or invisible, and uncheck it if it is a checkbox/radio
+function bible_vis(){ // hides bible/calvin box depending on who wins ties
 
-    var visible = $('#' + elem).is(':visible') // checks to see if elemen is visible or not
+    var tie_winner = $("input[type='radio'][name='tie_winner']:checked").val();
+    console.log(tie_winner)
+
+    if (tie_winner == 'atk'){
+        document.getElementById('bible').style.display = 'block' // if attacker button has been clicked display the bible/calvin box
+    }
+    else if (tie_winner == 'def'){ 
+        document.getElementById('bible').checked = false; // if defender button has been clicked hide the bible/calvin box and uncheck it
+        document.getElementById('bible').style.display = 'none'
+    }
+}
+
+// FUNCTIONS NOT CURRENTLY IN USE:
+
+//FXN NOT CURRENTLY IN USE
+function toggle_vis(elem){ // make elements visible or invisible, and uncheck it if it is a checkbox/radio
+    // param str elem: name of string
+    // param bool disp: whether to set the element to visible or not
+
+    var visible = $('#' + elem).is(':visible') // checks to see if element is visible or not
     // console.log(visible)
     
-    if (display){
+    if (visible){
         document.getElementById(elem).style.display = 'block'
     }
     else {
