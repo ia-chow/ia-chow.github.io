@@ -18,6 +18,8 @@ const MARY_MULTIPLIER = 2 // multiplier for papal debater value in england if ma
 
 const NUMSIMULATIONS = 100000 // number of simulations to do for calculating the number of spaces flipped in debates/battles
 const HITVALUE = 5 // value on die for which a hit is scored (and higher values); vanilla HIS hits on 5 or 6
+const ALEANDERBONUS = 1 // bonus spaces flipped by aleander when he's in a debate
+const CAMPEGGIOCANCEL = 5 // value (or higher) on die for which campeggio cancels a loss when he's in a debate (vanilla HIS cancels if 5 or 6)
 
 // import json of debaters and associated values:
 
@@ -181,7 +183,7 @@ function getDebaterOdds(hit_chance = HIT_CHANCE){
     def_elim += atk_hits_chance * def_hits_elim
   }
 
-  const differenceOdds = Object.entries(getHitDifference(deb_atk_dice, deb_def_dice)) // get the odds of certain hit differences
+  const differenceOdds = Object.entries(getHitDifference(atk_debater, def_debater, deb_atk_dice, deb_def_dice)) // get the odds of certain hit differences
 
   // Object.filter = (obj, predicate) => Object.keys(obj).filter(key => predicate(obj[key])).reduce((res, key) => (res[key] = obj[key],res),{});
 
@@ -200,15 +202,33 @@ function getDebaterOdds(hit_chance = HIT_CHANCE){
 
   // atkOdds = Math.abs(atkOdds)
 
+  // might make this into a fxn at some point?
+
+/*   if (atk_debater == 'Aleander'){
+    atkOdds[0] += aleanderBonus
+  }
+  else if (def_debater == 'Aleander'){
+    defOdds[0] += aleanderBonus
+  } */
+
   // TODO: Try to find a more efficient way to do this that does not use a for loop
+  var atkWin = 0;
+  var defWin = 0;
+
   for (var i = 0; i < atkOdds.length; i ++){
     atkOdds[i][0] = Math.abs(atkOdds[i][0]) //take absolute value of hit differences (since negative were for defender earlier)
+    atkWin += parseFloat(atkOdds[i][1])
     atkOdds[i][1] = atkOdds[i][1] + "%"  //append "%" to the end of every probability value in the table
   }
   for (var j = 0; j < defOdds.length; j++){
     defOdds[j][0] = Math.abs(defOdds[j][0]) // same for def
+    defWin += parseFloat(defOdds[j][1])
+    /* console.log(defOdds[j][1])
+    console.log(defWin) */
     defOdds[j][1] = defOdds[j][1] + "%"
   }
+
+  var tieOdds = 100 - atkWin - defWin
 
   atkOdds = atkOdds.sort((a, b) => a[0] - b[0]); // sort arrays so they go from lowest die difference to highest die difference
   defOdds = defOdds.sort((a, b) => a[0] - b[0]);
@@ -249,10 +269,12 @@ function getDebaterOdds(hit_chance = HIT_CHANCE){
 
   summary.textContent = atk_debater + ' (' + atk_val + ') debates ' + com_msg + ' ' + def_debater + ' (' + def_val + ') in ' + language + ': ' + deb_atk_dice + ' v ' + deb_def_dice + ' dice'
   // TODO: figure out how to make some of this appear in different colours
-  deb_results_atk.textContent = atk_debater + ' wins ' + (atk_win * 100).toFixed(2) + '% of the time'
-  deb_results_tie.textContent = 'Tie ' + (tie * 100).toFixed(2) + '% of the time'
-  deb_results_def.textContent = def_debater + ' wins ' + (def_win * 100).toFixed(2) + '% of the time'
+  deb_results_atk.textContent = atk_debater + ' wins ' + (atkWin).toFixed(2) + '% of the time'
+  deb_results_tie.textContent = 'Tie ' + (tieOdds).toFixed(2) + '% of the time'
+  deb_results_def.textContent = def_debater + ' wins ' + (defWin).toFixed(2) + '% of the time'
 
+
+  //TODO: CHANGE THE BURN/DISGRACE CHANCES TO USE THE NEW SIMULATION AS WELL!
   elim_chance_atk.textContent = atk_debater + ' has a ' + (atk_elim * 100).toFixed(2) + '% chance to ' + atk_msg + ' ' + def_debater // display to page
   elim_chance_def.textContent = def_debater + ' has a ' + (def_elim * 100).toFixed(2) + '% chance to ' + def_msg + ' ' + atk_debater
   // deb_results_def.textContent = '2'
@@ -265,7 +287,7 @@ function getDebaterOdds(hit_chance = HIT_CHANCE){
 }
 //});
 
-function getHitDifference(atkDice, defDice, numSimulations=NUMSIMULATIONS, diceFaces=DICEFACES, hitValue=HITVALUE){
+function getHitDifference(atkDebater, defDebater, atkDice, defDice, numSimulations=NUMSIMULATIONS, diceFaces=DICEFACES, hitValue=HITVALUE, aleanderBonus=ALEANDERBONUS, campeggioCancel=CAMPEGGIOCANCEL){
   /*
   Gets the odds of hit difference of attacking and defending dice by simulating rolls
   takes the number of attacking and defending dice
@@ -299,8 +321,24 @@ function getHitDifference(atkDice, defDice, numSimulations=NUMSIMULATIONS, diceF
     }
     // console.log(atkHits);
     // console.log(defHits);
-    const hitDif = atkHits - defHits // positive hit difference means attacker scores more hits, negative means defender scores more
-    sims.push(hitDif);
+    var spacesFlipped = atkHits - defHits // positive hit difference means attacker scores more hits, negative means defender scores more
+    
+    if (atkDebater == 'Aleander' || defDebater == 'Aleander'){ // checks if aleander was in the debate, if he is then it flips an extra space for the winner
+      if (spacesFlipped > 0){
+        spacesFlipped += aleanderBonus
+      }
+      else if (spacesFlipped < 0){
+        spacesFlipped -= aleanderBonus
+      }
+    }
+
+    if ((atkDebater == 'Campeggio' && spacesFlipped < 0) || (defDebater == 'Campeggio' && spacesFlipped > 0)){ // checks if campeggio was in the debate and lost
+        if ((Math.floor(Math.random() * diceFaces) + 1) >= campeggioCancel){ // rolls a die to see if debate is canceled
+          spacesFlipped = 0;
+        }
+    }
+
+    sims.push(spacesFlipped);
     // console.log(hitDif)
   }
   // console.log(sims)
