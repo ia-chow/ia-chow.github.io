@@ -2,7 +2,7 @@
 
 const HIT_CHANCE = 1/3 // in vanilla HIS, 5 or 6 on a d6 is a hit for debates/battles
 
-const DICE_FACES = 6 // number of faces on a die (vanilla HIS uses 6 dice)
+const DICEFACES = 6 // number of faces on a die (vanilla HIS uses 6 dice)
 const BIBLE_BONUS = 1 // +1 bonus given from bible translations/calvin's institutes
 
 const ATK_BASE = 3 // 3 dice for attacker in theological debates
@@ -16,6 +16,9 @@ const AUGSBURG_PEN = 1  // malus dice for effects of Augsburg Confession
 const INQ_BONUS = 2  // bonus dice for papal inquisition
 const MARY_MULTIPLIER = 2 // multiplier for papal debater value in england if mary rules england
 
+const NUMSIMULATIONS = 100 // number of simulations to do for calculating the number of spaces flipped in debates/battles
+const HITVALUE = 5 // value on die for which a hit is scored (and higher values); vanilla HIS hits on 5 or 6
+
 // import json of debaters and associated values:
 
 // var debaters;
@@ -27,7 +30,8 @@ var data = jQuery.getJSON("./debater_values.json", function(get_debaters){debate
 
 //console.log(data)
 //console.log(debaters)
-
+$(document).ready(function() {
+  // Handler for .ready() called.
 function getDebaterOdds(hit_chance = HIT_CHANCE){
   /*
   Gets debate odds and changes html elements as appropriate
@@ -184,10 +188,52 @@ function getDebaterOdds(hit_chance = HIT_CHANCE){
 
   summary.style.color = 'inherit'
 
+  getHitDifference(7, 5);
+
   return true;
 }
+});
 
-function getHitDifferenc
+function getHitDifference(atkDice, defDice, numSimulations=NUMSIMULATIONS, diceFaces=DICEFACES, hitValue=HITVALUE){
+  /*
+  Gets the odds of hit difference of attacking and defending dice by simulating rolls
+  takes the number of attacking and defending dice
+  Returns array probability of hit difference for attacker and defender
+
+  Negative numbers
+  */
+
+  for (i = 0; i < numSimulations; i++){
+    // rand = Math.floor(Math.random() * 6) + 1;
+
+    var atkHits = 0;
+    var defHits = 0;
+    // const hitDif;
+    var sims = []
+
+    // BELOW CODE CAN GET SLOW FOR LARGE VALUES OF ATTACK AND DEFENSE DICE MAYBE?
+    // CAN TRY TO OPTIMIZE IF POSSIBLE
+
+    for (j = 1; j <= atkDice; j++) { // j = 1 and until j = atkDice
+      const rand = Math.floor(Math.random() * diceFaces) + 1 // generates random number from 1 to dice value
+      if (rand >= hitValue){ // if random is equal to or greater than hitvalue then record a hit
+        atkHits ++;
+      }
+    }
+    for (j = 1; j <= defDice; j++){
+      const rand = Math.floor(Math.random() * diceFaces) + 1 // same thing but for defense dice
+      if (rand >= hitValue){
+        defHits ++;
+      }
+    }
+    // console.log(atkHits);
+    // console.log(defHits);
+    const hitDif = atkHits - defHits // positive hit difference means attacker scores more hits, negative means defender scores more
+    sims = sims.push(hitDif)
+    console.log(hitDif)
+  }
+  console.log(sims)
+}
 
 function NantoZero(val){return +val || 0} // one-line function that checks if there is a nan and converts it to zero
 
@@ -260,7 +306,7 @@ function getDebaterDice(name, language, status, tmore, inq, augsburg, mary, atk_
 
 // console.log(getDebaterDice('Eck'));
 
-function getReformOdds(dice_faces = DICE_FACES, bible_bonus = BIBLE_BONUS){
+function getReformOdds(diceFaces = DICEFACES, bible_bonus = BIBLE_BONUS){
     /*
     Gets reform odds and then changes html element on the page appropriately
     // TODO: HIDE THE BOX ON THE PAGE IF POSSIBLE
@@ -315,11 +361,11 @@ function getReformOdds(dice_faces = DICE_FACES, bible_bonus = BIBLE_BONUS){
 
     // console.log(bonus)
 
-    for (val = 1; val < dice_faces + 1; val++){
-        const prob_def = ((val/dice_faces) ** def_dice) - (((val - 1)/dice_faces) ** def_dice); // probability that highest defender roll is equal to this value
+    for (val = 1; val < diceFaces + 1; val++){
+        const prob_def = ((val/diceFaces) ** def_dice) - (((val - 1)/diceFaces) ** def_dice); // probability that highest defender roll is equal to this value
         
-        const prob_atk_less = ((val - 1 - bonus)/dice_faces) ** atk_dice;  // probability that all attacker dice are lower than this value
-        const prob_equal = ((val - bonus)/dice_faces) ** atk_dice - prob_atk_less; // probability that highest attacker roll is exactly equal to the given roll (tie)
+        const prob_atk_less = ((val - 1 - bonus)/diceFaces) ** atk_dice;  // probability that all attacker dice are lower than this value
+        const prob_equal = ((val - bonus)/diceFaces) ** atk_dice - prob_atk_less; // probability that highest attacker roll is exactly equal to the given roll (tie)
         const prob_atk_more = 1 - prob_atk_less - prob_equal; // probability that highest attacker roll is greater than given value
 
         atk_win += prob_def * prob_atk_more;
