@@ -200,6 +200,16 @@ function getDebaterOdds(hit_chance = HIT_CHANCE){
 
   // atkOdds = Math.abs(atkOdds)
 
+  // TODO: Try to find a more efficient way to do this that does not use a for loop
+  for (var i = 0; i < atkOdds.length; i ++){
+    atkOdds[i][0] = Math.abs(atkOdds[i][0]) //take absolute value of hit differences (since negative were for defender earlier)
+    atkOdds[i][1] = atkOdds[i][1] + "%"  //append "%" to the end of every probability value in the table
+  }
+  for (var j = 0; j < defOdds.length; j++){
+    defOdds[j][0] = Math.abs(defOdds[j][0]) // same for def
+    defOdds[j][1] = defOdds[j][1] + "%"
+  }
+
   atkOdds = atkOdds.sort((a, b) => a[0] - b[0]); // sort arrays so they go from lowest die difference to highest die difference
   defOdds = defOdds.sort((a, b) => a[0] - b[0]);
 
