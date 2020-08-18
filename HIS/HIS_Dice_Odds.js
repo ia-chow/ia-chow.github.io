@@ -28,6 +28,37 @@ var data = jQuery.getJSON("./debater_values.json", function(get_debaters){debate
 // console.log(data)
 // console.log(debaters)
 
+function generateTableHead(table, data) {
+  /*
+  Generates a table head
+  */
+  let thead = table.createTHead();
+  let row = thead.insertRow();
+  for (let key of data) {
+    let th = document.createElement("th");
+    let text = document.createTextNode(key);
+    th.appendChild(text);
+    row.appendChild(th);
+    // console.log('thead print')
+  }
+}
+
+function generateTable(table, data) {
+  /*
+  Generates a table
+  */
+
+  for (let element of data) {
+    let row = table.insertRow();
+    for (key in element) {
+      let cell = row.insertCell();
+      let text = document.createTextNode(element[key]);
+      cell.appendChild(text);
+      // console.log('thead print')
+    }
+  }
+}
+
 //console.log(data)
 //console.log(debaters)
 //$(document).ready(function() { // check to make sure document is loaded because otherwise debater lists don't generate properly sometimes
@@ -150,6 +181,43 @@ function getDebaterOdds(hit_chance = HIT_CHANCE){
     def_elim += atk_hits_chance * def_hits_elim
   }
 
+  const differenceOdds = Object.entries(getHitDifference(deb_atk_dice, deb_def_dice)) // get the odds of certain hit differences
+
+  // Object.filter = (obj, predicate) => Object.keys(obj).filter(key => predicate(obj[key])).reduce((res, key) => (res[key] = obj[key],res),{});
+
+  // console.log(differenceOdds)
+
+  /* console.log(differenceOdds)
+  console.log(atkOdds) */
+  // console.log(Object.keys(differenceOdds)[1])
+  // console.log(defOdds) 
+
+  let atkTable = document.getElementById("deb_hit_difference_atk");
+  let defTable = document.getElementById('deb_hit_difference_def');
+
+  let atkOdds = (differenceOdds.filter(diff => diff[0] > 0)) // split differenceOdds into two arrays for attacker and defender
+  let defOdds = (differenceOdds.filter(diff => diff[0] < 0)) // negative means defender has more hits
+
+  // atkOdds = Math.abs(atkOdds)
+
+  atkOdds = atkOdds.sort((a, b) => a[0] - b[0]); // sort arrays so they go from lowest die difference to highest die difference
+  defOdds = defOdds.sort((a, b) => a[0] - b[0]);
+
+  /* console.log(atkOdds)
+  console.log(defOdds) */
+
+  atkTable.deleteTHead(); // deletes table heads if exist already
+  defTable.deleteTHead();
+
+  generateTableHead(atkTable, ['Hit Difference for ' + atk_debater, 'Chance']); // generate the two tables using the generate table func
+  generateTable(atkTable, atkOdds);
+
+  generateTableHead(defTable, ['Hit Difference for ' + def_debater, 'Chance'])
+  generateTable(defTable, defOdds);
+
+  atkTable.style.display = 'inline' // display table
+  defTable.style.display = 'inline'
+
 /* 
   console.log(atk_win)
   console.log(tie)
@@ -164,8 +232,10 @@ function getDebaterOdds(hit_chance = HIT_CHANCE){
     com_msg = 'committed'
   }
   else{
-    throw 'Somehow defender isn\'t committed or uncommitted?'
+    throw 'Error: Somehow defender isn\'t committed or uncommitted? Fix this'
   }
+
+  // display the other stuff that isn't the text from earlier
 
   summary.textContent = atk_debater + ' (' + atk_val + ') debates ' + com_msg + ' ' + def_debater + ' (' + def_val + ') in ' + language + ': ' + deb_atk_dice + ' v ' + deb_def_dice + ' dice'
   // TODO: figure out how to make some of this appear in different colours
@@ -181,8 +251,6 @@ function getDebaterOdds(hit_chance = HIT_CHANCE){
 
   summary.style.color = 'inherit'
 
-  getHitDifference(7, 5);
-
   return true;
 }
 //});
@@ -191,7 +259,7 @@ function getHitDifference(atkDice, defDice, numSimulations=NUMSIMULATIONS, diceF
   /*
   Gets the odds of hit difference of attacking and defending dice by simulating rolls
   takes the number of attacking and defending dice
-  Returns array probability of hit difference for attacker and defender
+  Returns probabilities of hit differences for attacker and defender
 
   Negative numbers represent defender getting more hits than the attacker
   */
@@ -236,7 +304,7 @@ function getHitDifference(atkDice, defDice, numSimulations=NUMSIMULATIONS, diceF
   //console.log(sims)
   //console.log(results)
   //console.log(Object.entries(results))
-  probabilities = Object.fromEntries(Object.entries(results).map(([key, value]) => [key, value/numSimulations]));
+  probabilities = Object.fromEntries(Object.entries(results).map(([key, value]) => [key, (value/numSimulations * 100).toFixed(2)])); // divides values in obj by the number of simulations and then multiplies by 100, to find probability in percentages, and then rounds to two digits
   // console.log(probabilities)
   return probabilities
 }

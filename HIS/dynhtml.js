@@ -92,7 +92,7 @@ function toggleVis(elem){ // make elements visible or invisible, and uncheck it 
     // param str elem: name of string
     // param bool disp: whether to set the element to visible or not
 
-    var visible = $('#' + elem).is(':visible') // checks to see if element is visible or not
+    var visible = $('#' + elem).is(':visible') // checks to see if element is visible or not, uses jquery
     // console.log(visible)
     
     if (visible){
