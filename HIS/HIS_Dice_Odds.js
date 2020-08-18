@@ -28,7 +28,7 @@ var data = jQuery.getJSON("./debater_values.json", function(get_debaters){debate
 //console.log(data)
 //console.log(debaters)
 
-function get_debater_odds(hit_chance = HIT_CHANCE){
+function getDebaterOdds(hit_chance = HIT_CHANCE){
   /*
   Gets debate odds and changes html elements as appropriate
   hit chance is default param
@@ -105,8 +105,8 @@ function get_debater_odds(hit_chance = HIT_CHANCE){
   }
   //console.log(language)
 
-  var data_atk = get_debater_dice(atk_debater, language, atk_status, tmore, inq, augsburg, mary); // get debater dice and value
-  var data_def = get_debater_dice(def_debater, language, def_status, tmore, inq, augsburg, mary);
+  var data_atk = getDebaterDice(atk_debater, language, atk_status, tmore, inq, augsburg, mary); // get debater dice and value
+  var data_def = getDebaterDice(def_debater, language, def_status, tmore, inq, augsburg, mary);
 
   var deb_atk_dice = data_atk[0]
   var deb_def_dice = data_def[0]
@@ -127,15 +127,14 @@ function get_debater_odds(hit_chance = HIT_CHANCE){
   var atk_elim = 0; // attacker eliminates defender
   var def_elim = 0; // vice versa
 
-  for (i = 0; i < deb_atk_dice + 1; i++){ // deb_atk_dice + 1 to include the endpoint
+  for (ddice = 0; ddice < deb_atk_dice + 1; ddice++){ // deb_atk_dice + 1 to include the endpoint
     // console.log(i)
     // have to check whether there are invalid cases (e.g. checking for more hits than there are dice and convert the nans to 0)
-    atk_hits_chance = NantoZero(jStat.binomial.pdf(i, deb_atk_dice, hit_chance)) // odds of attacker getting exactly this many hits
+    atk_hits_chance = NantoZero(jStat.binomial.pdf(ddice, deb_atk_dice, hit_chance)) // odds of attacker getting exactly this many hits
     // console.log(atk_hits_chance)
-    def_hits_fewer = NantoZero(jStat.binomial.cdf(i - 1, deb_def_dice, hit_chance)) // odds of defender getting fewer than this many hits
-    def_hits_equal = NantoZero(jStat.binomial.pdf(i, deb_def_dice, hit_chance)) // odds of defender getting equal number of hits
+    def_hits_fewer = NantoZero(jStat.binomial.cdf(ddice - 1, deb_def_dice, hit_chance)) // odds of defender getting fewer than this many hits
+    def_hits_equal = NantoZero(jStat.binomial.pdf(ddice, deb_def_dice, hit_chance)) // odds of defender getting equal number of hits
     def_hits_more = 1 - def_hits_fewer - def_hits_equal // odds of defender getting more than this many hits
-    
 
  /*    console.log(atk_hits_chance)
     console.log(def_hits_fewer)
@@ -147,8 +146,8 @@ function get_debater_odds(hit_chance = HIT_CHANCE){
     tie += (atk_hits_chance * def_hits_equal)
     def_win += (atk_hits_chance * def_hits_more)
 
-    atk_hits_elim = NantoZero(jStat.binomial.cdf(i - (def_val + 1), deb_def_dice, hit_chance)) // odds of attacker burning/disgracing defender (defender scores few enough hits)
-    def_hits_elim = NantoZero(1 - jStat.binomial.cdf(i + atk_val, deb_def_dice, hit_chance)) // odds of defender burning/disgracing attacker (defender gets enough hits)
+    atk_hits_elim = NantoZero(jStat.binomial.cdf(ddice - (def_val + 1), deb_def_dice, hit_chance)) // odds of attacker burning/disgracing defender (defender scores few enough hits)
+    def_hits_elim = NantoZero(1 - jStat.binomial.cdf(ddice + atk_val, deb_def_dice, hit_chance)) // odds of defender burning/disgracing attacker (defender gets enough hits)
 
     atk_elim += atk_hits_chance * atk_hits_elim
     def_elim += atk_hits_chance * def_hits_elim
@@ -188,9 +187,11 @@ function get_debater_odds(hit_chance = HIT_CHANCE){
   return true;
 }
 
+function getHitDifferenc
+
 function NantoZero(val){return +val || 0} // one-line function that checks if there is a nan and converts it to zero
 
-function get_debater_dice(name, language, status, tmore, inq, augsburg, mary, atk_base = ATK_BASE, unc_base = UNC_BASE, com_base = COM_BASE, eck_bonus = ECK_BONUS, gard_bonus = GARD_BONUS, tmore_bonus_eng = TMORE_BONUS_ENG, tmore_bonus_other = TMORE_BONUS_OTHER, inq_bonus = INQ_BONUS, augsburg_pen = AUGSBURG_PEN, mary_multiplier = MARY_MULTIPLIER){
+function getDebaterDice(name, language, status, tmore, inq, augsburg, mary, atk_base = ATK_BASE, unc_base = UNC_BASE, com_base = COM_BASE, eck_bonus = ECK_BONUS, gard_bonus = GARD_BONUS, tmore_bonus_eng = TMORE_BONUS_ENG, tmore_bonus_other = TMORE_BONUS_OTHER, inq_bonus = INQ_BONUS, augsburg_pen = AUGSBURG_PEN, mary_multiplier = MARY_MULTIPLIER){
     /*
     Gets array containing the number of dice a debater rolls in a debate and the debater value
 
@@ -257,9 +258,9 @@ function get_debater_dice(name, language, status, tmore, inq, augsburg, mary, at
 
 }
 
-// console.log(get_debater_dice('Eck'));
+// console.log(getDebaterDice('Eck'));
 
-function get_reform_odds(dice_faces = DICE_FACES, bible_bonus = BIBLE_BONUS){
+function getReformOdds(dice_faces = DICE_FACES, bible_bonus = BIBLE_BONUS){
     /*
     Gets reform odds and then changes html element on the page appropriately
     // TODO: HIDE THE BOX ON THE PAGE IF POSSIBLE
@@ -365,4 +366,4 @@ function enforceMinMax(el){
     }
   }
 
-// console.log(get_reform_odds(3, 4, 'defender', 3));
+// console.log(getReformOdds(3, 4, 'defender', 3));

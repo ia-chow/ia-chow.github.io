@@ -8,7 +8,7 @@ var data = jQuery.getJSON("./debater_values.json", function(get_debaters){debate
 //console.log(data)
 //console.log(debaters)
 
-function dynamicdropdown(team) {
+function dynamicDropdown(team) {
     /*
     Creates dynamic drop down lists of attacking and defending debaters given the attacking team
     */
@@ -71,7 +71,7 @@ function dynamicdropdown(team) {
 
 // dynamicdropdown("papal", require("./debater_values.json"))
 
-function bible_vis(){ // hides bible/calvin box depending on who wins ties
+function bibleVis(){ // hides bible/calvin box depending on who wins ties
 
     var tie_winner = $("input[type='radio'][name='tie_winner']:checked").val();
     console.log(tie_winner)
@@ -88,7 +88,7 @@ function bible_vis(){ // hides bible/calvin box depending on who wins ties
 // FUNCTIONS NOT CURRENTLY IN USE:
 
 //FXN NOT CURRENTLY IN USE
-function toggle_vis(elem){ // make elements visible or invisible, and uncheck it if it is a checkbox/radio
+function toggleVis(elem){ // make elements visible or invisible, and uncheck it if it is a checkbox/radio
     // param str elem: name of string
     // param bool disp: whether to set the element to visible or not
 

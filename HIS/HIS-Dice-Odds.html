@@ -25,9 +25,9 @@
     <input id="defender_dice" type="number" value="3" step="1" min="1" max="9999" name="def_dice">
     <br><br>
     Ties won by:
-    <input id="atk_tie" class="radio" type="radio" name="tie_winner" value="atk" checked="checked" onclick="bible_vis()">
+    <input id="atk_tie" class="radio" type="radio" name="tie_winner" value="atk" checked="checked" onclick="bibleVis()">
     <label for="atk_tie">Attacker</label>
-    <input id="def_tie" class="radio" type="radio" name="tie_winner" value="def" onclick="bible_vis()">
+    <input id="def_tie" class="radio" type="radio" name="tie_winner" value="def" onclick="bibleVis()">
     <label for="def_tie">Defender</label>
     <br><br>
 <div id="bible">
@@ -35,16 +35,16 @@
 </div>
 <br>
 <div id="ref_calc">
-    <input id="ref_button" class="button" type="button" value="Calculate Reform Odds" onclick="get_reform_odds()" onkeyup="enforceMinMax(this)">
+    <input id="ref_button" class="button" type="button" value="Calculate Reform Odds" onclick="getReformOdds()" onkeyup="enforceMinMax(this)">
 </div>
     <br>
     <div id="ref_results_atk"></div>
     <div id="ref_results_def"></div>
 <h2 style="color:#2DBF3B;"> Theological Debate Odds Calculator: </h2>
     <p>Attacking side:</p>
-    <input id="papal" class="radio" type="radio" name="deb_team" value="papal" checked="checked" onclick="dynamicdropdown('papal')">
+    <input id="papal" class="radio" type="radio" name="deb_team" value="papal" checked="checked" onclick="dynamicDropdown('papal')">
     <label for="papal">Papal</label>
-    <input id="protestant" class="radio" type="radio" name="deb_team" value="protestant" onclick="dynamicdropdown('protestant')">
+    <input id="protestant" class="radio" type="radio" name="deb_team" value="protestant" onclick="dynamicDropdown('protestant')">
     <label for="protestant">Protestant</label>
     <br><br>
 <p><label for="atk_dropdown" name="atk_dropdown">Attacking Debater: </label></p>
@@ -71,7 +71,7 @@
 <div id="mary"><label><input id="mary_box" class="checkbox" type="checkbox" name="mary" value="mary">Mary I rules England?</label></div>
 
 <br><br>
-    <input id="debate_button" class="button" type="button" value="Calculate Debate Odds" onclick="get_debater_odds()">
+    <input id="debate_button" class="button" type="button" value="Calculate Debate Odds" onclick="getDebaterOdds()">
 <br>
 <div id="deb_summary"></div>
 <br>
