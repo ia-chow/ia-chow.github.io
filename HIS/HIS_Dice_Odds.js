@@ -30,16 +30,12 @@ var data = jQuery.getJSON("./debater_values.json", function(get_debaters){debate
 
 //console.log(data)
 //console.log(debaters)
-$(document).ready(function() {
-  // Handler for .ready() called.
+//$(document).ready(function() { // check to make sure document is loaded because otherwise debater lists don't generate properly sometimes
 function getDebaterOdds(hit_chance = HIT_CHANCE){
   /*
   Gets debate odds and changes html elements as appropriate
   hit chance is default param
   */
-
-  //todo: add avg number of spaces flipped in more sophisticated way, add debater bonuses for aleander/campeggio
-
   let summary = document.getElementById('deb_summary')
   let deb_results_atk = document.getElementById('deb_results_atk')
   let deb_results_def = document.getElementById('deb_results_def')
@@ -48,10 +44,7 @@ function getDebaterOdds(hit_chance = HIT_CHANCE){
   let elim_chance_def = document.getElementById('elim_chance_def')
   // console.log('2')
 
-  // TODO: ADD DROPDOWN FOR THOMAS MORE/PAPAL INQUISITION
-  // ADD CHECKBOX FOR AUGSBURG
-  // DISPLAY CHECKBOX FOR MARY ONLY IF ENGLISH LANGUAGE DEBATER SELECTED
-  // NOT SUPER HIGH PRIORITY THOUGH
+  // tODO: DISPLAY CHECKBOX FOR MARY ONLY IF ENGLISH LANGUAGE DEBATER SELECTED
 
   // grabbing all the data from the page
   const atk_debater = document.getElementById('atk_dropdown').value;
@@ -192,7 +185,7 @@ function getDebaterOdds(hit_chance = HIT_CHANCE){
 
   return true;
 }
-});
+//});
 
 function getHitDifference(atkDice, defDice, numSimulations=NUMSIMULATIONS, diceFaces=DICEFACES, hitValue=HITVALUE){
   /*
