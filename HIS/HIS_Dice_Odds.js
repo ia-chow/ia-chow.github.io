@@ -135,6 +135,7 @@ function get_debater_odds(hit_chance = HIT_CHANCE){
     def_hits_fewer = NantoZero(jStat.binomial.cdf(i - 1, deb_def_dice, hit_chance)) // odds of defender getting fewer than this many hits
     def_hits_equal = NantoZero(jStat.binomial.pdf(i, deb_def_dice, hit_chance)) // odds of defender getting equal number of hits
     def_hits_more = 1 - def_hits_fewer - def_hits_equal // odds of defender getting more than this many hits
+    
 
  /*    console.log(atk_hits_chance)
     console.log(def_hits_fewer)
