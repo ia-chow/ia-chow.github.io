@@ -16,7 +16,7 @@ const AUGSBURG_PEN = 1  // malus dice for effects of Augsburg Confession
 const INQ_BONUS = 2  // bonus dice for papal inquisition
 const MARY_MULTIPLIER = 2 // multiplier for papal debater value in england if mary rules england
 
-const NUMSIMULATIONS = 100 // number of simulations to do for calculating the number of spaces flipped in debates/battles
+const NUMSIMULATIONS = 100000 // number of simulations to do for calculating the number of spaces flipped in debates/battles
 const HITVALUE = 5 // value on die for which a hit is scored (and higher values); vanilla HIS hits on 5 or 6
 
 // import json of debaters and associated values:
@@ -193,8 +193,9 @@ function getHitDifference(atkDice, defDice, numSimulations=NUMSIMULATIONS, diceF
   takes the number of attacking and defending dice
   Returns array probability of hit difference for attacker and defender
 
-  Negative numbers
+  Negative numbers represent defender getting more hits than the attacker
   */
+  var sims = []
 
   for (i = 0; i < numSimulations; i++){
     // rand = Math.floor(Math.random() * 6) + 1;
@@ -202,18 +203,17 @@ function getHitDifference(atkDice, defDice, numSimulations=NUMSIMULATIONS, diceF
     var atkHits = 0;
     var defHits = 0;
     // const hitDif;
-    var sims = []
 
     // BELOW CODE CAN GET SLOW FOR LARGE VALUES OF ATTACK AND DEFENSE DICE MAYBE?
     // CAN TRY TO OPTIMIZE IF POSSIBLE
 
-    for (j = 1; j <= atkDice; j++) { // j = 1 and until j = atkDice
+    for (var j = 1; j <= atkDice; j++) { // j = 1 and until j = atkDice
       const rand = Math.floor(Math.random() * diceFaces) + 1 // generates random number from 1 to dice value
       if (rand >= hitValue){ // if random is equal to or greater than hitvalue then record a hit
         atkHits ++;
       }
     }
-    for (j = 1; j <= defDice; j++){
+    for (var j = 1; j <= defDice; j++){
       const rand = Math.floor(Math.random() * diceFaces) + 1 // same thing but for defense dice
       if (rand >= hitValue){
         defHits ++;
@@ -222,10 +222,23 @@ function getHitDifference(atkDice, defDice, numSimulations=NUMSIMULATIONS, diceF
     // console.log(atkHits);
     // console.log(defHits);
     const hitDif = atkHits - defHits // positive hit difference means attacker scores more hits, negative means defender scores more
-    sims = sims.push(hitDif)
-    console.log(hitDif)
+    sims.push(hitDif);
+    // console.log(hitDif)
   }
-  console.log(sims)
+  // console.log(sims)
+  var results = { };
+  for (var k = 0; k < sims.length; k++){ // count up all the values that appear in the results in a js obj
+    if (!results[sims[k]]){
+      results[sims[k]] = 0;
+    }
+    results[sims[k]]++;
+  }
+  //console.log(sims)
+  //console.log(results)
+  //console.log(Object.entries(results))
+  probabilities = Object.fromEntries(Object.entries(results).map(([key, value]) => [key, value/numSimulations]));
+  // console.log(probabilities)
+  return probabilities
 }
 
 function NantoZero(val){return +val || 0} // one-line function that checks if there is a nan and converts it to zero
