@@ -160,11 +160,11 @@ function getDebaterOdds(hit_chance = HIT_CHANCE){
   for (ddice = 0; ddice < deb_atk_dice + 1; ddice++){ // deb_atk_dice + 1 to include the endpoint
     // console.log(i)
     // have to check whether there are invalid cases (e.g. checking for more hits than there are dice and convert the nans to 0)
-    atk_hits_chance = NantoZero(jStat.binomial.pdf(ddice, deb_atk_dice, hit_chance)) // odds of attacker getting exactly this many hits
+    let atk_hits_chance = NantoZero(jStat.binomial.pdf(ddice, deb_atk_dice, hit_chance)) // odds of attacker getting exactly this many hits
     // console.log(atk_hits_chance)
-    def_hits_fewer = NantoZero(jStat.binomial.cdf(ddice - 1, deb_def_dice, hit_chance)) // odds of defender getting fewer than this many hits
-    def_hits_equal = NantoZero(jStat.binomial.pdf(ddice, deb_def_dice, hit_chance)) // odds of defender getting equal number of hits
-    def_hits_more = 1 - def_hits_fewer - def_hits_equal // odds of defender getting more than this many hits
+    let def_hits_fewer = NantoZero(jStat.binomial.cdf(ddice - 1, deb_def_dice, hit_chance)) // odds of defender getting fewer than this many hits
+    let def_hits_equal = NantoZero(jStat.binomial.pdf(ddice, deb_def_dice, hit_chance)) // odds of defender getting equal number of hits
+    let def_hits_more = 1 - def_hits_fewer - def_hits_equal // odds of defender getting more than this many hits
 
  /*    console.log(atk_hits_chance)
     console.log(def_hits_fewer)
@@ -176,8 +176,8 @@ function getDebaterOdds(hit_chance = HIT_CHANCE){
     tie += (atk_hits_chance * def_hits_equal)
     def_win += (atk_hits_chance * def_hits_more)
 
-    atk_hits_elim = NantoZero(jStat.binomial.cdf(ddice - (def_val + 1), deb_def_dice, hit_chance)) // odds of attacker burning/disgracing defender (defender scores few enough hits)
-    def_hits_elim = NantoZero(1 - jStat.binomial.cdf(ddice + atk_val, deb_def_dice, hit_chance)) // odds of defender burning/disgracing attacker (defender gets enough hits)
+    let atk_hits_elim = NantoZero(jStat.binomial.cdf(ddice - (def_val + 1), deb_def_dice, hit_chance)) // odds of attacker burning/disgracing defender (defender scores few enough hits)
+    let def_hits_elim = NantoZero(1 - jStat.binomial.cdf(ddice + atk_val, deb_def_dice, hit_chance)) // odds of defender burning/disgracing attacker (defender gets enough hits)
 
     atk_elim += atk_hits_chance * atk_hits_elim
     def_elim += atk_hits_chance * def_hits_elim
@@ -304,18 +304,18 @@ function getHitDifference(atkDebater, defDebater, atkDice, defDice, numSimulatio
     var defHits = 0;
     // const hitDif;
 
-    // BELOW CODE CAN GET SLOW FOR LARGE VALUES OF ATTACK AND DEFENSE DICE MAYBE?
+    // BELOW CODE CAN GET SLOW FOR LARGE VALUES OF ATTACK AND DEFENSE DICE MAYBE (notable difference when at >1e7 trials I think)?
     // CAN TRY TO OPTIMIZE IF POSSIBLE
 
     for (var j = 1; j <= atkDice; j++) { // j = 1 and until j = atkDice
-      const rand = Math.floor(Math.random() * diceFaces) + 1 // generates random number from 1 to dice value
-      if (rand >= hitValue){ // if random is equal to or greater than hitvalue then record a hit
+      // const rand = Math.floor(Math.random() * diceFaces) + 1 // generates random number from 1 to dice value
+      if (Math.floor(Math.random() * diceFaces) + 1 >= hitValue){ // if random is equal to or greater than hitvalue then record a hit
         atkHits ++;
       }
     }
     for (var j = 1; j <= defDice; j++){
-      const rand = Math.floor(Math.random() * diceFaces) + 1 // same thing but for defense dice
-      if (rand >= hitValue){
+      // const rand =  // same thing but for defense dice
+      if (Math.floor(Math.random() * diceFaces) + 1 >= hitValue){
         defHits ++;
       }
     }
@@ -336,6 +336,7 @@ function getHitDifference(atkDebater, defDebater, atkDice, defDice, numSimulatio
         if ((Math.floor(Math.random() * diceFaces) + 1) >= campeggioCancel){ // rolls a die to see if debate is canceled
           spacesFlipped = 0;
         }
+        // else nothing
     }
 
     sims.push(spacesFlipped);

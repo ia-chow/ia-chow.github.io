@@ -20,13 +20,13 @@ function dynamicDropdown(team) {
    //console.log(pap_list)
    // console.log(prot_list)
 
-    atk_list = document.getElementById("atk_dropdown");
-    def_list = document.getElementById("def_dropdown");
+    let atk_list = document.getElementById("atk_dropdown");
+    let def_list = document.getElementById("def_dropdown");
 
-    for(i = atk_list.options.length - 1; i >= 0; i --){
+    for(let i = atk_list.options.length - 1; i >= 0; i --){
         atk_list.remove(i)
     }
-    for(i = def_list.options.length - 1; i >= 0; i --){
+    for(let i = def_list.options.length - 1; i >= 0; i --){
         def_list.remove(i)
     }
 
@@ -37,22 +37,22 @@ function dynamicDropdown(team) {
         {
         case "papal" :
             // console.log(name_list)
-            for (i = 0; i < pap_list.length; i++) {
+            for (let i = 0; i < pap_list.length; i++) {
                 atk_list.options[i] = new Option(pap_list[i], pap_list[i])
                 // def_list.options[i] = new Option(prot_list[i])
                 // console.log(pap_list[i])
             }
-            for (i = 0; i < prot_list.length; i++){
+            for (let i = 0; i < prot_list.length; i++){
                 def_list.options[i] = new Option(prot_list[i], prot_list[i])
             }
             break;
         case "protestant" :
-            for (i = 0; i < prot_list.length; i++){
+            for (let i = 0; i < prot_list.length; i++){
                 atk_list.options[i] = new Option(prot_list[i], prot_list[i])
                 // def_list.options[i] = new Option(pap_list[i])
                 // console.log(prot_list[i])
             }
-            for (i = 0; i < pap_list.length; i++){
+            for (let i = 0; i < pap_list.length; i++){
                 def_list.options[i] = new Option(pap_list[i], pap_list[i])
             }
             /* 
