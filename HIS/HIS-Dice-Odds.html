@@ -18,6 +18,8 @@
 
 <h2 style="color:#2DBF3B;"> Reformation/Counter-Reformation Odds Calculator: </h2>
 
+<p>Find the odds of Reformation/Counter-Reformation attempts succeeding</p>
+
     <label for="attacker_dice">Attacker Dice:</label>
     <input id="attacker_dice" type="number" value="3" step="1" min="1" max="9999" name="atk_dice">
     <br><br>
@@ -40,7 +42,11 @@
     <br>
     <div id="ref_results_atk"></div>
     <div id="ref_results_def"></div>
+
 <h2 style="color:#2DBF3B;"> Theological Debate Odds Calculator: </h2>
+
+    Find the odds of the attacker/defender winning theological debates
+
     <p>Attacking side:</p>
     <input id="papal" class="radio" type="radio" name="deb_team" value="papal" checked="checked" onclick="dynamicDropdown('papal')">
     <label for="papal">Papal</label>
@@ -85,15 +91,15 @@
     <table id="deb_hit_difference_def" style="display:none width:50%">
     </table>
 </div>
+<br>
 <div id="deb_results_def"></div>
 <br>
 <div id="deb_results_tie"></div>
-<br>
 <div id="elim_chance_atk"></div>
 <div id="elim_chance_def"></div>
 
-<h2 style="color:#2DBF3B;"> Battle Odds Calculator: </h2>
-    WIP
+<h2 style="color:#2DBF3B;"> Battle/Assault Odds Calculator: </h2>
+
 
 </body>
 </html>

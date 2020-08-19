@@ -105,7 +105,7 @@ function toggleVis(elem){ // make elements visible or invisible, and uncheck it 
         document.getElementById(elem).style.display = 'none'
     }
     /* if (style.display == 'none'){
-        document.getElementById(elem).style.display == 'inline'
+        document.getElementById(eHlem).style.display == 'inline'
     }
     else{
         document.getElementById(elem).style.display == 'none'
