@@ -1,6 +1,6 @@
 // CONSTANTS:
 
-const HIT_CHANCE = 1/3 // in vanilla HIS, 5 or 6 on a d6 is a hit for debates/battles
+const HITCHANCE = 1/3 // in vanilla HIS, 5 or 6 on a d6 is a hit for debates/battles
 
 const DICEFACES = 6 // number of faces on a die (vanilla HIS uses 6 dice)
 const BIBLE_BONUS = 1 // +1 bonus given from bible translations/calvin's institutes
@@ -66,7 +66,7 @@ function generateTable(table, data) {
 //console.log(data)
 //console.log(debaters)
 //$(document).ready(function() { // check to make sure document is loaded because otherwise debater lists don't generate properly sometimes
-function getDebaterOdds(hit_chance = HIT_CHANCE){
+function getDebaterOdds(hitChance = HITCHANCE){
   /*
   Gets debate odds and changes html elements as appropriate
   hit chance is default param
@@ -162,10 +162,10 @@ function getDebaterOdds(hit_chance = HIT_CHANCE){
   for (ddice = 0; ddice < deb_atk_dice + 1; ddice++){ // deb_atk_dice + 1 to include the endpoint
     // console.log(i)
     // have to check whether there are invalid cases (e.g. checking for more hits than there are dice and convert the nans to 0)
-    let atk_hits_chance = NantoZero(jStat.binomial.pdf(ddice, deb_atk_dice, hit_chance)) // odds of attacker getting exactly this many hits
+    let atk_hits_chance = NantoZero(jStat.binomial.pdf(ddice, deb_atk_dice, hitChance)) // odds of attacker getting exactly this many hits
     // console.log(atk_hits_chance)
-    let def_hits_fewer = NantoZero(jStat.binomial.cdf(ddice - 1, deb_def_dice, hit_chance)) // odds of defender getting fewer than this many hits
-    let def_hits_equal = NantoZero(jStat.binomial.pdf(ddice, deb_def_dice, hit_chance)) // odds of defender getting equal number of hits
+    let def_hits_fewer = NantoZero(jStat.binomial.cdf(ddice - 1, deb_def_dice, hitChance)) // odds of defender getting fewer than this many hits
+    let def_hits_equal = NantoZero(jStat.binomial.pdf(ddice, deb_def_dice, hitChance)) // odds of defender getting equal number of hits
     let def_hits_more = 1 - def_hits_fewer - def_hits_equal // odds of defender getting more than this many hits
 
  /*    console.log(atk_hits_chance)
@@ -178,8 +178,8 @@ function getDebaterOdds(hit_chance = HIT_CHANCE){
     tie += (atk_hits_chance * def_hits_equal)
     def_win += (atk_hits_chance * def_hits_more)
 
-    let atk_hits_elim = NantoZero(jStat.binomial.cdf(ddice - (def_val + 1), deb_def_dice, hit_chance)) // odds of attacker burning/disgracing defender (defender scores few enough hits)
-    let def_hits_elim = NantoZero(1 - jStat.binomial.cdf(ddice + atk_val, deb_def_dice, hit_chance)) // odds of defender burning/disgracing attacker (defender gets enough hits)
+    let atk_hits_elim = NantoZero(jStat.binomial.cdf(ddice - (def_val + 1), deb_def_dice, hitChance)) // odds of attacker burning/disgracing defender (defender scores few enough hits)
+    let def_hits_elim = NantoZero(1 - jStat.binomial.cdf(ddice + atk_val, deb_def_dice, hitChance)) // odds of defender burning/disgracing attacker (defender gets enough hits)
 
     atk_elim += atk_hits_chance * atk_hits_elim
     def_elim += atk_hits_chance * def_hits_elim
@@ -519,6 +519,13 @@ function getReformOdds(diceFaces = DICEFACES, bible_bonus = BIBLE_BONUS){
       def_results.style.visibility = 'none' // hide element
     }
     return true;
+}
+
+function simulateAssaults(hitChance = HITCHANCE){
+  /*
+  Simulate assaults with a certain number of attacker and defender dice and leaders
+  Finds odds fof assault winning/losing, and the odds it will take a certain number of impulses to finish
+  */
 }
 
 // FUNCTIONS CURRENTLY NOT IN USE:

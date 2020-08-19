@@ -100,6 +100,39 @@
 
 <h2 style="color:#2DBF3B;"> Battle/Assault Odds Calculator: </h2>
 
+<h3> Field Battles:</h3>
 
+WIP
+
+<h3> Assaults: </h3>
+<p> Find the chances of capturing a fortified space under siege in a certain number of impulses by simulation: </p>
+<p><label for="atk_troops">Attacking Units:</label>
+    <input id="atk_troops" class='number' type="number" value="3" step="1" min="1" max="9999" name="atk_troops">
+    <br><br>
+    <label for="def_troops">Defending Units:</label>
+    <input id="def_troops" class="number" type="number" value="3" step="1" min="1" max="4" name="def_troops">
+    <br><br>
+    <label for="atk_br">Battle Rating of best attacking leader: </label>
+    <select id="atk_br" name="atk_br">
+        <option value="atk_br_zero"> 0 </option>
+        <option value="atk_br_one"> 1 </option>
+        <option value="atk_br_two"> 2 </option>
+    </select>
+    <br><br>
+    <label for="def_br">Battle Rating of best defending leader: </label>
+    <select id="def_br" name="def_br">
+        <option value="def_br_zero"> 0 </option>
+        <option value="def_br_one"> 1 </option>
+        <option value="def_br_two"> 2 </option>
+    </select>
+<br>
+<div>
+    <input id="assault_sim" name="assault_sim" class="button" type="button" value="Simulate Assaults" onclick="simulateAssault()">
+</div>
+</p>
+<div>
+    <section id="assault_winner"></section>
+    <section id="assault_num_impulses"></section>
+</div>
 </body>
 </html>
