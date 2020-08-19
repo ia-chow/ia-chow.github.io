@@ -526,6 +526,7 @@ function simulateAssaults(hitChance = HITCHANCE){
   Simulate assaults with a certain number of attacker and defender dice and leaders
   Finds odds fof assault winning/losing, and the odds it will take a certain number of impulses to finish
   */
+ 
 }
 
 // FUNCTIONS CURRENTLY NOT IN USE:
