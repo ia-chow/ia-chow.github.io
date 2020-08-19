@@ -43,6 +43,7 @@ function generateTableHead(table, data) {
     row.appendChild(th);
     // console.log('thead print')
   }
+  return true;
 }
 
 function generateTable(table, data) {
@@ -59,6 +60,7 @@ function generateTable(table, data) {
       // console.log('thead print')
     }
   }
+  return true;
 }
 
 //console.log(data)
@@ -355,7 +357,7 @@ function getHitDifference(atkDebater, defDebater, atkDice, defDice, numSimulatio
   //console.log(Object.entries(results))
   probabilities = Object.fromEntries(Object.entries(results).map(([key, value]) => [key, (value/numSimulations * 100).toFixed(2)])); // divides values in obj by the number of simulations and then multiplies by 100, to find probability in percentages, and then rounds to two digits
   // console.log(probabilities)
-  return probabilities
+  return probabilities;
 }
 
 function NantoZero(val){return +val || 0} // one-line function that checks if there is a nan and converts it to zero
@@ -424,7 +426,6 @@ function getDebaterDice(name, language, status, tmore, inq, augsburg, mary, atk_
      }
    }
    return ([tot_dice, deb_val])
-
 }
 
 // console.log(getDebaterDice('Eck'));
@@ -533,6 +534,7 @@ function enforceMinMax(el){
         el.value = el.max;
       }
     }
+    return true;
   }
 
 // console.log(getReformOdds(3, 4, 'defender', 3));
