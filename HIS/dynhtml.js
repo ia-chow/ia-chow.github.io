@@ -3,12 +3,12 @@
 });
  */
 var debaters;
-var data = jQuery.getJSON("./debater_values.json", function(get_debaters){debaters = get_debaters;}); // uses debater_values.json
+var data = jQuery.getJSON("./debater_values.json", function(get_debaters){debaters = get_debaters;}); // uses debater_values.json file for debater list
 
 //console.log(data)
 //console.log(debaters)
 
-function dynamicdropdown(team) {
+function dynamicDropdown(team) {
     /*
     Creates dynamic drop down lists of attacking and defending debaters given the attacking team
     */
@@ -20,13 +20,13 @@ function dynamicdropdown(team) {
    //console.log(pap_list)
    // console.log(prot_list)
 
-    atk_list = document.getElementById("atk_dropdown");
-    def_list = document.getElementById("def_dropdown");
+    let atk_list = document.getElementById("atk_dropdown");
+    let def_list = document.getElementById("def_dropdown");
 
-    for(i = atk_list.options.length - 1; i >= 0; i --){
+    for (let i = atk_list.options.length - 1; i >= 0; i --){ // remove lists if they already exist to rebuild them
         atk_list.remove(i)
     }
-    for(i = def_list.options.length - 1; i >= 0; i --){
+    for (let i = def_list.options.length - 1; i >= 0; i --){
         def_list.remove(i)
     }
 
@@ -37,22 +37,23 @@ function dynamicdropdown(team) {
         {
         case "papal" :
             // console.log(name_list)
-            for (i = 0; i < pap_list.length; i++) {
+            for (let i = 0; i < pap_list.length; i++) {
                 atk_list.options[i] = new Option(pap_list[i], pap_list[i])
                 // def_list.options[i] = new Option(prot_list[i])
                 // console.log(pap_list[i])
             }
-            for (i = 0; i < prot_list.length; i++){
+            for (let i = 0; i < prot_list.length; i++){
                 def_list.options[i] = new Option(prot_list[i], prot_list[i])
             }
             break;
+
         case "protestant" :
-            for (i = 0; i < prot_list.length; i++){
+            for (let i = 0; i < prot_list.length; i++){
                 atk_list.options[i] = new Option(prot_list[i], prot_list[i])
                 // def_list.options[i] = new Option(pap_list[i])
                 // console.log(prot_list[i])
             }
-            for (i = 0; i < pap_list.length; i++){
+            for (let i = 0; i < pap_list.length; i++){
                 def_list.options[i] = new Option(pap_list[i], pap_list[i])
             }
             /* 
@@ -61,6 +62,7 @@ function dynamicdropdown(team) {
             document.getElementById("status").options[2]=new Option("DELIVERED","delivered");
             document.getElementById("status").options[3]=new Option("SHIPPED","shipped"); */
             break;
+
         }
         // console.log(atk_list)
 
@@ -71,10 +73,10 @@ function dynamicdropdown(team) {
 
 // dynamicdropdown("papal", require("./debater_values.json"))
 
-function bible_vis(){ // hides bible/calvin box depending on who wins ties
+function bibleVis(){ // hides bible/calvin box depending on who wins ties
 
-    var tie_winner = $("input[type='radio'][name='tie_winner']:checked").val();
-    console.log(tie_winner)
+    var tie_winner = $("input[type='radio'][name='tie_winner']:checked").val(); // jquery
+    // console.log(tie_winner)
 
     if (tie_winner == 'atk'){
         document.getElementById('bible').style.display = 'block' // if attacker button has been clicked display the bible/calvin box
@@ -83,16 +85,17 @@ function bible_vis(){ // hides bible/calvin box depending on who wins ties
         document.getElementById('bible').checked = false; // if defender button has been clicked hide the bible/calvin box and uncheck it
         document.getElementById('bible').style.display = 'none'
     }
+    return true;
 }
 
 // FUNCTIONS NOT CURRENTLY IN USE:
 
 //FXN NOT CURRENTLY IN USE
-function toggle_vis(elem){ // make elements visible or invisible, and uncheck it if it is a checkbox/radio
+function toggleVis(elem){ // make elements visible or invisible, and uncheck it if it is a checkbox/radio
     // param str elem: name of string
     // param bool disp: whether to set the element to visible or not
 
-    var visible = $('#' + elem).is(':visible') // checks to see if element is visible or not
+    var visible = $('#' + elem).is(':visible') // checks to see if element is visible or not, uses jquery
     // console.log(visible)
     
     if (visible){
@@ -119,4 +122,5 @@ function toggle_vis(elem){ // make elements visible or invisible, and uncheck it
     else{
         throw 'Error: Choose a side to win ties'
     } */
+    return true;
 }
