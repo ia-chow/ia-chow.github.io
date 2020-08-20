@@ -105,29 +105,44 @@
 WIP
 
 <h3> Assaults: </h3>
-<p> Find the chances of capturing a fortified space under siege in a certain number of impulses by simulation: </p>
-<p><label for="atk_troops">Attacking Units:</label>
-    <input id="atk_troops" class='number' type="number" value="3" step="1" min="1" max="9999" name="atk_troops">
+<p> Simulate the chances of capturing a fortified space under siege in a certain number of impulses (assuming no reinforcement by either side):
+</p>
+<p><label for="atk_rms">Attacking Regulars/Mercenaries:</label>
+    <input id="atk_rms" class='number' type="number" value="3" step="1" min="1" max="9999" name="atk_rms">	&nbsp;
+    <label for="atk_cav">Attacking Cavalry:</label>
+    <input id="atk_cav" class="number" type="number" value="0" step="1" min="1" max="9999" name="atk_cav"> &nbsp;
+    <label for="atk_el_cav"> Cavalry Elimination Behaviour: </label>
+    <select id="atk_el_cav" name="atk_el_cav">
+        <option value="always_cav" selected="selected"> Always eliminate cavalry first </option>
+        <option value="one_cav"> Keep one cavalry alive if possible </option>
+    </select>
     <br><br>
-    <label for="def_troops">Defending Units:</label>
-    <input id="def_troops" class="number" type="number" value="3" step="1" min="1" max="4" name="def_troops">
+    <label for="def_rms">Defending Regulars/Mercenaries:</label>
+    <input id="def_rms" class="number" type="number" value="3" step="1" min="1" max="9999" name="def_rms">	&nbsp;
+    <label for="def_cav">Defending Cavalry:</label>
+    <input id="def_cav" class="number" type="number" value="0" step="1" min="1" max="9999" name="def_cav"> &nbsp;
+    <label for="def_el_cav">Cavalry Elimination Behaviour:</label>
+    <select id="def_el_cav" name="def_el_cav">
+        <option value="always_cav" selected="selected"> Always eliminate cavalry first </option>
+        <option value="one_cav"> Keep one cavalry alive if possible </option>
+    </select>
     <br><br>
     <label for="atk_br">Battle Rating of best attacking leader: </label>
     <select id="atk_br" name="atk_br">
-        <option value="atk_br_zero"> 0 </option>
-        <option value="atk_br_one"> 1 </option>
-        <option value="atk_br_two"> 2 </option>
+        <option value="0" selected="selected"> 0 </option>
+        <option value="1"> 1 </option>
+        <option value="2"> 2 </option>
     </select>
     <br><br>
     <label for="def_br">Battle Rating of best defending leader: </label>
     <select id="def_br" name="def_br">
-        <option value="def_br_zero"> 0 </option>
-        <option value="def_br_one"> 1 </option>
-        <option value="def_br_two"> 2 </option>
+        <option value="0" selected="selected"> 0 </option>
+        <option value="1"> 1 </option>
+        <option value="2"> 2 </option>
     </select>
 <br>
 <div>
-    <input id="assault_sim" name="assault_sim" class="button" type="button" value="Simulate Assaults" onclick="simulateAssault()">
+    <input id="assault_sim" name="assault_sim" class="button" type="button" value="Simulate Assaults" onclick="simulateBattle('assault')">
 </div>
 </p>
 <div>

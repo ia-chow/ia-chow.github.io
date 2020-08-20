@@ -16,10 +16,11 @@ const AUGSBURG_PEN = 1  // malus dice for effects of Augsburg Confession
 const INQ_BONUS = 2  // bonus dice for papal inquisition
 const MARY_MULTIPLIER = 2 // multiplier for papal debater value in england if mary rules england
 
-const NUMSIMULATIONS = 100000 // number of simulations to do for calculating the number of spaces flipped in debates/battles
+const NUMSIMULATIONS = 100 // number of simulations to do for calculating the number of spaces flipped in debates/battles
 const HITVALUE = 5 // value on die for which a hit is scored (and higher values); vanilla HIS hits on 5 or 6
 const ALEANDERBONUS = 1 // bonus spaces flipped by aleander when he's in a debate
 const CAMPEGGIOCANCEL = 5 // value (or higher) on die for which campeggio cancels a loss when he's in a debate (vanilla HIS cancels if 5 or 6)
+const DEFBONUSDICE = 1 // extra die defender gets in battles/assaults for being the defender
 
 // import json of debaters and associated values:
 
@@ -291,7 +292,7 @@ function getDebaterOdds(hitChance = HITCHANCE){
 
 function getHitDifference(atkDebater, defDebater, atkDice, defDice, numSimulations=NUMSIMULATIONS, diceFaces=DICEFACES, hitValue=HITVALUE, aleanderBonus=ALEANDERBONUS, campeggioCancel=CAMPEGGIOCANCEL){
   /*
-  Gets the odds of hit difference of attacking and defending dice by simulating rolls
+  Gets the odds of hit difference (for debates) of attacking and defending dice by simulating rolls
   takes the number of attacking and defending dice
   Returns probabilities of hit differences for attacker and defender
 
@@ -521,11 +522,66 @@ function getReformOdds(diceFaces = DICEFACES, bible_bonus = BIBLE_BONUS){
     return true;
 }
 
-function simulateAssaults(hitChance = HITCHANCE){
+function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDice = DEFBONUSDICE, hitValue = HITVALUE, diceFaces = DICEFACES){
   /*
-  Simulate assaults with a certain number of attacker and defender dice and leaders
+  Simulate field battles/assaults with a certain number of attacker and defender dice and leaders
   Finds odds fof assault winning/losing, and the odds it will take a certain number of impulses to finish
   */
+
+  let atkTroops = parseInt(document.getElementById('atk_rms').value)// gets number of attacking and defending dice by dividing number of troops by 2 and rounding up, then adding battle rating of leaders
+  let defTroops = parseInt(document.getElementById('def_rms').value);
+  let atkCav = parseInt(document.getElementById('atk_cav').value);
+  let defCav = parseInt(document.getElementById('def_cav').value);
+  const atkRating = parseInt(document.getElementById('atk_br').value);
+  const defRating = parseInt(document.getElementById('def_br').value);
+  const atkCavStrat = document.getElementById('atk_el_cav').value;
+  const defCavStrat = document.getElementById('def_el_cav').value;
+
+  /* console.log(atkUnits)
+  console.log(defUnits)
+  console.log(atkRating)
+  console.log(defRating) */
+
+  switch (battleType){
+    case 'assault':
+
+    // FINDING NUMBER OF DICE ROLLED BY BOTH SIDES:
+
+      var atkAssaultDice;
+      var defAssaultDice;
+    
+      defAssaultDice = defRating + defBonusDice + defTroops // defender always gets 1 die per merc/regular in the castle, bonus dice, and 1 die per battlerating of best leader
+      
+      if ((defTroops + defCav) == 0){ // case where there are no units in the castle
+        atkAssaultDice = atkRating + atkTroops // attacker gets 1 die per non-cav unit and one die per battle rating of best leader
+      }
+      else if ((defTroops + defCav) > 0){ // case where there are 1 or more units in the castle
+        atkAssaultDice = atkRating + Math.ceil(atkTroops/2) // attacker gets 1 die per every two non-cav units (rounded up) and one die per battle rating of best leader
+      }
+      else{
+        throw 'Error: negative dice being rolled, check why this is happening'
+      }
+      console.log(atkAssaultDice)
+      console.log(defAssaultDice)
+      // Run simulations of dice to see the chances an assault will take a certain number of impulses to succeed and the chances it will fail
+
+      var impulses = 0;
+
+      for(let i = 0; i < numSimulations; i++){
+        while ((atkTroops + atkCav) > (defTroops + defCav) && (defTroops + defCav) > 0){ // simulation of one series of impulses ends when either all defending units are eliminated or attacker has fewer units than defender (must break siege)
+        let atkRolls = Array(atkAssaultDice).fill().map(() => Math.floor(Math.random() * diceFaces) + 1) // generate two arrays of attack and defense rolls
+        let defRolls = Array(defAssaultDice).fill().map(() => Math.floor(Math.random() * diceFaces) + 1) // generate two arrays of attack and defense rolls
+
+        let atkHits = atkRolls.filter(roll => roll >= hitValue).length; // filter to find number of attacker and defender hits
+        let defHits = defRolls.filter(roll => roll >= hitValue).length;
+
+        /* console.log(atkRolls)
+        console.log(atkHits) */
+        }
+      }
+
+      break;
+  }
  
 }
 
