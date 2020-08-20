@@ -16,7 +16,7 @@ const AUGSBURG_PEN = 1  // malus dice for effects of Augsburg Confession
 const INQ_BONUS = 2  // bonus dice for papal inquisition
 const MARY_MULTIPLIER = 2 // multiplier for papal debater value in england if mary rules england
 
-const NUMSIMULATIONS = 100 // number of simulations to do for calculating the number of spaces flipped in debates/battles
+const NUMSIMULATIONS = 100000 // number of simulations to do for calculating the number of spaces flipped in debates/battles
 const HITVALUE = 5 // value on die for which a hit is scored (and higher values); vanilla HIS hits on 5 or 6
 const ALEANDERBONUS = 1 // bonus spaces flipped by aleander when he's in a debate
 const CAMPEGGIOCANCEL = 5 // value (or higher) on die for which campeggio cancels a loss when he's in a debate (vanilla HIS cancels if 5 or 6)
@@ -534,13 +534,19 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
   let defCav = parseInt(document.getElementById('def_cav').value);
   const atkRating = parseInt(document.getElementById('atk_br').value);
   const defRating = parseInt(document.getElementById('def_br').value);
-  const atkCavStrat = document.getElementById('atk_el_cav').value;
+  const atkCavStrat = document.getElementById('atk_el_cav').value; // how many cav the attacker and defender want to keep
   const defCavStrat = document.getElementById('def_el_cav').value;
+
+  /* console.log(atkCavStrat)
+  console.log(defCavStrat) */
 
   /* console.log(atkUnits)
   console.log(defUnits)
   console.log(atkRating)
   console.log(defRating) */
+
+  //TODO: add some error handling here to figure out what should happen otherwise!
+  var cardsToConclude = []
 
   switch (battleType){
     case 'assault':
@@ -561,21 +567,61 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
       else{
         throw 'Error: negative dice being rolled, check why this is happening'
       }
-      console.log(atkAssaultDice)
-      console.log(defAssaultDice)
+      //console.log(atkAssaultDice)
+      //console.log(defAssaultDice)
       // Run simulations of dice to see the chances an assault will take a certain number of impulses to succeed and the chances it will fail
 
-      var impulses = 0;
+      const atkTroopsO = atkTroops; // save the old variable names in "original" before they are reassigned
+      const atkCavO = atkCav;
+      const defTroopsO = defTroops;
+      const defCavO = defCav;
+      const atkAssaultDiceO = atkAssaultDice; // sort of a hacky work around but whatever
+      const defAssaultDice0 = defAssaultDice; 
+
+      var impulses;
+      var atkScoredHit;
+      var winner;
 
       for(let i = 0; i < numSimulations; i++){
-        while ((atkTroops + atkCav) > (defTroops + defCav) && (defTroops + defCav) > 0){ // simulation of one series of impulses ends when either all defending units are eliminated or attacker does not outnumber the defender (must break siege)
+        impulses = 0;
+        
+        atkTroops = atkTroopsO; // reassign all these variables back to the original so that the calculations can take place
+        atkCav = atkCavO;
+        defTroops = defTroopsO;
+        defCav = defCavO;
+        atkAssaultDice = atkAssaultDiceO;
+        defAssaultDice = defAssaultDice0;
+
+        while ((((atkTroops + atkCav) > (defTroops + defCav)) && ((defTroops + defCav) > 0)) || ((defTroops + defCav) == 0 && atkScoredHit)){ // simulation of one series of impulses ends when either all defending units are eliminated and the attacker scored at least one hit in the previous round of combat or attacker does not outnumber the defender (must break siege)
+          
           let atkRolls = Array(atkAssaultDice).fill().map(() => Math.floor(Math.random() * diceFaces) + 1) // generate two arrays of attack and defense rolls
           let defRolls = Array(defAssaultDice).fill().map(() => Math.floor(Math.random() * diceFaces) + 1) // generate two arrays of attack and defense rolls
 
           let atkHits = atkRolls.filter(roll => roll >= hitValue).length; // filter to find number of attacker and defender hits
           let defHits = defRolls.filter(roll => roll >= hitValue).length;
+
+          //console.log(atkHits)
+          //console.log(defHits)
+
+          if (atkHits > 0){ // set atkScoredHit to true if attackers score at least one hit
+            atkScoredHit = true
+          }
+
+          atkArray = elimUnits(defHits, atkCav, atkTroops, atkCavStrat) // takes number of hits socred by defender and eliminated atk cav and troops appropriately
+          defArray = elimUnits(atkHits, defCav, defTroops, defCavStrat) // same but eliminates def cav/troops
+
+          /* console.log(atkArray)
+          console.log(defArray) */
+
+          atkCav = atkArray[0]; atkTroops = atkArray[1]
+          defCav = defArray[0]; defTroops = defArray[1]
+
+          atkAssaultDice = atkRating + Math.ceil(atkTroops/2)
+          defAssaultDice = defRating + defTroops
+
+          impulses += 1
           
-          switch (atkCavStrat) {
+          /* switch (atkCavStrat) {
             case 'always_cav':
               let atkArray = elimUnits(defHits, atkCav, atkTroops) // returns array containing remaining attacker cav and regs/mercs
 
@@ -598,36 +644,102 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
             case 'one_cav':
               //TODO: fINISH THIS TOO
               break;
-          }
+          } */
           /* console.log(atkRolls)
           console.log(atkHits) */
+          
         }
+        if ((defTroops + defCav) <= 0 && atkScoredHit){ // if siege ends because defender has no units in fort and attacker scored at least one hit then set attacker as winner
+          winner = 'atk'
+        }
+        else if ((atkTroops + atkCav) <= (defTroops + defCav)){ // if siege ends because attacker does not outnumber defender then set defender as winner
+          winner = 'def'
+        }
+        cardsToConclude.push([impulses, winner]) // adds array containing number of impulses it took to conclude the assault and then the assault winner
       }
       break;
+    
+      case 'fb':
+        null
+        // TODO: ADD THE FIELD BATTLE CODE AT SOME POINT
+      break;
     }
+    //console.log(cardsToConclude)
+
+    let atkWins = cardsToConclude.filter(arr => arr[1] == 'atk') // split array into two arrays for attacker and defender wins
+    let defWins = cardsToConclude.filter(arr => arr[1] == 'def')
+    // let atkWins = cardsToConclude.reduce((n, val) => n + (val == 'atk'));// split array into two arrays for attacker and defender wins
+    // let defWins = cardsToConclude.filter(winner => winner == 'def')
+
+    console.log(atkWins)
+
+    var atkImpulseArr = [];
+  
+    // let atkWinsF = atkWins.toString().split(",").map(Number);
+    var atkImpulseMin = ([].concat.apply([], atkWins));
+    console.log(atkImpulseMin)
+    //const atkImpulseMax = atkWins.sort(function(a,b){return a[0] < b[0];})[0]
+
+    const defImpulseMin = defWins.sort(function(a,b){return a[0] > b[0];})[0]
+    const defImpulseMax = defWins.sort(function(a,b){return a[0] < b[0];})[0]
+
+    /* for (val = atkImpulseMin; val < atkImpulseMax + 1; val++){
+      atkImpulseArr.push(val, cardsToConclude.filter(arr => arr[0] == val))
+    } */
+
+    console.log(atkImpulseArr)
+
+    //for (val = Math.min(atkWins[0]))
+
+    let atkAssaultOdds = (atkWins.length)/numSimulations // get attack and defense win odds 
+    let defAssaultOdds = (defWins.length)/numSimulations
+
+
+    /* for (val = Math.min.apply(cardsToConclude); val < Math.max.apply(cardsToConclude); val++){
+      cardsToConclude.filter(v => v === val).length;
+    } */
+    
+    
 }
 
-function elimUnits(hits, cav, troops, strat){
+function elimUnits(hits, cav, troops, cavToKeep){
   /*
     Eliminates units based on how many hits are scored depending on cav strategy
+    Note that hits are the hits scored by the OTHER side
   */
 
 /*   switch (hitsAppliedTo){
     case 'attacker':
       if  */
-  switch (strat){
-  
-  if (cav >= hits){ // if there are an equal number or greater attacking cavalry than defender hits, then eliminate cavalry
+
+  if ((cav - cavToKeep) >= hits){ // if there are an equal number or greater attacking cavalry than defender hits, then eliminate cavalry
     cav -= hits
   }
-
-  else if (cav < hits){ // if there are fewer attacking cavalry than defender hits, then eliminate all cav before moving on to regs/mercs
-    hits -= cav // subtract the number of attacking cavalry from the number of defender hits
+  else if ((cav - cavToKeep) < hits){ // if there are fewer attacking cavalry than defender hits, then eliminate all cav before moving on to regs/mercs
+    hits -= (cav - cavToKeep) // subtract the number of cavalry (minus how many cav to keep) from the number of defender hits
+    cav -= (cav - cavToKeep) // remove that number of cav
     troops -= hits // apply all remaining defender hits to regulars/mercs
-    cav -= cav // remove all cav
-
-    }
   }
+
+ /*  switch (strat){
+    case 'always_cav':
+      if (cav >= hits){ // if there are an equal number or greater attacking cavalry than defender hits, then eliminate cavalry
+        cav -= hits
+      }
+      else if (cav < hits){ // if there are fewer attacking cavalry than defender hits, then eliminate all cav before moving on to regs/mercs
+        hits -= cav // subtract the number of attacking cavalry from the number of defender hits
+        troops -= hits // apply all remaining defender hits to regulars/mercs
+        cav -= cav // remove all cav
+    }
+    case 'one_cav':
+      if (cav > hits){
+        cav -= hits
+      }
+      else if (cav <= hits){
+        hits -= cav
+      }
+  } */
+  return [cav, troops]
 }
 
 // FUNCTIONS CURRENTLY NOT IN USE:

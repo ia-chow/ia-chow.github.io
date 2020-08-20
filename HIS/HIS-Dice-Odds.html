@@ -108,24 +108,18 @@ WIP
 <p> Simulate the chances of capturing a fortified space under siege in a certain number of impulses (assuming no reinforcement by either side):
 </p>
 <p><label for="atk_rms">Attacking Regulars/Mercenaries:</label>
-    <input id="atk_rms" class='number' type="number" value="3" step="1" min="1" max="9999" name="atk_rms">	&nbsp;
+    <input id="atk_rms" class='number' type="number" value="4" step="1" min="1" max="9999" name="atk_rms">	&nbsp;
     <label for="atk_cav">Attacking Cavalry:</label>
     <input id="atk_cav" class="number" type="number" value="0" step="1" min="1" max="9999" name="atk_cav"> &nbsp;
-    <label for="atk_el_cav"> Cavalry Elimination Behaviour: </label>
-    <select id="atk_el_cav" name="atk_el_cav">
-        <option value="always_cav" selected="selected"> Always eliminate cavalry first </option>
-        <option value="one_cav"> Keep one cavalry alive if possible </option>
-    </select>
+    <label for="atk_el_cav"> Cavalry to keep: </label>
+    <input id="atk_el_cav" class="number" type="number" value="0" step="1" min="0" max="9999" name="atk_cav_keep">
     <br><br>
     <label for="def_rms">Defending Regulars/Mercenaries:</label>
-    <input id="def_rms" class="number" type="number" value="3" step="1" min="1" max="9999" name="def_rms">	&nbsp;
+    <input id="def_rms" class="number" type="number" value="2" step="1" min="1" max="9999" name="def_rms">	&nbsp;
     <label for="def_cav">Defending Cavalry:</label>
     <input id="def_cav" class="number" type="number" value="0" step="1" min="1" max="9999" name="def_cav"> &nbsp;
-    <label for="def_el_cav">Cavalry Elimination Behaviour:</label>
-    <select id="def_el_cav" name="def_el_cav">
-        <option value="always_cav" selected="selected"> Always eliminate cavalry first </option>
-        <option value="one_cav"> Keep one cavalry alive if possible </option>
-    </select>
+    <label for="def_el_cav">Cavalry to keep:</label>
+    <input id="def_el_cav" class="number" type="number" value="0" step="1" min="0" max="9999" name="def_cav_keep">
     <br><br>
     <label for="atk_br">Battle Rating of best attacking leader: </label>
     <select id="atk_br" name="atk_br">
