@@ -680,8 +680,8 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
     console.log(atkImpulseMin)
     //const atkImpulseMax = atkWins.sort(function(a,b){return a[0] < b[0];})[0]
 
-    const defImpulseMin = defWins.sort(function(a,b){return a[0] > b[0];})[0]
-    const defImpulseMax = defWins.sort(function(a,b){return a[0] < b[0];})[0]
+    // const defImpulseMin = defWins.sort(function(a,b){return a[0] > b[0];})[0]
+    // const defImpulseMax = defWins.sort(function(a,b){return a[0] < b[0];})[0]
 
     /* for (val = atkImpulseMin; val < atkImpulseMax + 1; val++){
       atkImpulseArr.push(val, cardsToConclude.filter(arr => arr[0] == val))
