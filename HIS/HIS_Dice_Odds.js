@@ -568,21 +568,66 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
       var impulses = 0;
 
       for(let i = 0; i < numSimulations; i++){
-        while ((atkTroops + atkCav) > (defTroops + defCav) && (defTroops + defCav) > 0){ // simulation of one series of impulses ends when either all defending units are eliminated or attacker has fewer units than defender (must break siege)
-        let atkRolls = Array(atkAssaultDice).fill().map(() => Math.floor(Math.random() * diceFaces) + 1) // generate two arrays of attack and defense rolls
-        let defRolls = Array(defAssaultDice).fill().map(() => Math.floor(Math.random() * diceFaces) + 1) // generate two arrays of attack and defense rolls
+        while ((atkTroops + atkCav) > (defTroops + defCav) && (defTroops + defCav) > 0){ // simulation of one series of impulses ends when either all defending units are eliminated or attacker does not outnumber the defender (must break siege)
+          let atkRolls = Array(atkAssaultDice).fill().map(() => Math.floor(Math.random() * diceFaces) + 1) // generate two arrays of attack and defense rolls
+          let defRolls = Array(defAssaultDice).fill().map(() => Math.floor(Math.random() * diceFaces) + 1) // generate two arrays of attack and defense rolls
 
-        let atkHits = atkRolls.filter(roll => roll >= hitValue).length; // filter to find number of attacker and defender hits
-        let defHits = defRolls.filter(roll => roll >= hitValue).length;
+          let atkHits = atkRolls.filter(roll => roll >= hitValue).length; // filter to find number of attacker and defender hits
+          let defHits = defRolls.filter(roll => roll >= hitValue).length;
+          
+          switch (atkCavStrat) {
+            case 'always_cav':
+              let atkArray = elimUnits(defHits, atkCav, atkTroops) // returns array containing remaining attacker cav and regs/mercs
 
-        /* console.log(atkRolls)
-        console.log(atkHits) */
+              atkCav = atkArray[0] // get the number of attacking cav and regs/mercs
+              atkTroops = atkArray[1]
+
+              break;
+            case 'one_cav':
+              //TODO: FINISH THIS
+              break;
+          }
+          switch (defCavStrat){
+            case 'always_cav':
+              let defArray = elimUnits(atkHits, defCav, defTroops)
+
+              defCav = defArray[0] // get the number of defending cav and regs/mercs
+              defTroops = defArray[1] 
+
+              break;
+            case 'one_cav':
+              //TODO: fINISH THIS TOO
+              break;
+          }
+          /* console.log(atkRolls)
+          console.log(atkHits) */
         }
       }
-
       break;
+    }
+}
+
+function elimUnits(hits, cav, troops, strat){
+  /*
+    Eliminates units based on how many hits are scored depending on cav strategy
+  */
+
+/*   switch (hitsAppliedTo){
+    case 'attacker':
+      if  */
+  switch (strat){
+  
+  if (cav >= hits){ // if there are an equal number or greater attacking cavalry than defender hits, then eliminate cavalry
+    cav -= hits
   }
- 
+
+  else if (cav < hits){ // if there are fewer attacking cavalry than defender hits, then eliminate all cav before moving on to regs/mercs
+    hits -= cav // subtract the number of attacking cavalry from the number of defender hits
+    troops -= hits // apply all remaining defender hits to regulars/mercs
+    cav -= cav // remove all cav
+
+    }
+  }
 }
 
 // FUNCTIONS CURRENTLY NOT IN USE:
