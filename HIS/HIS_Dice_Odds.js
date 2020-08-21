@@ -23,6 +23,7 @@ const CAMPEGGIOCANCEL = 5 // value (or higher) on die for which campeggio cancel
 const DEFBONUSDICE = 1 // extra die defender gets in battles/assaults for being the defender
 
 const CUTOFFPROB = 0.00005 // outcomes that have fewer than this probability to happen are eliminated from the simulations, by default set to 0.005%
+const ROUNDTO = 2 // number of significant figures (after the decimal point) that all the results should round to
 
 // import json of debaters and associated values:
 
@@ -69,7 +70,7 @@ function generateTable(table, data) {
 //console.log(data)
 //console.log(debaters)
 //$(document).ready(function() { // check to make sure document is loaded because otherwise debater lists don't generate properly sometimes
-function getDebaterOdds(hitChance = HITCHANCE){
+function getDebaterOdds(hitChance = HITCHANCE, roundTo = ROUNDTO){
   /*
   Gets debate odds and changes html elements as appropriate
   hit chance is default param
@@ -274,14 +275,14 @@ function getDebaterOdds(hitChance = HITCHANCE){
 
   summary.textContent = atk_debater + ' (' + atk_val + ') debates ' + com_msg + ' ' + def_debater + ' (' + def_val + ') in ' + language + ': ' + deb_atk_dice + ' v ' + deb_def_dice + ' dice'
   // TODO: figure out how to make some of this appear in different colours
-  deb_results_atk.textContent = atk_debater + ' wins ' + (atkWin).toFixed(2) + '% of the time'
-  deb_results_tie.textContent = 'Tie ' + (tieOdds).toFixed(2) + '% of the time'
-  deb_results_def.textContent = def_debater + ' wins ' + (defWin).toFixed(2) + '% of the time'
+  deb_results_atk.textContent = atk_debater + ' wins ' + (atkWin).toFixed(roundTo) + '% of the time'
+  deb_results_tie.textContent = 'Tie ' + (tieOdds).toFixed(roundTo) + '% of the time'
+  deb_results_def.textContent = def_debater + ' wins ' + (defWin).toFixed(roundTo) + '% of the time'
 
 
   //TODO: CHANGE THE BURN/DISGRACE CHANCES TO USE THE NEW SIMULATION AS WELL!
-  elim_chance_atk.textContent = atk_debater + ' has a ' + (atk_elim * 100).toFixed(2) + '% chance to ' + atk_msg + ' ' + def_debater // display to page
-  elim_chance_def.textContent = def_debater + ' has a ' + (def_elim * 100).toFixed(2) + '% chance to ' + def_msg + ' ' + atk_debater
+  elim_chance_atk.textContent = atk_debater + ' has a ' + (atk_elim * 100).toFixed(roundTo) + '% chance to ' + atk_msg + ' ' + def_debater // display to page
+  elim_chance_def.textContent = def_debater + ' has a ' + (def_elim * 100).toFixed(roundTo) + '% chance to ' + def_msg + ' ' + atk_debater
   // deb_results_def.textContent = '2'
   /* elim_chance_atk.textContent = '3'
   elim_chance_def.textContent = '4' */
@@ -292,7 +293,7 @@ function getDebaterOdds(hitChance = HITCHANCE){
 }
 //});
 
-function getHitDifference(atkDebater, defDebater, atkDice, defDice, numSimulations=NUMSIMULATIONS, diceFaces=DICEFACES, hitValue=HITVALUE, aleanderBonus=ALEANDERBONUS, campeggioCancel=CAMPEGGIOCANCEL){
+function getHitDifference(atkDebater, defDebater, atkDice, defDice, numSimulations=NUMSIMULATIONS, diceFaces=DICEFACES, hitValue=HITVALUE, aleanderBonus=ALEANDERBONUS, campeggioCancel=CAMPEGGIOCANCEL, roundTo = ROUNDTO){
   /*
   Gets the odds of hit difference (for debates) of attacking and defending dice by simulating rolls
   takes the number of attacking and defending dice
@@ -358,7 +359,7 @@ function getHitDifference(atkDebater, defDebater, atkDice, defDice, numSimulatio
   //console.log(sims)
   //console.log(results)
   //console.log(Object.entries(results))
-  probabilities = Object.fromEntries(Object.entries(results).map(([key, value]) => [key, (value/numSimulations * 100).toFixed(2)])); // divides values in obj by the number of simulations and then multiplies by 100, to find probability in percentages, and then rounds to two digits
+  probabilities = Object.fromEntries(Object.entries(results).map(([key, value]) => [key, (value/numSimulations * 100).toFixed(roundTo)])); // divides values in obj by the number of simulations and then multiplies by 100, to find probability in percentages, and then rounds to two digits
   // console.log(probabilities)
   return probabilities;
 }
@@ -509,9 +510,9 @@ function getReformOdds(diceFaces = DICEFACES, bible_bonus = BIBLE_BONUS){
     }
     // console.log((atk_win * 100).toFixed(2))
     
-    if(0 < (atk_win * 100).toFixed(2) && (atk_win * 100).toFixed(2) < 100){
-      atk_results.textContent = 'Attacker has ' + (atk_win * 100).toFixed(2) + '% chance of winning' // print to page
-      def_results.textContent = 'Defender has ' + (def_win * 100).toFixed(2) + '% chance of winning' // print to page
+    if(0 < (atk_win * 100).toFixed(roundTo) && (atk_win * 100).toFixed(roundTo) < 100){
+      atk_results.textContent = 'Attacker has ' + (atk_win * 100).toFixed(roundTo) + '% chance of winning' // print to page
+      def_results.textContent = 'Defender has ' + (def_win * 100).toFixed(roundTo) + '% chance of winning' // print to page
 
       atk_results.style.color = 'inherit' // change text to default color
       def_results.style.display = 'block' // show element
@@ -525,7 +526,7 @@ function getReformOdds(diceFaces = DICEFACES, bible_bonus = BIBLE_BONUS){
     return true;
 }
 
-function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDice = DEFBONUSDICE, hitValue = HITVALUE, diceFaces = DICEFACES, cutoffProb = CUTOFFPROB){
+function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDice = DEFBONUSDICE, hitValue = HITVALUE, diceFaces = DICEFACES, cutoffProb = CUTOFFPROB, roundTo = ROUNDTO){
   /*
   Simulate field battles/assaults with a certain number of attacker and defender dice and leaders
   Finds odds fof assault winning/losing, and the odds it will take a certain number of impulses to finish
@@ -702,7 +703,7 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
         atkImpulseArr.push([val, filtered])
       }
     }
-    atkImpulseArr = atkImpulseArr.map(([impulses, numOutcomes]) => [impulses, numOutcomes.length]) // change the number of outcomes from an array of all the outcomes to the length
+    atkImpulseArr = atkImpulseArr.map(([impulses, numOutcomes]) => [impulses, (100 * numOutcomes.length/numSimulations).toFixed(roundTo) + "%"]) // change the number of outcomes from an array of all the outcomes to the chances (with % added to the end)
 
     for (let val = defImpulseMin; val < defImpulseMax + 1; val++){
       filtered = defWins.filter(arr => arr[0] == val)
@@ -710,10 +711,10 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
         defImpulseArr.push([val, defWins.filter(arr => arr[0] == val)])
       }
     }
-    defImpulseArr = defImpulseArr.map(([impulses, numOutcomes]) => [impulses, numOutcomes.length]) // same thing but for defenders
+    defImpulseArr = defImpulseArr.map(([impulses, numOutcomes]) => [impulses, (100 * numOutcomes.length/numSimulations).toFixed(roundTo) + "%"]) // same thing but for defenders
 
-    console.log(atkImpulseArr)
-    console.log(defImpulseArr)
+    /* console.log(atkImpulseArr)
+    console.log(defImpulseArr) */
     //for (val = Math.min(atkWins[0]))
 
     let atkAssaultOdds = (atkWins.length)/numSimulations // get attack and defense win odds 
@@ -722,7 +723,8 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
     /* console.log(atkAssaultOdds)
     console.log(defAssaultOdds) */
 
-    let assaultWinner = document.getElementById('assault_winner') // get assault winning chances
+    let atkAssaultWinner = document.getElementById('atk_assault_odds') // get assault winning chances
+    let defAssaultWinner = document.getElementById('def_assault_odds')
     let atkAssaultImpulses = document.getElementById('assault_impulses_atk') // get tables 
     let defAssaultImpulses = document.getElementById('assault_impulses_def')
 
@@ -738,6 +740,9 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
 
     generateTableHead(defAssaultImpulses, ['Impulses to Resolve Assault for Defender', 'Chance'])
     generateTable(defAssaultImpulses, defImpulseArr);
+
+    atkAssaultWinner.textContent = 'Attacker has a ' + (atkAssaultOdds * 100).toFixed(roundTo) + '% chance to win the siege'
+    defAssaultWinner.textContent = 'Defender has a ' + (defAssaultOdds * 100).toFixed(roundTo) + '% chance to win (repel attacker)'
 
     /* for (val = Math.min.apply(cardsToConclude); val < Math.max.apply(cardsToConclude); val++){
       cardsToConclude.filter(v => v === val).length;
