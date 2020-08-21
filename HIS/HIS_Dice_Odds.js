@@ -238,8 +238,8 @@ function getDebaterOdds(hitChance = HITCHANCE){
   atkOdds = atkOdds.sort((a, b) => a[0] - b[0]); // sort arrays so they go from lowest die difference to highest die difference
   defOdds = defOdds.sort((a, b) => a[0] - b[0]);
 
-  /* console.log(atkOdds)
-  console.log(defOdds) */
+  console.log(atkOdds)
+  console.log(defOdds)
 
   atkTable.deleteTHead(); // deletes table heads if exist already
   defTable.deleteTHead();
@@ -389,19 +389,34 @@ function getDebaterDice(name, language, status, tmore, inq, augsburg, mary, atk_
    console.log(base_dice)
    console.log(language) */
    if (status == 'atk'){
-     if (language == 'English' && team == 'Papal'){
-       if (mary){
-         tot_dice *= mary_multiplier
+
+    tot_dice += atk_base
+
+    if (team == 'Papal'){
+      if (language == "English"){
+        if (mary){
+          tot_dice *= mary_multiplier
+        }
+        if (name == 'Gardiner'){
+          tot_dice += gard_bonus
+        }
        }
-       if (name == 'Gardiner'){
-         tot_dice += gard_bonus
-       }
-     }  
-     tot_dice += atk_base
-     if (name == 'Eck'){
+      if (name == 'Eck'){
         tot_dice += eck_bonus
       }
-   }
+      if (inq){
+        tot_dice += inq_bonus
+      }
+      if (tmore){
+        if (language == 'English'){
+          tot_dice += tmore_bonus_eng
+        }
+        else{
+          tot_dice += tmore_bonus_other
+        }
+      }
+    }
+  }
    else if (status == 'unc'){
      tot_dice += unc_base
    }
@@ -411,22 +426,8 @@ function getDebaterDice(name, language, status, tmore, inq, augsburg, mary, atk_
    else{
      throw 'Error: Debater is in an invalid status please report'
    }
-
-   if (team == 'Papal'){
-     if (tmore){
-       if (language == 'English'){
-         tot_dice += tmore_bonus_eng
-       }
-       else{
-         tot_dice += tmore_bonus_other
-       }
-     }
-     if (inq){
-       tot_dice += inq_bonus
-     }
-     if (augsburg){
-       tot_dice -= augsburg_pen
-     }
+   if (team == 'Papal' && augsburg){
+    tot_dice -= augsburg_pen
    }
    return ([tot_dice, deb_val])
 }
@@ -536,8 +537,8 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
   let defCav = parseInt(document.getElementById('def_cav').value);
   const atkRating = parseInt(document.getElementById('atk_br').value);
   const defRating = parseInt(document.getElementById('def_br').value);
-  const atkCavStrat = document.getElementById('atk_el_cav').value; // how many cav the attacker and defender want to keep
-  const defCavStrat = document.getElementById('def_el_cav').value;
+  const atkCavStrat = parseInt(document.getElementById('atk_el_cav').value); // how many cav the attacker and defender want to keep
+  const defCavStrat = parseInt(document.getElementById('def_el_cav').value);
 
   /* console.log(atkCavStrat)
   console.log(defCavStrat) */
@@ -718,8 +719,25 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
     let atkAssaultOdds = (atkWins.length)/numSimulations // get attack and defense win odds 
     let defAssaultOdds = (defWins.length)/numSimulations
     
-    console.log(atkAssaultOdds)
-    console.log(defAssaultOdds)
+    /* console.log(atkAssaultOdds)
+    console.log(defAssaultOdds) */
+
+    let assaultWinner = document.getElementById('assault_winner') // get assault winning chances
+    let atkAssaultImpulses = document.getElementById('assault_impulses_atk') // get tables 
+    let defAssaultImpulses = document.getElementById('assault_impulses_def')
+
+    /* for (var i = 0; i < atkAssaultImpulses.length; i ++){
+      atkAssaultImpulses[i][1] = atkAssaultImpulses[i][1] + "%"  //append "%" to the end of every probability value in the table
+    } */
+
+    atkAssaultImpulses.deleteTHead(); // deletes table heads if exist already
+    defAssaultImpulses.deleteTHead();
+
+    generateTableHead(atkAssaultImpulses, ['Impulses to Resolve Assault for Attacker', 'Chance']); // generate the two tables using the generate table func
+    generateTable(atkAssaultImpulses, atkImpulseArr);
+
+    generateTableHead(defAssaultImpulses, ['Impulses to Resolve Assault for Defender', 'Chance'])
+    generateTable(defAssaultImpulses, defImpulseArr);
 
     /* for (val = Math.min.apply(cardsToConclude); val < Math.max.apply(cardsToConclude); val++){
       cardsToConclude.filter(v => v === val).length;
