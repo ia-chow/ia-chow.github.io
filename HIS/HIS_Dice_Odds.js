@@ -1,6 +1,7 @@
 // CONSTANTS:
 
 const HITCHANCE = 1/3 // in vanilla HIS, 5 or 6 on a d6 is a hit for debates/battles
+const ROUNDTO = 2 // number of significant figures (after the decimal point) that all the results should round to
 
 const DICEFACES = 6 // number of faces on a die (vanilla HIS uses 6 dice)
 const BIBLE_BONUS = 1 // +1 bonus given from bible translations/calvin's institutes
@@ -22,8 +23,8 @@ const ALEANDERBONUS = 1 // bonus spaces flipped by aleander when he's in a debat
 const CAMPEGGIOCANCEL = 5 // value (or higher) on die for which campeggio cancels a loss when he's in a debate (vanilla HIS cancels if 5 or 6)
 const DEFBONUSDICE = 1 // extra die defender gets in battles/assaults for being the defender
 
-const CUTOFFPROB = 0.00005 // outcomes that have fewer than this probability to happen are eliminated from the simulations, by default set to 0.005%
-const ROUNDTO = 2 // number of significant figures (after the decimal point) that all the results should round to
+const CUTOFFPROB = 0.00005 // outcomes that have fewer than this probability to happen are eliminated from the simulations, by default set to 0.00005
+const GARRISONSIZE = 4 // maximum size for a garrison in assaults (vanilla HIS is 4)
 
 // import json of debaters and associated values:
 
@@ -526,7 +527,7 @@ function getReformOdds(diceFaces = DICEFACES, bible_bonus = BIBLE_BONUS){
     return true;
 }
 
-function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDice = DEFBONUSDICE, hitValue = HITVALUE, diceFaces = DICEFACES, cutoffProb = CUTOFFPROB, roundTo = ROUNDTO){
+function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDice = DEFBONUSDICE, hitValue = HITVALUE, diceFaces = DICEFACES, cutoffProb = CUTOFFPROB, roundTo = ROUNDTO, garrisonSize = GARRISONSIZE){
   /*
   Simulate field battles/assaults with a certain number of attacker and defender dice and leaders
   Finds odds fof assault winning/losing, and the odds it will take a certain number of impulses to finish
@@ -541,8 +542,15 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
   const atkCavStrat = parseInt(document.getElementById('atk_el_cav').value); // how many cav the attacker and defender want to keep
   const defCavStrat = parseInt(document.getElementById('def_el_cav').value);
 
+  let atkAssaultWinner = document.getElementById('atk_assault_odds') // get assault winning chances
+  let defAssaultWinner = document.getElementById('def_assault_odds')
+  let atkAssaultImpulses = document.getElementById('assault_impulses_atk') // get tables 
+  let defAssaultImpulses = document.getElementById('assault_impulses_def')
+
   /* console.log(atkCavStrat)
   console.log(defCavStrat) */
+
+  // if (atkTroop)
 
   /* console.log(atkUnits)
   console.log(defUnits)
@@ -571,6 +579,35 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
       else{
         throw 'Error: negative dice being rolled, check why this is happening'
       }
+
+      //error handling
+
+      if (atkAssaultDice == 0){
+        atkAssaultWinner.textContent = 'Attacker must roll at least 1 die in the assault'
+        atkAssaultWinner.color = 'red'
+        throw "Error: attacker rolling 0 dice in the assault"
+      }
+      if ((atkTroops + atkCav) <= (defTroops + defCav)){
+        atkAssaultWinner.textContent = 'Attacker must outnumber defender to siege'
+        atkAssaultWinner.color = 'red'
+        throw "Error: attacker must have more units than defender to siege"
+      }
+      if ((defTroops + defCav) > garrisonSize){
+        atkAssaultWinner.textContent = 'Defender has too many units in the space to garrison all of them'
+        atkAssaultWinner.color = 'red'
+        throw "Error: Defender has too many units in the space to garrison all of them"
+      }
+      if (atkCavStrat > atkCav){
+        atkAssaultWinner.textContent = 'Attacker cannot keep more cavalry than started with'
+        atkAssaultWinner.color = 'red'
+        throw "Error: Attacker trying to keep more cavalry than started with"
+      }
+      if (defCavStrat > defCav){
+        atkAssaultWinner.textContent = 'Defender cannot keep more cavalry than started with'
+        atkAssaultWinner.color = 'red'
+        throw "Error: Defender trying to keep more cavalry than started with"
+      }
+
       //console.log(atkAssaultDice)
       //console.log(defAssaultDice)
       // Run simulations of dice to see the chances an assault will take a certain number of impulses to succeed and the chances it will fail
@@ -600,7 +637,7 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
         atkScoredHit = false; // reset atkScoreHit to false before the beginning of every sim
 
         // loop continues to run if: there are more attacking units than defending units and there are more than 0 defending units (units are left in the battle) or if there are 0 defensive units but the attacker did not score a hit in the impulse (if attacker attacked an ungarrisoned fort)
-        while ((((atkTroops + atkCav) > (defTroops + defCav)) && ((defTroops + defCav) > 0)) || (((defTroops + defCav) == 0) && !atkScoredHit)){ // simulation of one series of impulses ends when either all defending units are eliminated and the attacker scored at least one hit in the previous round of combat or attacker does not outnumber the defender (must break siege)
+        while ((((atkTroops + atkCav) > (defTroops + defCav)) && ((defTroops + defCav) > 0)) || ((atkTroops + atkCav) > 0 && ((defTroops + defCav) <= 0) && !atkScoredHit)){ // simulation of one series of impulses ends when either all defending units are eliminated and the attacker scored at least one hit in the previous round of combat or attacker does not outnumber the defender (must break siege)
           
           let atkRolls = Array(atkAssaultDice).fill().map(() => Math.floor(Math.random() * diceFaces) + 1) // generate two arrays of attack and defense rolls
           let defRolls = Array(defAssaultDice).fill().map(() => Math.floor(Math.random() * diceFaces) + 1) // generate two arrays of attack and defense rolls
@@ -624,8 +661,19 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
           atkCav = atkArray[0]; atkTroops = atkArray[1]
           defCav = defArray[0]; defTroops = defArray[1]
 
-          atkAssaultDice = atkRating + Math.ceil(atkTroops/2)
-          defAssaultDice = defRating + defTroops
+          // maybe more efficient way to do this than just copy pasting what is above but i will figure this out some other time
+
+          if ((defTroops + defCav) == 0){ // case where there are no units in the castle
+            atkAssaultDice = atkRating + atkTroops // attacker gets 1 die per non-cav unit and one die per battle rating of best leader
+          }
+          else if ((defTroops + defCav) > 0){ // case where there are 1 or more units in the castle
+            atkAssaultDice = atkRating + Math.ceil(atkTroops/2) // attacker gets 1 die per every two non-cav units (rounded up) and one die per battle rating of best leader
+          }
+
+          defAssaultDice = defRating + defTroops + defBonusDice
+
+          /* console.log(atkAssaultDice)
+          console.log(defAssaultDice) */
 
           impulses += 1
           
@@ -655,12 +703,14 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
           } */
           /* console.log(atkRolls)
           console.log(atkHits) */
+
+          //TODO: IMPLEMENT CASE WHERE BOTH ATTACKER AND DEFENDER UNITS ARE ALL DEAD
           
         }
-        if ((defTroops + defCav) <= 0 && atkScoredHit){ // if siege ends because defender has no units in fort and attacker scored at least one hit then set attacker as winner
+        if ((defTroops + defCav) <= 0 && atkScoredHit && (atkTroops + atkCav) > 0){ // if siege ends because defender has no units in fort and attacker scored at least one hit and ther eis at least one attacking unit remaining then set attacker as winner
           winner = 'atk'
         }
-        else if ((atkTroops + atkCav) <= (defTroops + defCav)){ // if siege ends because attacker does not outnumber defender then set defender as winner
+        else if (((atkTroops + atkCav) <= (defTroops + defCav)) || (atkTroops + atkCav) <= 0) { // if siege ends because attacker does not outnumber defender, or because all attacking units have been eliminated, then set defender as winner
           winner = 'def'
         }
         cardsToConclude.push([impulses, winner]) // adds array containing number of impulses it took to conclude the assault and then the assault winner
@@ -722,12 +772,6 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
     
     /* console.log(atkAssaultOdds)
     console.log(defAssaultOdds) */
-
-    let atkAssaultWinner = document.getElementById('atk_assault_odds') // get assault winning chances
-    let defAssaultWinner = document.getElementById('def_assault_odds')
-    let atkAssaultImpulses = document.getElementById('assault_impulses_atk') // get tables 
-    let defAssaultImpulses = document.getElementById('assault_impulses_def')
-
     /* for (var i = 0; i < atkAssaultImpulses.length; i ++){
       atkAssaultImpulses[i][1] = atkAssaultImpulses[i][1] + "%"  //append "%" to the end of every probability value in the table
     } */
