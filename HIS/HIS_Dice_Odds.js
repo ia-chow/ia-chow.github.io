@@ -850,4 +850,3 @@ function enforceMinMax(el){
   }
 
 // console.log(getReformOdds(3, 4, 'defender', 3));
-//
