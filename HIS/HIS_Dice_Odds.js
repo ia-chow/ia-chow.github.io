@@ -22,6 +22,8 @@ const ALEANDERBONUS = 1 // bonus spaces flipped by aleander when he's in a debat
 const CAMPEGGIOCANCEL = 5 // value (or higher) on die for which campeggio cancels a loss when he's in a debate (vanilla HIS cancels if 5 or 6)
 const DEFBONUSDICE = 1 // extra die defender gets in battles/assaults for being the defender
 
+const CUTOFFPROB = 0.00005 // outcomes that have fewer than this probability to happen are eliminated from the simulations, by default set to 0.005%
+
 // import json of debaters and associated values:
 
 // var debaters;
@@ -522,7 +524,7 @@ function getReformOdds(diceFaces = DICEFACES, bible_bonus = BIBLE_BONUS){
     return true;
 }
 
-function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDice = DEFBONUSDICE, hitValue = HITVALUE, diceFaces = DICEFACES){
+function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDice = DEFBONUSDICE, hitValue = HITVALUE, diceFaces = DICEFACES, cutoffProb = CUTOFFPROB){
   /*
   Simulate field battles/assaults with a certain number of attacker and defender dice and leaders
   Finds odds fof assault winning/losing, and the odds it will take a certain number of impulses to finish
@@ -593,7 +595,7 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
         atkAssaultDice = atkAssaultDiceO;
         defAssaultDice = defAssaultDice0;
 
-        atkScoreHit = false; // reset atkScoreHit to false before the beginning of every sim
+        atkScoredHit = false; // reset atkScoreHit to false before the beginning of every sim
 
         // loop continues to run if: there are more attacking units than defending units and there are more than 0 defending units (units are left in the battle) or if there are 0 defensive units but the attacker did not score a hit in the impulse (if attacker attacked an ungarrisoned fort)
         while ((((atkTroops + atkCav) > (defTroops + defCav)) && ((defTroops + defCav) > 0)) || (((defTroops + defCav) == 0) && !atkScoredHit)){ // simulation of one series of impulses ends when either all defending units are eliminated and the attacker scored at least one hit in the previous round of combat or attacker does not outnumber the defender (must break siege)
@@ -674,41 +676,57 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
     let defWins = cardsToConclude.filter(arr => arr[1] == 'def')
     // let atkWins = cardsToConclude.reduce((n, val) => n + (val == 'atk'));// split array into two arrays for attacker and defender wins
     // let defWins = cardsToConclude.filter(winner => winner == 'def')
+    //console.log(atkWins)
 
-    console.log(atkWins)
-
-    var atkImpulseArr = [];
+    var atkImpulseArr = []; // define atk and def impulse arr
+    var defImpulseArr = [];
+    var filtered;
   
-    // let atkWinsF = atkWins.toString().split(",").map(Number);
-    var atkImpulseMin = Math.min.apply(null, ([].concat.apply([], atkWins)).filter(val => !isNaN(val)))
+    const atkImpulseMin = Math.min.apply(null, ([].concat.apply([], atkWins)).filter(val => !isNaN(val))) // calculate min and max number of impulses taken to resolve the full assasult
+    const atkImpulseMax = Math.max.apply(null, ([].concat.apply([], atkWins)).filter(val => !isNaN(val)))
+    const defImpulseMin = Math.min.apply(null, ([].concat.apply([], defWins)).filter(val => !isNaN(val)))
+    const defImpulseMax = Math.max.apply(null, ([].concat.apply([], defWins)).filter(val => !isNaN(val)))
 
-    console.log(atkImpulseMin)
+   /*  console.log(atkImpulseMin)
+    console.log(atkImpulseMax) */
+
     //const atkImpulseMax = atkWins.sort(function(a,b){return a[0] < b[0];})[0]
 
     // const defImpulseMin = defWins.sort(function(a,b){return a[0] > b[0];})[0]
     // const defImpulseMax = defWins.sort(function(a,b){return a[0] < b[0];})[0]
 
-    /* for (val = atkImpulseMin; val < atkImpulseMax + 1; val++){
-      atkImpulseArr.push(val, cardsToConclude.filter(arr => arr[0] == val))
-    } */
+    for (let val = atkImpulseMin; val < atkImpulseMax + 1; val++){
+      filtered = atkWins.filter(arr => arr[0] == val)
+      if (filtered.length/numSimulations > cutoffProb){ // checks to make sure the number of simulations is above the cutoff probability, to avoid random very low probabiity things being added to the end of the array
+        atkImpulseArr.push([val, filtered])
+      }
+    }
+    atkImpulseArr = atkImpulseArr.map(([impulses, numOutcomes]) => [impulses, numOutcomes.length]) // change the number of outcomes from an array of all the outcomes to the length
+
+    for (let val = defImpulseMin; val < defImpulseMax + 1; val++){
+      filtered = defWins.filter(arr => arr[0] == val)
+      if (filtered.length/numSimulations > cutoffProb){ // same for defenders
+        defImpulseArr.push([val, defWins.filter(arr => arr[0] == val)])
+      }
+    }
+    defImpulseArr = defImpulseArr.map(([impulses, numOutcomes]) => [impulses, numOutcomes.length]) // same thing but for defenders
 
     console.log(atkImpulseArr)
-
+    console.log(defImpulseArr)
     //for (val = Math.min(atkWins[0]))
 
     let atkAssaultOdds = (atkWins.length)/numSimulations // get attack and defense win odds 
     let defAssaultOdds = (defWins.length)/numSimulations
-
+    
+    console.log(atkAssaultOdds)
+    console.log(defAssaultOdds)
 
     /* for (val = Math.min.apply(cardsToConclude); val < Math.max.apply(cardsToConclude); val++){
       cardsToConclude.filter(v => v === val).length;
     } */
-    
-
 }
 
 function elimUnits(hits, cav, troops, cavToKeep){
-
   /*
     Eliminates units based on how many hits are scored depending on cav strategy
     Note that hits are the hits scored by the OTHER side
