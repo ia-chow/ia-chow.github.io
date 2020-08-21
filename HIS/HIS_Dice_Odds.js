@@ -583,6 +583,7 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
       var winner;
 
       for(let i = 0; i < numSimulations; i++){
+
         impulses = 0;
         
         atkTroops = atkTroopsO; // reassign all these variables back to the original so that the calculations can take place
@@ -592,7 +593,10 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
         atkAssaultDice = atkAssaultDiceO;
         defAssaultDice = defAssaultDice0;
 
-        while ((((atkTroops + atkCav) > (defTroops + defCav)) && ((defTroops + defCav) > 0)) || ((defTroops + defCav) == 0 && atkScoredHit)){ // simulation of one series of impulses ends when either all defending units are eliminated and the attacker scored at least one hit in the previous round of combat or attacker does not outnumber the defender (must break siege)
+        atkScoreHit = false; // reset atkScoreHit to false before the beginning of every sim
+
+        // loop continues to run if: there are more attacking units than defending units and there are more than 0 defending units (units are left in the battle) or if there are 0 defensive units but the attacker did not score a hit in the impulse (if attacker attacked an ungarrisoned fort)
+        while ((((atkTroops + atkCav) > (defTroops + defCav)) && ((defTroops + defCav) > 0)) || (((defTroops + defCav) == 0) && !atkScoredHit)){ // simulation of one series of impulses ends when either all defending units are eliminated and the attacker scored at least one hit in the previous round of combat or attacker does not outnumber the defender (must break siege)
           
           let atkRolls = Array(atkAssaultDice).fill().map(() => Math.floor(Math.random() * diceFaces) + 1) // generate two arrays of attack and defense rolls
           let defRolls = Array(defAssaultDice).fill().map(() => Math.floor(Math.random() * diceFaces) + 1) // generate two arrays of attack and defense rolls
@@ -676,7 +680,8 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
     var atkImpulseArr = [];
   
     // let atkWinsF = atkWins.toString().split(",").map(Number);
-    var atkImpulseMin = ([].concat.apply([], atkWins));
+    var atkImpulseMin = Math.min.apply(null, ([].concat.apply([], atkWins)).filter(val => !isNaN(val)))
+
     console.log(atkImpulseMin)
     //const atkImpulseMax = atkWins.sort(function(a,b){return a[0] < b[0];})[0]
 
@@ -699,10 +704,11 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
       cardsToConclude.filter(v => v === val).length;
     } */
     
-    
+
 }
 
 function elimUnits(hits, cav, troops, cavToKeep){
+
   /*
     Eliminates units based on how many hits are scored depending on cav strategy
     Note that hits are the hits scored by the OTHER side
