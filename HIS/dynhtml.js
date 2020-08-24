@@ -75,17 +75,33 @@ function dynamicDropdown(team) {
 
 function bibleVis(){ // hides bible/calvin box depending on who wins ties
 
-    var tie_winner = $("input[type='radio'][name='tie_winner']:checked").val(); // jquery
+    const tie_winner = $("input[type='radio'][name='tie_winner']:checked").val(); // jquery
     // console.log(tie_winner)
 
     if (tie_winner == 'atk'){
         document.getElementById('bible').style.display = 'block' // if attacker button has been clicked display the bible/calvin box
     }
     else if (tie_winner == 'def'){ 
-        document.getElementById('bible').checked = false; // if defender button has been clicked hide the bible/calvin box and uncheck it
+        document.getElementById('bible_trans').checked = false; // if defender button has been clicked hide the bible/calvin box and uncheck it
         document.getElementById('bible').style.display = 'none'
     }
     return true;
+}
+
+function augsburgVis(){ // hide/show choosing papacy being attacker/defender box depending on whether augsburg confessoi nactive is checked
+    
+    const augsburg = document.getElementById('augsburg_reform_check').checked;
+    // console.log(augsburg)
+
+    if (augsburg){
+        document.getElementById('pap_augsburg').style.display = 'block'
+        document.getElementById("pap_atk").checked = true; // automatically checks papal attacker by defualt (can be changed iguess)
+    }
+    else if (!augsburg){
+        document.getElementById('pap_augsburg').style.display = 'none'
+        document.getElementById("pap_atk").checked = false;
+        document.getElementById('pap_def').checked = false; // unchecks both boxes when hidden
+    } 
 }
 
 // FUNCTIONS NOT CURRENTLY IN USE:
@@ -105,7 +121,7 @@ function toggleVis(elem){ // make elements visible or invisible, and uncheck it 
         document.getElementById(elem).style.display = 'none'
     }
     /* if (style.display == 'none'){
-        document.getElementById(elem).style.display == 'inline'
+        document.getElementById(eHlem).style.display == 'inline'
     }
     else{
         document.getElementById(elem).style.display == 'none'
