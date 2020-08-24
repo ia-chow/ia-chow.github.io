@@ -483,7 +483,7 @@ function getReformOdds(diceFaces = DICEFACES, bible_bonus = BIBLE_BONUS, roundTo
     const atk_dice = document.getElementById('attacker_dice').value;
     const def_dice = document.getElementById('defender_dice').value;
     const tie = $("input[type='radio'][name='tie_winner']:checked").val(); // ditto for this piece of jquery (see debate odds func)
-    const augsburgPapSide= $("input[type='radio'][name='pap_status']:checked").val(); // same here
+    const augsburgPapSide = $("input[type='radio'][name='pap_status']:checked").val(); // same here
     // augsburgPapSide evaluates to undefined if the augsburg confession active button isn't checked (since both raido buttons are unchecked)
     //console.log(augsburgPapSide)
 
@@ -568,9 +568,10 @@ function getReformOdds(diceFaces = DICEFACES, bible_bonus = BIBLE_BONUS, roundTo
     }
     else { // TODO: maybe use the css error class to handle this in the future?
       atk_results.textContent = 'Please enter a valid number of attacking and defending dice' // print to page
-
       atk_results.style.color = 'red' // change text to red
-      def_results.style.visibility = 'none' // hide element
+      def_results.style.visibility = 'hidden' // hide element
+      alert('Please enter a valid number of attacking and defending dice')
+      throw 'Error: invalid number of attacking and defending dice (should both be greater than 0)'
     }
     return true;
 }
@@ -601,6 +602,20 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
   console.log(defRating) */
 
   //TODO: add some error handling here to figure out what should happen otherwise!
+  // invalid situations for both fb and assaults
+
+  if (atkTroops + atkCav == 0){
+    alert ('Attacker must have at least 1 unit')
+    throw ('Error: attacker must have at least 1 unit')
+  }
+  if (atkTroops < 0 || atkCav < 0 || defTroops < 0 || defCav < 0){
+    alert ('Cannot have negative units')
+    throw('Error: cannot have negative troop numbers')
+  }
+ /*  if (defTroops < 0 || defCav < 0){
+    alert('Cannot have negative numbers of units')
+  } */
+
   var cardsToConclude = []
 
   switch (battleType){
@@ -633,31 +648,32 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
       //error handling, may want to clean this up
       // TODO: CLEAN THIS UP
 
-      if (atkAssaultDice == 0){
-        atkAssaultWinner.textContent = 'Attacker must roll at least 1 die in the assault'
+      if (atkAssaultDice <= 0){
+        alert('Attacker must roll at least 1 die in the assault')
         // atkAssaultWinner.style.color = 'red'
         throw "Error: attacker rolling 0 dice in the assault"
       }
       if ((atkTroops + atkCav) <= (defTroops + defCav)){
-        atkAssaultWinner.textContent = 'Attacker must outnumber defender to siege'
+        alert('Attacker must outnumber defender to siege')
         // atkAssaultWinner.style.color = 'red'
         throw "Error: attacker must have more units than defender to siege"
       }
       if ((defTroops + defCav) > garrisonSize){
-        atkAssaultWinner.textContent = 'Defender has too many units in the space to garrison all of them'
+        alert('Defender has too many units to garrison all')
         // atkAssaultWinner.style.color = 'red'
         throw "Error: Defender has too many units in the space to garrison all of them"
       }
-      if (atkCavStrat > atkCav){
-        atkAssaultWinner.textContent = 'Attacker cannot keep more cavalry than started with'
+      if ((atkCavStrat > atkCav) || (defCavStrat > defCav)){
+        alert('Cannot keep more cavalry than started with')
         // atkAssaultWinner.style.color = 'red'
-        throw "Error: Attacker trying to keep more cavalry than started with"
+        throw "Error: trying to keep more cavalry than started with"
       }
-      if (defCavStrat > defCav){
+
+      /* if (defCavStrat > defCav){
         atkAssaultWinner.textContent = 'Defender cannot keep more cavalry than started with'
         // atkAssaultWinner.style.color = 'red'
         throw "Error: Defender trying to keep more cavalry than started with"
-      }
+      } */
 
       //console.log(atkAssaultDice)
       //console.log(defAssaultDice)
@@ -839,6 +855,11 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
     case 'fb':
       /* let atkTable = document.getElementById('atk_fb_hits') 
       let defTable = document.getElementById('def_fb_hits') */
+      if (defTroops + defCav == 0){
+        alert ('Defender must have at least 1 unit')
+        throw ('Error: defender must have at least 1 unit')
+      }
+      
       let atkFbWinner = document.getElementById('atk_fb_odds') // get sections to print to
       let defFbWinner = document.getElementById('def_fb_odds')
       let atkFbHitDif = document.getElementById('atk_fb_hit_dif') // get attacker and defender tables
