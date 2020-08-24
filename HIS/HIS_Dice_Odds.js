@@ -464,7 +464,7 @@ function getDebaterDice(name, language, status, tmore, inq, augsburg, mary, atk_
 
 // console.log(getDebaterDice('Eck'));
 
-function getReformOdds(diceFaces = DICEFACES, bible_bonus = BIBLE_BONUS, roundTo = ROUNDTO){
+function getReformOdds(diceFaces = DICEFACES, bible_bonus = BIBLE_BONUS, roundTo = ROUNDTO, augsburgPenReform = AUGSBURG_PEN_REFORM){
     /*
     Gets reform odds and then changes html element on the page appropriately
     // TODO: HIDE THE BOX ON THE PAGE IF POSSIBLE
@@ -476,7 +476,19 @@ function getReformOdds(diceFaces = DICEFACES, bible_bonus = BIBLE_BONUS, roundTo
     const atk_dice = document.getElementById('attacker_dice').value;
     const def_dice = document.getElementById('defender_dice').value;
     const tie = $("input[type='radio'][name='tie_winner']:checked").val(); // ditto for this piece of jquery (see debate odds func)
-    const augsburg = document.getElementById('augsburg_debate').checked;
+    const augsburgPapSide= $("input[type='radio'][name='pap_status']:checked").val(); // same here
+    // augsburgPapSide evaluates to undefined if the augsburg confession active button isn't checked (since both raido buttons are unchecked)
+    //console.log(augsburgPapSide)
+
+    if (augsburgPapSide == 'atk'){ // depending on value of augsburgPapSide, applies a penalty for either attacker or defender
+      augsburgBonus = -augsburgPenReform
+    }
+    else if (augsburgPapSide == 'def'){
+      augsburgBonus = augsburgPenReform
+    }
+    else{
+      augsburgBonus = 0;
+    }
 
     // console.log(document.getElementById('bible_trans').checked);
 
@@ -523,8 +535,8 @@ function getReformOdds(diceFaces = DICEFACES, bible_bonus = BIBLE_BONUS, roundTo
     for (val = 1; val < diceFaces + 1; val++){
         const prob_def = ((val/diceFaces) ** def_dice) - (((val - 1)/diceFaces) ** def_dice); // probability that highest defender roll is equal to this value
         
-        const prob_atk_less = ((val - 1 - bonus)/diceFaces) ** atk_dice;  // probability that all attacker dice are lower than this value
-        const prob_equal = ((val - bonus)/diceFaces) ** atk_dice - prob_atk_less; // probability that highest attacker roll is exactly equal to the given roll (tie)
+        const prob_atk_less = ((val - 1 - bonus - augsburgBonus)/diceFaces) ** atk_dice;  // probability that all attacker dice are lower than this value
+        const prob_equal = ((val - bonus - augsburgBonus)/diceFaces) ** atk_dice - prob_atk_less; // probability that highest attacker roll is exactly equal to the given roll (tie)
         const prob_atk_more = 1 - prob_atk_less - prob_equal; // probability that highest attacker roll is greater than given value
 
         atk_win += prob_def * prob_atk_more;

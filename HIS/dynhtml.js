@@ -90,13 +90,17 @@ function bibleVis(){ // hides bible/calvin box depending on who wins ties
 
 function augsburgVis(){ // hide/show choosing papacy being attacker/defender box depending on whether augsburg confessoi nactive is checked
     
-    const augsburg = document.getElementById('augsburg_reform').checked;
+    const augsburg = document.getElementById('augsburg_reform_check').checked;
+    console.log(augsburg)
 
     if (augsburg){
         document.getElementById('pap_augsburg').style.display = 'block'
+        document.getElementById("pap_atk").checked = true; // automatically checks papal attacker by defualt (can be changed iguess)
     }
     else if (!augsburg){
         document.getElementById('pap_augsburg').style.display = 'none'
+        document.getElementById("pap_atk").checked = false;
+        document.getElementById('pap_def').checked = false; // unchecks both boxes when hidden
     } 
 }
 
