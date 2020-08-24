@@ -263,7 +263,14 @@ Also returns the chances of the attacker and defender winning, and the chances o
 */
 
 let atkOdds = (differenceOdds.filter(diff => diff[0] > 0)) // split differenceOdds into two arrays for attacker and defender
-let defOdds = (differenceOdds.filter(diff => diff[0] < 0)) // negative means defender has more hits
+// if called from simulate field battle, let defense odds include cases where attacker and defener got the same number of hits (since defender wins ties)
+// otherwise debates can end in ties
+if (caller == 'fb'){
+  var defOdds = (differenceOdds.filter(diff => diff[0] <= 0)) // negative means defender has more hits
+}
+else{
+  var defOdds = (differenceOdds.filter(diff => diff[0] < 0)) 
+}
 
 // atkOdds = Math.abs(atkOdds)
 
