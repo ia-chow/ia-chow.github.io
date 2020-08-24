@@ -436,7 +436,7 @@ function getDebaterDice(name, language, status, tmore, inq, augsburg, mary, atk_
 
 // console.log(getDebaterDice('Eck'));
 
-function getReformOdds(diceFaces = DICEFACES, bible_bonus = BIBLE_BONUS){
+function getReformOdds(diceFaces = DICEFACES, bible_bonus = BIBLE_BONUS, roundTo = ROUNDTO){
     /*
     Gets reform odds and then changes html element on the page appropriately
     // TODO: HIDE THE BOX ON THE PAGE IF POSSIBLE
@@ -580,31 +580,32 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
         throw 'Error: negative dice being rolled, check why this is happening'
       }
 
-      //error handling
+      //error handling, may want to clean this up
+      // TODO: CLEAN THIS UP
 
       if (atkAssaultDice == 0){
         atkAssaultWinner.textContent = 'Attacker must roll at least 1 die in the assault'
-        atkAssaultWinner.color = 'red'
+        // atkAssaultWinner.style.color = 'red'
         throw "Error: attacker rolling 0 dice in the assault"
       }
       if ((atkTroops + atkCav) <= (defTroops + defCav)){
         atkAssaultWinner.textContent = 'Attacker must outnumber defender to siege'
-        atkAssaultWinner.color = 'red'
+        // atkAssaultWinner.style.color = 'red'
         throw "Error: attacker must have more units than defender to siege"
       }
       if ((defTroops + defCav) > garrisonSize){
         atkAssaultWinner.textContent = 'Defender has too many units in the space to garrison all of them'
-        atkAssaultWinner.color = 'red'
+        // atkAssaultWinner.style.color = 'red'
         throw "Error: Defender has too many units in the space to garrison all of them"
       }
       if (atkCavStrat > atkCav){
         atkAssaultWinner.textContent = 'Attacker cannot keep more cavalry than started with'
-        atkAssaultWinner.color = 'red'
+        // atkAssaultWinner.style.color = 'red'
         throw "Error: Attacker trying to keep more cavalry than started with"
       }
       if (defCavStrat > defCav){
         atkAssaultWinner.textContent = 'Defender cannot keep more cavalry than started with'
-        atkAssaultWinner.color = 'red'
+        // atkAssaultWinner.style.color = 'red'
         throw "Error: Defender trying to keep more cavalry than started with"
       }
 
