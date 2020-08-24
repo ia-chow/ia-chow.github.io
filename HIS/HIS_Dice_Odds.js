@@ -377,7 +377,7 @@ function getHitDifference(atkDebater, defDebater, atkDice, defDice, numSimulatio
     sims.push(spacesFlipped);
     // console.log(hitDif)
   }
-  console.log(sims)
+  // console.log(sims)
   var results = { };
   for (var k = 0; k < sims.length; k++){ // count up all the values that appear in the results in a js obj
     if (!results[sims[k]]){
@@ -840,12 +840,12 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
       let hitArr = Object.entries(getHitDifference('', '', atkTroops + atkCav, defTroops + defCav + defBonusDice)) // find hits scored by attacker and defender using the gttetHitDifference func from earlier, also converts this to an array
       // might want to add the array conversion in the function in the future since easier than obj
       
-      console.log(hitArr)
+      // console.log(hitArr)
 
       // let atkHits = hitArr.filter(diff => diff[0] > 0); let defHits = hitArr.filter(diff => diff[0] < 0) // filter for attacker and defender hits (similar to debate)
       let outcomeOdds = genHitDiffTables(hitArr, atkFbHitDif, defFbHitDif, 'fb') // generate tables and return odds of each outcome (attacker, defender winning)
       // outcomeOdds = outcomeOdds.map(([hitDiff, numOutcomes]) => [hitDiff, parseInt(numOutcomes).toFixed(roundTo) + "%"]) // convert the number of outcomes to a percentage and round it
-      console.log(outcomeOdds)
+      // console.log(outcomeOdds)
 
       let atkWin = outcomeOdds[0].toFixed(roundTo) + "%"; let defWin = outcomeOdds[1].toFixed(roundTo) + "%" // get attacker and defender winning odds, round as required and add percentage at the end.
       
