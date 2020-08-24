@@ -190,7 +190,7 @@ function getDebaterOdds(hitChance = HITCHANCE, roundTo = ROUNDTO){
     def_elim += atk_hits_chance * def_hits_elim
   }
 
-  const differenceOdds = Object.entries(getHitDifference(atk_debater, def_debater, deb_atk_dice, deb_def_dice)) // get the odds of certain hit differences
+  const differenceOdds = Object.entries(getHitDifference(atk_debater, def_debater, deb_atk_dice, deb_def_dice)) // get the odds of certain hit differences and convert to arr
 
   // Object.filter = (obj, predicate) => Object.keys(obj).filter(key => predicate(obj[key])).reduce((res, key) => (res[key] = obj[key],res),{});
 
@@ -204,55 +204,10 @@ function getDebaterOdds(hitChance = HITCHANCE, roundTo = ROUNDTO){
   let atkTable = document.getElementById("deb_hit_difference_atk");
   let defTable = document.getElementById('deb_hit_difference_def');
 
-  let atkOdds = (differenceOdds.filter(diff => diff[0] > 0)) // split differenceOdds into two arrays for attacker and defender
-  let defOdds = (differenceOdds.filter(diff => diff[0] < 0)) // negative means defender has more hits
+  outcomeOdds = genHitDiffTables(differenceOdds, atkTable, defTable, 'debate', atk_debater, def_debater) // generates hit difference tables for debate
+  let atkWin = outcomeOdds[0]; let defWin = outcomeOdds[1]; let tieOdds = outcomeOdds[2]; // get chances for attacker, defender and tie from the outcome array
 
-  // atkOdds = Math.abs(atkOdds)
-
-  // might make this into a fxn at some point?
-
-/*   if (atk_debater == 'Aleander'){
-    atkOdds[0] += aleanderBonus
-  }
-  else if (def_debater == 'Aleander'){
-    defOdds[0] += aleanderBonus
-  } */
-
-  // TODO: Try to find a more efficient way to do this that does not use a for loop
-  var atkWin = 0;
-  var defWin = 0;
-
-  for (var i = 0; i < atkOdds.length; i ++){
-    atkOdds[i][0] = Math.abs(atkOdds[i][0]) //take absolute value of hit differences (since negative were for defender earlier)
-    atkWin += parseFloat(atkOdds[i][1])
-    atkOdds[i][1] = atkOdds[i][1] + "%"  //append "%" to the end of every probability value in the table
-  }
-  for (var j = 0; j < defOdds.length; j++){
-    defOdds[j][0] = Math.abs(defOdds[j][0]) // same for def
-    defWin += parseFloat(defOdds[j][1])
-    /* console.log(defOdds[j][1])
-    console.log(defWin) */
-    defOdds[j][1] = defOdds[j][1] + "%"
-  }
-
-  var tieOdds = 100 - atkWin - defWin
-
-  atkOdds = atkOdds.sort((a, b) => a[0] - b[0]); // sort arrays so they go from lowest die difference to highest die difference
-  defOdds = defOdds.sort((a, b) => a[0] - b[0]);
-
-  console.log(atkOdds)
-  console.log(defOdds)
-
-  atkTable.deleteTHead(); // deletes table heads if exist already
-  defTable.deleteTHead();
-
-  generateTableHead(atkTable, ['Hit Difference for ' + atk_debater, 'Chance']); // generate the two tables using the generate table func
-  generateTable(atkTable, atkOdds);
-
-  generateTableHead(defTable, ['Hit Difference for ' + def_debater, 'Chance'])
-  generateTable(defTable, defOdds);
-
-  atkTable.style.display = 'inline' // display table
+  atkTable.style.display = 'inline' // display tables
   defTable.style.display = 'inline'
 
 /* 
@@ -274,6 +229,9 @@ function getDebaterOdds(hitChance = HITCHANCE, roundTo = ROUNDTO){
 
   // display the other stuff that isn't the text from earlier
 
+  /* console.log(atk_debater)
+  console.log(def_debater) */
+
   summary.textContent = atk_debater + ' (' + atk_val + ') debates ' + com_msg + ' ' + def_debater + ' (' + def_val + ') in ' + language + ': ' + deb_atk_dice + ' v ' + deb_def_dice + ' dice'
   // TODO: figure out how to make some of this appear in different colours
   deb_results_atk.textContent = atk_debater + ' wins ' + (atkWin).toFixed(roundTo) + '% of the time'
@@ -294,11 +252,81 @@ function getDebaterOdds(hitChance = HITCHANCE, roundTo = ROUNDTO){
 }
 //});
 
+function genHitDiffTables(differenceOdds, atkTable, defTable, caller, atk_debater, def_debater){
+/*
+Generates the hit difference tables using a difference odds array, and then two table objects for attack and defense
+used for debater and battle rolls
+atk_debater and def_debater are optional params used only for the case where caller = 'debate'
+
+Also returns the chances of the attacker and defender winning, and the chances of ties
+*/
+
+let atkOdds = (differenceOdds.filter(diff => diff[0] > 0)) // split differenceOdds into two arrays for attacker and defender
+let defOdds = (differenceOdds.filter(diff => diff[0] < 0)) // negative means defender has more hits
+
+// atkOdds = Math.abs(atkOdds)
+
+// might make this into a fxn at some point?
+
+/*   if (atk_debater == 'Aleander'){
+  atkOdds[0] += aleanderBonus
+}
+else if (def_debater == 'Aleander'){
+  defOdds[0] += aleanderBonus
+} */
+
+// TODO: Try to find a more efficient way to do this that does not use a for loop
+var atkWin = 0;
+var defWin = 0;
+
+for (var i = 0; i < atkOdds.length; i ++){
+  atkOdds[i][0] = Math.abs(atkOdds[i][0]) //take absolute value of hit differences (since negative were for defender earlier)
+  atkWin += parseFloat(atkOdds[i][1])
+  atkOdds[i][1] = atkOdds[i][1] + "%"  //append "%" to the end of every probability value in the table
+}
+for (var j = 0; j < defOdds.length; j++){
+  defOdds[j][0] = Math.abs(defOdds[j][0]) // same for def
+  defWin += parseFloat(defOdds[j][1])
+  /* console.log(defOdds[j][1])
+  console.log(defWin) */
+  defOdds[j][1] = defOdds[j][1] + "%"
+}
+
+var tieOdds = 100 - atkWin - defWin
+
+atkOdds = atkOdds.sort((a, b) => a[0] - b[0]); // sort arrays so they go from lowest die difference to highest die difference
+defOdds = defOdds.sort((a, b) => a[0] - b[0]);
+
+/* console.log(atkOdds)
+console.log(defOdds) */
+
+atkTable.deleteTHead(); // deletes table heads if exist already
+defTable.deleteTHead();
+
+switch (caller){ // uses different column headings depending on whether func was called by getting debate odds or battle odds
+  case 'debate':
+    generateTableHead(atkTable, ['Hit Difference for ' + atk_debater, 'Chance']); // generate the two tables using the generate table func
+    generateTableHead(defTable, ['Hit Difference for ' + def_debater, 'Chance'])
+    break;
+  case 'fb':
+    generateTableHead(atkTable, ['Hit Difference for Attacking Army', 'Chance'])
+    generateTableHead(defTable, ['Hit Difference for Defending Army', 'Chance'])
+    defWin += tieOdds // for field battle, defender wins ties
+    tieOdds = 0 // no ties in field battles
+    break;
+  }
+
+generateTable(atkTable, atkOdds); // generate tables
+generateTable(defTable, defOdds);
+
+return [atkWin, defWin, tieOdds]; // generates tables and also returns the odds of attacker and defender winning
+}
+
 function getHitDifference(atkDebater, defDebater, atkDice, defDice, numSimulations=NUMSIMULATIONS, diceFaces=DICEFACES, hitValue=HITVALUE, aleanderBonus=ALEANDERBONUS, campeggioCancel=CAMPEGGIOCANCEL, roundTo = ROUNDTO){
   /*
   Gets the odds of hit difference (for debates) of attacking and defending dice by simulating rolls
   takes the number of attacking and defending dice
-  Returns probabilities of hit differences for attacker and defender
+  Returns array containing probabilities of hit differences for attacker and defender
 
   Negative numbers represent defender getting more hits than the attacker
   */
@@ -345,11 +373,10 @@ function getHitDifference(atkDebater, defDebater, atkDice, defDice, numSimulatio
         }
         // else nothing
     }
-
     sims.push(spacesFlipped);
     // console.log(hitDif)
   }
-  // console.log(sims)
+  console.log(sims)
   var results = { };
   for (var k = 0; k < sims.length; k++){ // count up all the values that appear in the results in a js obj
     if (!results[sims[k]]){
@@ -542,11 +569,6 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
   const atkCavStrat = parseInt(document.getElementById('atk_el_cav').value); // how many cav the attacker and defender want to keep
   const defCavStrat = parseInt(document.getElementById('def_el_cav').value);
 
-  let atkAssaultWinner = document.getElementById('atk_assault_odds') // get assault winning chances
-  let defAssaultWinner = document.getElementById('def_assault_odds')
-  let atkAssaultImpulses = document.getElementById('assault_impulses_atk') // get tables 
-  let defAssaultImpulses = document.getElementById('assault_impulses_def')
-
   /* console.log(atkCavStrat)
   console.log(defCavStrat) */
 
@@ -562,6 +584,13 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
 
   switch (battleType){
     case 'assault':
+
+    // getting document elements
+
+      let atkAssaultWinner = document.getElementById('atk_assault_odds') // get assault winning chances
+      let defAssaultWinner = document.getElementById('def_assault_odds')
+      let atkAssaultImpulses = document.getElementById('atk_assault_impulses') // get tables 
+      let defAssaultImpulses = document.getElementById('def_assault_impulses')
 
     // FINDING NUMBER OF DICE ROLLED BY BOTH SIDES:
 
@@ -716,15 +745,7 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
         }
         cardsToConclude.push([impulses, winner]) // adds array containing number of impulses it took to conclude the assault and then the assault winner
       }
-      break;
     
-      case 'fb':
-        null
-        // TODO: ADD THE FIELD BATTLE CODE AT SOME POINT
-      break;
-    }
-    //console.log(cardsToConclude)
-
     let atkWins = cardsToConclude.filter(arr => arr[1] == 'atk') // split array into two arrays for attacker and defender wins
     let defWins = cardsToConclude.filter(arr => arr[1] == 'def')
     // let atkWins = cardsToConclude.reduce((n, val) => n + (val == 'atk'));// split array into two arrays for attacker and defender wins
@@ -744,7 +765,6 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
     console.log(atkImpulseMax) */
 
     //const atkImpulseMax = atkWins.sort(function(a,b){return a[0] < b[0];})[0]
-
     // const defImpulseMin = defWins.sort(function(a,b){return a[0] > b[0];})[0]
     // const defImpulseMax = defWins.sort(function(a,b){return a[0] < b[0];})[0]
 
@@ -792,6 +812,38 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
     /* for (val = Math.min.apply(cardsToConclude); val < Math.max.apply(cardsToConclude); val++){
       cardsToConclude.filter(v => v === val).length;
     } */
+
+    break;
+    
+    case 'fb':
+      /* let atkTable = document.getElementById('atk_fb_hits') 
+      let defTable = document.getElementById('def_fb_hits') */
+      let atkFbWinner = document.getElementById('atk_fb_odds') // get sections to print to
+      let defFbWinner = document.getElementById('def_fb_odds')
+      let atkFbHitDif = document.getElementById('atk_fb_hit_dif') // get attacker and defender tables
+      let defFbHitDif = document.getElementById('def_fb_hit_dif')
+
+      let hitArr = Object.entries(getHitDifference('', '', atkTroops + atkCav, defTroops + defCav + defBonusDice)) // find hits scored by attacker and defender using the gttetHitDifference func from earlier, also converts this to an array
+      // might want to add the array conversion in the function in the future since easier than obj
+      
+      console.log(hitArr)
+
+      // let atkHits = hitArr.filter(diff => diff[0] > 0); let defHits = hitArr.filter(diff => diff[0] < 0) // filter for attacker and defender hits (similar to debate)
+      let outcomeOdds = genHitDiffTables(hitArr, atkFbHitDif, defFbHitDif, 'fb') // generate tables and return odds of each outcome (attacker, defender winning)
+      // outcomeOdds = outcomeOdds.map(([hitDiff, numOutcomes]) => [hitDiff, parseInt(numOutcomes).toFixed(roundTo) + "%"]) // convert the number of outcomes to a percentage and round it
+      console.log(outcomeOdds)
+
+      let atkWin = outcomeOdds[0].toFixed(roundTo) + "%"; let defWin = outcomeOdds[1].toFixed(roundTo) + "%" // get attacker and defender winning odds, round as required and add percentage at the end.
+      
+      atkFbWinner.textContent = 'Attacker has a ' + atkWin + ' chance of winning the battle'
+      defFbWinner.textContent = 'Defender has a ' + defWin + ' chance of winning the battle'
+
+      atkFbWinner.style.color = 'inherit' // change text to default color
+      defFbWinner.style.color = 'inherit' // show element
+      
+      break;
+    }
+    //console.log(cardsToConclude)
 }
 
 function elimUnits(hits, cav, troops, cavToKeep){

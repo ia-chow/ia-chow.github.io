@@ -99,14 +99,6 @@
 <div id="elim_chance_def"></div>
 
 <h2 style="color:#2DBF3B;"> Battle/Assault Odds Calculator: </h2>
-
-<h3> Field Battles:</h3>
-
-WIP
-
-<h3> Assaults: </h3>
-<p> Simulate the chances of capturing a fortified space under siege in a certain number of impulses (assuming no reinforcement by either side):
-</p>
 <p><label for="atk_rms">Attacking Regulars/Mercenaries:</label>
     <input id="atk_rms" class='number' type="number" value="5" step="1" min="1" max="9999" name="atk_rms">	&nbsp;
     <label for="atk_cav">Attacking Cavalry:</label>
@@ -135,19 +127,41 @@ WIP
         <option value="2"> 2 </option>
     </select>
 <br>
-<div>
-    <input id="assault_sim" name="assault_sim" class="button" type="button" value="Simulate Assaults" onclick="simulateBattle('assault')">
-</div>
+<h3> Field Battles:</h3>
+<p> Simulate the chances of the attacker/defender winning a field battle:
 </p>
+<div>
+    <input id="fb_sim" name="fb_sim" class="button" type="button" value="Simulate Field Battle" onclick="simulateBattle('fb')">
+</div>
+<div id="fb_atk">
+    <table id="atk_fb_hit_dif" style="display:none width: 10px">
+    </table>
+    <br>
+    <section id="atk_fb_odds"></section>
+</div>
+<br>
+<div id='fb_def'>
+    <table id="def_fb_hit_dif" style="display:none width: 10px"> <!-- add some css to replace this at some point -->
+    </table>
+    <br>
+    <section id="def_fb_odds"></section>
+</div>
+
+<h3> Assault: </h3>
+<p> Simulate the chances of capturing a fortified space in a certain number of impulses (assuming no reinforcement by either side):
+</p>
+<div>
+    <input id="assault_sim" name="assault_sim" class="button" type="button" value="Simulate Assault" onclick="simulateBattle('assault')">
+</div>
 <div id="assault_atk">
-    <table id="assault_impulses_atk" style="display:none width: 10px">
+    <table id="atk_assault_impulses" style="display:none width: 10px">
     </table>
     <br>
     <section id="atk_assault_odds"></section>
 </div>
 <br>
 <div id='assault_def'>
-    <table id="assault_impulses_def" style="display:none width: 10px"> <!-- add some css to replace this at some point -->
+    <table id="def_assault_impulses" style="display:none width: 10px"> <!-- add some css to replace this at some point -->
     </table>
     <br>
     <section id="def_assault_odds"></section>
