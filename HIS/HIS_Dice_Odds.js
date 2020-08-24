@@ -585,7 +585,7 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
   let defTroops = parseInt(document.getElementById('def_rms').value);
   let atkCav = parseInt(document.getElementById('atk_cav').value);
   let defCav = parseInt(document.getElementById('def_cav').value);
-  const atkRating = parseInt(document.getElementById('atk_br').value);
+  const atkRating = parseInt(document.getElementById('atk_br').value); // attacker and defender battlerating
   const defRating = parseInt(document.getElementById('def_br').value);
   const atkCavStrat = parseInt(document.getElementById('atk_el_cav').value); // how many cav the attacker and defender want to keep
   const defCavStrat = parseInt(document.getElementById('def_el_cav').value);
@@ -844,7 +844,7 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
       let atkFbHitDif = document.getElementById('atk_fb_hit_dif') // get attacker and defender tables
       let defFbHitDif = document.getElementById('def_fb_hit_dif')
 
-      let hitArr = Object.entries(getHitDifference('', '', atkTroops + atkCav, defTroops + defCav + defBonusDice)) // find hits scored by attacker and defender using the gttetHitDifference func from earlier, also converts this to an array
+      let hitArr = Object.entries(getHitDifference('', '', atkTroops + atkCav + atkRating, defTroops + defCav + defRating + defBonusDice)) // find hits scored by attacker and defender using the gttetHitDifference func from earlier, also converts this to an array
       // might want to add the array conversion in the function in the future since easier than obj
       
       // console.log(hitArr)
