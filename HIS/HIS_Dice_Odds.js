@@ -606,17 +606,17 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
 
   if (atkTroops + atkCav == 0){
     alert ('Attacker must have at least 1 unit')
-    throw ('Error: attacker must have at least 1 unit')
+    throw ('Error: attacker must have at least 1 unit') // attacker must have at least 1 unit
   }
   if (atkTroops < 0 || atkCav < 0 || defTroops < 0 || defCav < 0){
     alert ('Cannot have negative units')
-    throw('Error: cannot have negative troop numbers')
+    throw ('Error: cannot have negative troop numbers') // cav and troops cannot be negative
   }
  /*  if (defTroops < 0 || defCav < 0){
     alert('Cannot have negative numbers of units')
   } */
 
-  var cardsToConclude = []
+  var cardsToConclude = [] // array containing the number of impulses it takes to conclude an assault (either with an attacker or defender win)
 
   switch (battleType){
     case 'assault':
