@@ -883,7 +883,7 @@ function elimUnits(hits, cav, troops, cavToKeep){
         hits -= cav
       }
   } */
-  return [cav, troops]
+  return [cav, troops] // returns the number of cavalry and regulars/mercs after one round of unit elimination
 }
 
 // FUNCTIONS CURRENTLY NOT IN USE:
