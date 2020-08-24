@@ -35,6 +35,16 @@
 <div id="bible">
     <label><input id="bible_trans" class="checkbox" type="checkbox" name="bible_trans" value="bible_trans"> Attacker gets +1 from bible translation/Calvin's Institutes? </label>
 </div>
+<div id="augsburg_reform">
+    <label><input id="augsburg_reform_check" class="checkbox" type="checkbox" name="augsburg_reform" value="augsburg_reform" onclick="augsburgVis()"> Augsburg Confession active? </label>
+</div>
+<div id="pap_augsburg" style="display:none">
+    Papacy is the:
+    <input id="pap_atk" class="radio" type="radio" name="pap_status" value="atk" checked="checked">
+    <input id="pap_def" class="radio" type="radio" name="pap_status" value="def">
+    <label for="pap_atk"> Attacker </label>
+    <label for="pap_def"> Defender </label>
+</div>
 <br>
 <div id="ref_calc">
     <input id="ref_button" class="button" type="button" value="Calculate Reform Odds" onclick="getReformOdds()" onkeyup="enforceMinMax(this)">
@@ -67,8 +77,8 @@
     <input id="com" class="radio" type="radio" name="commit" value="com">
     <label for="com">Committed</label>
 <br><br>
-    <input id="augsburg" class="checkbox" type="checkbox" name="augsburg" value="augsburg">
-    <label for="augsburg">Augsburg Confession active?</label><br>
+    <input id="augsburg_debate" class="checkbox" type="checkbox" name="augsburg_debate" value="augsburg_debate">
+    <label for="augsburg_debate">Augsburg Confession active?</label><br>
     <input id="tmore" class="checkbox" type="checkbox" name="tmore" value="tmore">
 
     <label for="tmore">Thomas More active?</label><br>

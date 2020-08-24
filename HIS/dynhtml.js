@@ -75,17 +75,29 @@ function dynamicDropdown(team) {
 
 function bibleVis(){ // hides bible/calvin box depending on who wins ties
 
-    var tie_winner = $("input[type='radio'][name='tie_winner']:checked").val(); // jquery
+    const tie_winner = $("input[type='radio'][name='tie_winner']:checked").val(); // jquery
     // console.log(tie_winner)
 
     if (tie_winner == 'atk'){
         document.getElementById('bible').style.display = 'block' // if attacker button has been clicked display the bible/calvin box
     }
     else if (tie_winner == 'def'){ 
-        document.getElementById('bible').checked = false; // if defender button has been clicked hide the bible/calvin box and uncheck it
+        document.getElementById('bible_trans').checked = false; // if defender button has been clicked hide the bible/calvin box and uncheck it
         document.getElementById('bible').style.display = 'none'
     }
     return true;
+}
+
+function augsburgVis(){ // hide/show choosing papacy being attacker/defender box depending on whether augsburg confessoi nactive is checked
+    
+    const augsburg = document.getElementById('augsburg_reform').checked;
+
+    if (augsburg){
+        document.getElementById('pap_augsburg').style.display = 'block'
+    }
+    else if (!augsburg){
+        document.getElementById('pap_augsburg').style.display = 'none'
+    } 
 }
 
 // FUNCTIONS NOT CURRENTLY IN USE:

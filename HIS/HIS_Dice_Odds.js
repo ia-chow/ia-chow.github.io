@@ -13,7 +13,8 @@ const ECK_BONUS = 1 // bonus die for Eck
 const GARD_BONUS = 1 // bonus die for gardiner in the english language zone
 const TMORE_BONUS_ENG = 3  // bonus dice for thomas more on offense
 const TMORE_BONUS_OTHER = 1
-const AUGSBURG_PEN = 1  // malus dice for effects of Augsburg Confession
+const AUGSBURG_PEN_DEBATE = 1  // debate malus dice for effects of Augsburg Confession
+const AUGSBURG_PEN_REFORM = 1 // dice roll malus modifier for effects of augsburg confession
 const INQ_BONUS = 2  // bonus dice for papal inquisition
 const MARY_MULTIPLIER = 2 // multiplier for papal debater value in england if mary rules england
 
@@ -96,7 +97,7 @@ function getDebaterOdds(hitChance = HITCHANCE, roundTo = ROUNDTO){
   const tmore = document.getElementById("tmore").checked;
   // console.log(tmore)
   const inq = document.getElementById('inq').checked;
-  const augsburg = document.getElementById('augsburg').checked;
+  const augsburg = document.getElementById('augsburg_debate').checked;
   const mary = document.getElementById('mary').checked;
 
 /*   console.log(status)
@@ -394,7 +395,7 @@ function getHitDifference(atkDebater, defDebater, atkDice, defDice, numSimulatio
 
 function NantoZero(val){return +val || 0} // one-line function that checks if there is a nan and converts it to zero
 
-function getDebaterDice(name, language, status, tmore, inq, augsburg, mary, atk_base = ATK_BASE, unc_base = UNC_BASE, com_base = COM_BASE, eck_bonus = ECK_BONUS, gard_bonus = GARD_BONUS, tmore_bonus_eng = TMORE_BONUS_ENG, tmore_bonus_other = TMORE_BONUS_OTHER, inq_bonus = INQ_BONUS, augsburg_pen = AUGSBURG_PEN, mary_multiplier = MARY_MULTIPLIER){
+function getDebaterDice(name, language, status, tmore, inq, augsburg, mary, atk_base = ATK_BASE, unc_base = UNC_BASE, com_base = COM_BASE, eck_bonus = ECK_BONUS, gard_bonus = GARD_BONUS, tmore_bonus_eng = TMORE_BONUS_ENG, tmore_bonus_other = TMORE_BONUS_OTHER, inq_bonus = INQ_BONUS, augsburg_pen = AUGSBURG_PEN_DEBATE, mary_multiplier = MARY_MULTIPLIER){
     /*
     Gets array containing the number of dice a debater rolls in a debate and the debater value
 
@@ -475,6 +476,7 @@ function getReformOdds(diceFaces = DICEFACES, bible_bonus = BIBLE_BONUS, roundTo
     const atk_dice = document.getElementById('attacker_dice').value;
     const def_dice = document.getElementById('defender_dice').value;
     const tie = $("input[type='radio'][name='tie_winner']:checked").val(); // ditto for this piece of jquery (see debate odds func)
+    const augsburg = document.getElementById('augsburg_debate').checked;
 
     // console.log(document.getElementById('bible_trans').checked);
 
