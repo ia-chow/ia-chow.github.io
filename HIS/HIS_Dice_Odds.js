@@ -647,6 +647,8 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
     
       defAssaultDice = defRating + defBonusDice + defTroops // defender always gets 1 die per merc/regular in the castle, bonus dice, and 1 die per battlerating of best leader
       
+      /* atkAssaultDice = (defTroops + defCav == 0) ? atkRating + atkTroops : (defTroops + defCav > 0) ? atkRating + Math.ceil(atkTroops/2) : null */
+
       if ((defTroops + defCav) == 0){ // case where there are no units in the castle
         atkAssaultDice = atkRating + atkTroops // attacker gets 1 die per non-cav unit and one die per battle rating of best leader
       }
@@ -742,12 +744,14 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
 
           // maybe more efficient way to do this than just copy pasting what is above but i will figure this out some other time
 
-          if ((defTroops + defCav) == 0){ // case where there are no units in the castle
+          atkAssaultDice = (defTroops + defCav == 0) ? (atkRating + atkTroops) : (defTroops + defCav > 0) ? (atkRating + Math.ceil(atkTroops/2)) : null
+
+          /* if ((defTroops + defCav) == 0){ // case where there are no units in the castle
             atkAssaultDice = atkRating + atkTroops // attacker gets 1 die per non-cav unit and one die per battle rating of best leader
           }
           else if ((defTroops + defCav) > 0){ // case where there are 1 or more units in the castle
             atkAssaultDice = atkRating + Math.ceil(atkTroops/2) // attacker gets 1 die per every two non-cav units (rounded up) and one die per battle rating of best leader
-          }
+          } */
 
           defAssaultDice = defRating + defTroops + defBonusDice
 
