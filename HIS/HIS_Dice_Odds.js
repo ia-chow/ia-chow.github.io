@@ -425,6 +425,9 @@ function getDebaterDice(name, language, status, tmore, inq, augsburg, mary, atk_
    /* const language = deb_data.map(deb_language => deb_language.Language)
    console.log(base_dice)
    console.log(language) */
+
+   // convert some of these using ternary operators
+
    if (status == 'atk'){
 
     tot_dice += atk_base
@@ -530,31 +533,39 @@ function getReformOdds(diceFaces = DICEFACES, bible_bonus = BIBLE_BONUS, roundTo
     var def_win = 0
     var val;
 
-    if (bible){ // set bonus to bible bonus if bible translation active (check dice from higher value)
+    var bonus = bible ? bible_bonus : 0
+    /* if (bible){ // set bonus to bible bonus if bible translation active (check dice from higher value)
       var bonus = bible_bonus;
     }
     else if (!bible){
       var bonus = 0;
-    }
+    } */
 
-    // console.log(bonus)
+    console.log(bonus)
 
     for (val = 1; val < diceFaces + 1; val++){
         const prob_def = ((val/diceFaces) ** def_dice) - (((val - 1)/diceFaces) ** def_dice); // probability that highest defender roll is equal to this value
-        
-        const prob_atk_less = ((val - 1 - bonus - augsburgBonus)/diceFaces) ** atk_dice;  // probability that all attacker dice are lower than this value
-        const prob_equal = ((val - bonus - augsburgBonus)/diceFaces) ** atk_dice - prob_atk_less; // probability that highest attacker roll is exactly equal to the given roll (tie)
+        // takes minimim of augsburgbonus and 0 because if augsburgbonus is for the attacker then it will be 1, if inactive will be 0, if for defender will be -1
+        // takes max of augsburgbonus and 0 so if it is active then it applies penalty to attacker
+
+        // Takes min of probability and 1 so it covers the cases where evaluating 7 or soomething (due to augsburg bonus or bible)
+        const prob_atk_less = Math.min(((val - 1 - bonus - augsburgBonus)/diceFaces), 1) ** atk_dice;  // probability that all attacker dice are lower than this value
+        const prob_equal = Math.min(((val - bonus - augsburgBonus)/diceFaces), 1) ** atk_dice - prob_atk_less; // probability that highest attacker roll is exactly equal to the given roll (tie)
         const prob_atk_more = 1 - prob_atk_less - prob_equal; // probability that highest attacker roll is greater than given value
+
+        console.log(prob_atk_less); console.log(prob_equal); console.log(prob_atk_more);
 
         atk_win += prob_def * prob_atk_more;
         def_win += prob_def * prob_atk_less;
 
-        if (win_ties == true){
+        (win_ties) ? atk_win += prob_equal * prob_def : def_win += prob_equal * prob_def;
+
+        /* if (win_ties == true){
             atk_win += prob_equal * prob_def;
         }
         else if (win_ties == false){
             def_win += prob_equal * prob_def;
-        }
+        } */
         //console.log(atk_win, def_win, prob_def, prob_atk_less, prob_atk_more, prob_equal);
     }
     // console.log((atk_win * 100).toFixed(2))
@@ -775,12 +786,15 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
           //TODO: IMPLEMENT CASE WHERE BOTH ATTACKER AND DEFENDER UNITS ARE ALL DEAD
           
         }
-        if ((defTroops + defCav) <= 0 && atkScoredHit && (atkTroops + atkCav) > 0){ // if siege ends because defender has no units in fort and attacker scored at least one hit and ther eis at least one attacking unit remaining then set attacker as winner
+
+        winner = ((defTroops + defCav) <= 0 && atkScoredHit && (atkTroops + atkCav) > 0) ? 'atk' : 'def';
+
+        /* if ((defTroops + defCav) <= 0 && atkScoredHit && (atkTroops + atkCav) > 0){ // if siege ends because defender has no units in fort and attacker scored at least one hit and ther eis at least one attacking unit remaining then set attacker as winner
           winner = 'atk'
         }
         else if (((atkTroops + atkCav) <= (defTroops + defCav)) || (atkTroops + atkCav) <= 0) { // if siege ends because attacker does not outnumber defender, or because all attacking units have been eliminated, then set defender as winner
           winner = 'def'
-        }
+        } */
         cardsToConclude.push([impulses, winner]) // adds array containing number of impulses it took to conclude the assault and then the assault winner
       }
     
