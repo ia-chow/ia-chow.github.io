@@ -1,0 +1,24 @@
+{
+  "name": "ia-chow.github.io",
+  "version": "1.0.0",
+  "description": "ia-chow.github.io",
+  "main": "jquery-3.5.1.js",
+  "dependencies": {
+    "jstat": "^1.9.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ia-chow/ia-chow.github.io.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ia-chow/ia-chow.github.io/issues"
+  },
+  "homepage": "https://github.com/ia-chow/ia-chow.github.io#readme",
+  "keywords": []
+}
