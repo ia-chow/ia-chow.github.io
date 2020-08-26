@@ -564,7 +564,8 @@ function getReformOdds(diceFaces = DICEFACES, bible_bonus = BIBLE_BONUS, roundTo
       def_results.textContent = 'Defender has ' + (def_win * 100).toFixed(roundTo) + '% chance of winning' // print to page
 
       atk_results.style.color = 'inherit' // change text to default color
-      def_results.style.display = 'block' // show element
+      def_results.style.visibility = 'visible' // display def results
+      def_results.style.display = 'block' // show in block form (could change this to inlien or whatever in future)
     }
     else { // TODO: maybe use the css error class to handle this in the future?
       atk_results.textContent = 'Please enter a valid number of attacking and defending dice' // print to page
