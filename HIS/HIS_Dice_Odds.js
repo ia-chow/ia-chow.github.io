@@ -856,8 +856,8 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
       /* let atkTable = document.getElementById('atk_fb_hits') 
       let defTable = document.getElementById('def_fb_hits') */
       if (defTroops + defCav == 0){
-        alert ('Defender must have at least 1 unit')
-        throw ('Error: defender must have at least 1 unit')
+        alert ('Defender must have at least 1 unit in a field battle')
+        throw ('Error: defender must have at least 1 unit in a field battle')
       }
       
       let atkFbWinner = document.getElementById('atk_fb_odds') // get sections to print to
