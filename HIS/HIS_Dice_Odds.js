@@ -541,7 +541,7 @@ function getReformOdds(diceFaces = DICEFACES, bible_bonus = BIBLE_BONUS, roundTo
       var bonus = 0;
     } */
 
-    console.log(bonus)
+    // console.log(bonus)
 
     for (val = 1; val < diceFaces + 1; val++){
         const prob_def = ((val/diceFaces) ** def_dice) - (((val - 1)/diceFaces) ** def_dice); // probability that highest defender roll is equal to this value
@@ -553,7 +553,7 @@ function getReformOdds(diceFaces = DICEFACES, bible_bonus = BIBLE_BONUS, roundTo
         const prob_equal = Math.min(((val - bonus - augsburgBonus)/diceFaces), 1) ** atk_dice - prob_atk_less; // probability that highest attacker roll is exactly equal to the given roll (tie)
         const prob_atk_more = 1 - prob_atk_less - prob_equal; // probability that highest attacker roll is greater than given value
 
-        console.log(prob_atk_less); console.log(prob_equal); console.log(prob_atk_more);
+        // console.log(prob_atk_less); console.log(prob_equal); console.log(prob_atk_more);
 
         atk_win += prob_def * prob_atk_more;
         def_win += prob_def * prob_atk_less;
