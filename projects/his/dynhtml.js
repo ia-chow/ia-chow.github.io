@@ -3,7 +3,7 @@
 });
  */
 var debaters;
-var data = jQuery.getJSON("./debater_values.json", function(get_debaters){debaters = get_debaters;}); // uses debater_values.json file for debater list
+var data = jQuery.getJSON("debater_values.json", function(get_debaters){debaters = get_debaters;}); // uses debater_values.json file for debater list
 
 //console.log(data)
 //console.log(debaters)

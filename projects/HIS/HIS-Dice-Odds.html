@@ -56,7 +56,7 @@
 
 <h2 style="color:#2DBF3B;"> Theological Debate Odds Calculator: </h2>
 
-    Find the odds of the attacker/defender winning theological debates
+    Simulate the odds of the attacker/defender winning theological debates. Positive hit difference means the attacker wins. Negative hit difference means the defender wins.
 
     <p>Attacking side:</p>
     <input id="papal" class="radio" type="radio" name="deb_team" value="papal" checked="checked" onclick="dynamicDropdown('papal')">
@@ -86,25 +86,20 @@
     <input id="inq" class="checkbox" type="checkbox" name="inq" value="inq">
     <label for="inq">Papal Inquisition active?</label><br>
 <div id="mary"><label><input id="mary_box" class="checkbox" type="checkbox" name="mary" value="mary"> Mary I rules England?</label></div>
-
-<br><br>
-    <input id="debate_button" class="button" type="button" value="Calculate Debate Odds" onclick="getDebaterOdds()">
+<br>
+    <input id="debate_button" class="button" type="button" value="Simulate Debate Odds" onclick="getDebaterOdds()">
 <br>
 <div id="deb_summary"></div>
 <br>
 <div id="hit_difference_odds_atk">
     <table id="deb_hit_difference_atk" style="display:none width:50%">
     </table>
+    <br>
+    <section id = "deb_results_atk"> </section>
+    <section id = "deb_results_def"> </section>
+    <section id = "deb_results_tie"> </section>
 </div>
-<div id="deb_results_atk"></div>
 <br>
-<div id="hit_difference_odds_def">
-    <table id="deb_hit_difference_def" style="display:none width:50%">
-    </table>
-</div>
-<div id="deb_results_def"></div>
-<br>
-<div id="deb_results_tie"></div>
 <div id="elim_chance_atk"></div>
 <div id="elim_chance_def"></div>
 
@@ -138,7 +133,7 @@
     </select>
 <br>
 <h3> Field Battles:</h3>
-<p> Simulate the chances of the attacker/defender winning a field battle:
+<p> Simulate the chances of the attacker/defender winning a field battle. Positive hit difference means the attacker wins. Negative or zero hit difference means the defender wins.
 </p>
 <div>
     <input id="fb_sim" name="fb_sim" class="button" type="button" value="Simulate Field Battle" onclick="simulateBattle('fb')">
@@ -148,14 +143,9 @@
     </table>
     <br>
     <section id="atk_fb_odds"></section>
-</div>
-<br>
-<div id='fb_def'>
-    <table id="def_fb_hit_dif" style="display:none width: 10px"> <!-- add some css to replace this at some point -->
-    </table>
-    <br>
     <section id="def_fb_odds"></section>
 </div>
+<br>
 
 <h3> Assault: </h3>
 <p> Simulate the chances of capturing a fortified space in a certain number of impulses (assuming no reinforcement by either side):
