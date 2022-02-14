@@ -1,0 +1,1 @@
+var get_debaters = require('./debater_values.json');

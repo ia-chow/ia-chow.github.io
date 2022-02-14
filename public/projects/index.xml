@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Projects on Ian Chow</title>
+    <link>http://ia-chow.github.io/projects/</link>
+    <description>Recent content in Projects on Ian Chow</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
+    <lastBuildDate>Thu, 27 Aug 2020 00:00:00 +0000</lastBuildDate><atom:link href="http://ia-chow.github.io/projects/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Here I Stand Calculator</title>
+      <link>http://ia-chow.github.io/projects/his/</link>
+      <pubDate>Thu, 27 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://ia-chow.github.io/projects/his/</guid>
+      <description>A tool used to calculate various odds in the board game Here I Stand.
+Here I Stand Calculator</description>
+    </item>
+    
+  </channel>
+</rss>
