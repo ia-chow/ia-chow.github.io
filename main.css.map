@@ -1,7 +1,7 @@
 {
 	"version": 3,
 	"file": "main.css",
-	"sourceRoot": "C:/users/ian chow/pycharmprojects/ia-chow.github.io",
+	"sourceRoot": "C:/Users/Ian Chow/pycharmprojects/ia-chow.github.io",
 	"sources": [
 		"themes/hello-friend-ng/assets/scss/main.scss",
 		"themes/hello-friend-ng/assets/scss/_normalize.scss",
