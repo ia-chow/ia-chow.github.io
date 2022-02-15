@@ -615,30 +615,22 @@ function simulateBattle(battleType, numSimulations = NUMSIMULATIONS, defBonusDic
   const atkCavStrat = parseInt(document.getElementById('atk_el_cav').value); // how many cav the attacker and defender want to keep
   const defCavStrat = parseInt(document.getElementById('def_el_cav').value);
 
-  /* console.log(atkCavStrat)
-  console.log(defCavStrat) */
+  // console.log(defTroops)
 
-  // if (atkTroop)
-
-  /* console.log(atkUnits)
-  console.log(defUnits)
-  console.log(atkRating)
-  console.log(defRating) */
-
-  //TODO: add some error handling here to figure out what should happen otherwise!
-  // invalid situations for both fb and assaults
+  // Error handling for invalid inputs:
 
   if (atkTroops + atkCav == 0){
     alert ('Attacker must have at least 1 unit')
     throw ('Error: attacker must have at least 1 unit') // attacker must have at least 1 unit
   }
-  if (atkTroops < 0 || atkCav < 0 || defTroops < 0 || defCav < 0){
-    alert ('Cannot have negative units')
-    throw ('Error: cannot have negative troop numbers') // cav and troops cannot be negative
+  if (atkTroops < 0 || atkTroops > 100 || atkCav < 0 || atkCav > 100 || defTroops < 0 || defTroops > 100 || defCav < 0 || defCav > 100){
+    alert ('All troop numbers must be between 0 and 100')
+    throw ('Error: All troop numbers must be between 0 and 100') // cav and troops should be between 0 and 100
+    }
+  if (isNaN(atkTroops) || isNaN(atkCav) || isNaN(defTroops) || isNaN(defCav)){
+    alert('Enter attack/defense troop numbers to simulate')  // if the box is left empty for any of them
+    throw ('Error: enter attack/defense troop numbers in all boxes to simulate')
   }
- /*  if (defTroops < 0 || defCav < 0){
-    alert('Cannot have negative numbers of units')
-  } */
 
   var cardsToConclude = [] // array containing the number of impulses it takes to conclude an assault (either with an attacker or defender win)
 
