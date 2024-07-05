@@ -143,7 +143,7 @@ svg,img { max-width: 100%; height: auto; }
 /*-----------------------------------------------------------------
   8. >>> 404 Style
 ----------------------------------------------------------------*/
-.ds-404 {display: inline-block; background-color: #4F2683; color: #000; font-weight: 600; font-family: 'Poppins', sans-serif; text-align: center; padding: 0 0.4375rem; font-size: 3.75rem; width: 100%; margin: auto; margin-top: 8rem; margin-bottom: 4rem}
+.ds-404 {display: inline-block; background-color: #4F2683; color: #FFFFFF; font-weight: 600; font-family: 'Poppins', sans-serif; text-align: center; padding: 0 0.4375rem; font-size: 3.75rem; width: 100%; margin: auto; margin-top: 8rem; margin-bottom: 4rem}
 
 /*-------------------------------------------------------------------------------
  XS Style @media (max-width: 767px) 
@@ -154,7 +154,7 @@ svg,img { max-width: 100%; height: auto; }
 	.ds-banner .container{ position: relative; padding-bottom: 90px }
 	.ds-social-link{ position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); }
 	.ds-banner figure{ width: 75%; margin: 0 auto; margin-top: 40px }
-	.ds-image-shadow {box-shadow:20px 20px #c7f900;}
+	.ds-image-shadow {box-shadow:20px 20px #4F2683;}
 	.ds-banner {margin-bottom: 3.5rem;}
 	.ds-resume-section,.ds-projects-section,.ds-testimonials-section,.ds-email-section{ padding: 3.5rem 0 }
 	.ds-resume-section h2,.ds-projects-section h2{ max-width: 100% }
