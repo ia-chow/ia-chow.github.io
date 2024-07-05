@@ -1,0 +1,2 @@
+User-agent: *
+Disallow: /CV/Ian_Chow_CV.pdf
