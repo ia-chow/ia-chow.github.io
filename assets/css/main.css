@@ -26,8 +26,11 @@
 	--margin-100:6.25rem;
 	--margin-120:7.5rem;   
 }
-html {font-family: 'Poppins', sans-serif;background-color:#2A2A2A}
-body {font-family: 'Poppins', sans-serif;overflow-x: hidden; background-color:#2A2A2A; font-weight:400;font-style: normal; color: #FFF; font-size: var(--font_14)}
+html {font-family: 'Poppins', sans-serif;background-color:#FFFFFF; user-select: auto;}
+/* Old background color was #2A2A2A */
+/* IBM Plex Serif or EB Garamond work well */
+body {font-family: 'EB Garamond', serif; overflow-x: hidden; background-color:#FFFFFF; 
+	font-weight:400;font-style: normal; color: #1C1C1C; font-size: var(--font_14); user-select:auto;}
 a,a:hover,a:focus,i,input,button,input:focus,.transition {text-decoration: none;outline: none;transition-delay: 0s;transition-duration: 0.4s;transition-property: all;transition-timing-function: ease;box-shadow: none;}
 a{color: #000}
 iframe {border: 0;outline: none;}
@@ -44,7 +47,7 @@ font-family: 'DM Serif Display', serif;
 font-family: 'Poppins', sans-serif;}
 input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {background-color: transparent;background-image: none;color:#000;}
 /* 1.2 Typography */
-h1,h2,h3,h4,h5,h6 {font-family: 'DM Serif Display', serif;}
+h1,h2,h3,h4,h5,h6 {font-family: 'Poppins', sans-serif; user-select: auto;}
 figure{ margin: 0 }
 svg,img { max-width: 100%; height: auto; }
 @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
@@ -53,29 +56,32 @@ svg,img { max-width: 100%; height: auto; }
 /*-----------------------------------------------------------------
   1. >>> Headr Style
 ----------------------------------------------------------------*/
-.ds-header{ padding-top:2.0rem; padding-bottom: 3.4125rem; position: relative;  }
-.ds-logo a{ display: inline-block; background-color: #4F2683; font-weight: 600; font-size: 2.125rem; padding: 0  1.4375rem; color: #ffffff}
-.ds-logo a::selection{color: white; background-color: #0074ffcc}
-.ds-logo a:hover{ background-color: #FFFFFF; color: #4F2683 }
+.ds-header{ padding-top:2.0rem; padding-bottom: 3.4125rem; position: relative;}
+.ds-logo a{ display: inline-block; background-color: #FFFFFF; font-family: 'Poppins'; font-weight: 450; font-size: 2.125rem; padding: 0  1.4375rem; color: #4F2683;}
+.ds-logo a::selection{color: #FFFFFF; background-color: #0074ffcc}
+.ds-logo a:hover{ background-color: #4F2683; color: #FFFFFF }
 .ds-logo a:focus{color: #000}
 /*-----------------------------------------------------------------
   2. >>> Banner Style
 ----------------------------------------------------------------*/
-.ds-banner{ margin-bottom: 7.125rem; user-select: ‘none’ }
-.ds-banner-hed{ font-size: 5.3125rem; line-height:7rem; margin-top: 1.0rem; user-select: ‘none’; animation: fadeIn 1.7s}
+.ds-banner{ margin-bottom: 7.125rem; user-select: auto;}/* user-select: ‘none’ } */
+.ds-banner-hed{font-family:'DM Serif Display'; font-size: 5.3125rem; line-height:7rem; margin-top: 1.0rem; animation: fadeIn 1.5s; user-select: auto;}/* user-select: ‘none’ } */
 .ds-banner-hed::selection{color: white; background-color: #0074ffcc}
 .ds-image-shadow{box-shadow:20px 20px #8F55E0; animation: animatetop 1.7s}
-.ds-banner p{ color:#9C9C9C; font-size: 2.65rem; line-height: 3.875rem }
+.ds-banner h3{font-family:'Poppins'; font-weight: light; color:#5C5C5C; font-size: 2.65rem; line-height: 3.875rem }
+.ds-banner p{ color:#1c1c1c; font-size: 1.5rem; line-height: 2.0rem }
+.ds-banner p a{color:dodgerblue}
+/* old colour #9C9C9C */
 /*.ds-banner-left{display: flex; justify-content: space-between; flex-direction: column;}*/
 
-.ds-social-link{ list-style: none; display: flex; align-items: center;margin-top: 3.5rem; animation: fadeIn 1.7s}
+.ds-social-link{ list-style: none; display: flex; align-items: center;margin-top: 3.5rem; animation: fadeIn 1.5s}
 .ds-social-link li{ margin-right: 15px }
 .ds-social-link li:alst-child{ margin-right: 0 }
-.ds-social-link a{ width: 60px; height: 60px; background-color: #4F2683; border-radius: 100%; text-align: center; display: flex; justify-content: center; 
-	align-items: center; font-size:2.5rem; color:#FFFFFF }
-.ds-social-link li:hover a{background-color: #FFFFFF; color: #4F2683 }
+.ds-social-link a{ width: 75px; height: 75px; background-color: #FFFFFF; border-radius: 100%; text-align: center; display: flex; justify-content: center; 
+	align-items: center; font-size:2.5rem; color:#4F2683 }
+.ds-social-link li:hover a{background-color: #4F2683; color: #FFFFFF }
 
-.ds-banner figure{width: 425px; position: relative; padding-bottom:2.125rem}
+.ds-banner figure{width: 500px; position: relative; padding-bottom:1.125rem; padding-left: 3.00rem}
 .ds-banner figure:hover img.ds-image-shadow{box-shadow:-20px -20px #8F55E0;}
 .ds-banner figure figcaption{ color: #FFF; font-size:1.875rem; position: absolute; bottom: 0; width: 100%; text-align: center; padding-bottom:2.5rem  }
 /*-----------------------------------------------------------------
@@ -90,26 +96,28 @@ svg,img { max-width: 100%; height: auto; }
 /*-----------------------------------------------------------------
   4. >>> Projects Style
 ----------------------------------------------------------------*/
-.ds-projects-section{padding: 2.5rem 0 }
-.ds-projects-section h2{ font-size: 3.5rem; line-height: 3.375rem; width: 100%;max-width:100%;margin: 0}
+.ds-projects-section{padding: 1.5rem 0 }
+.ds-projects-section h2{ font-size: 3.5rem; line-height: 3.375rem; width:auto; max-width:100%; margin: 0}
 .ds-projects-section h2 span{ display: block; font-family: 'Poppins', sans-serif; text-transform: uppercase; color: #4F2683; 
 	font-weight: 600; letter-spacing: 3px; font-size: 0.75rem; margin-bottom: 0.625rem}
-.ds-projects-listing-section{ margin-top: 3rem }
+.ds-projects-section p{margin-top: 0.8rem; font-family: 'EB Garamond'; font-weight: 250; font-size: 1.5rem; line-height: 2.25rem; color:#000000; text-transform: none}
+.ds-projects-listing-section{ margin-top: 3rem}
 .ds-projects-loop figure{ margin-right: 60px; position: relative; }
 .ds-projects-loop:hover figure img.ds-image-shadow{box-shadow:20px 20px #8F55E0;}
 
 /* .ds-link-button{position: relative; width: 3.75rem; height: 3.75rem; border-radius: 3px; 
 	background-color: #FFFFFF; display: inline-block; justify-content: left; align-items: left; color: #4F2683; font-size: 1.125rem; text-align: left; opacity: 1} */
-.ds-link-button li{list-style-type: none; margin-right: 15px }
+.ds-link-button li{list-style-type: none; margin-right: 15px; color:#4F2683}
 .ds-link-button li:alst-child{ margin-right: 0 }
 /* .ds-link-button a{ width: 60px; height: 60px; background-color: #4F2683; border-radius: 100%; text-align: left; display: flex; justify-content: left; 
 	align-items: center; font-size:2.5rem; color:#FFFFFF } */
-.ds-link-button a{color:#8F55E0}
-.ds-link-button li:hover a{background-color: #4F2683; color: #FFFFFF; font-size: 1.90rem;}
+.ds-link-button a{color:#4F2683}
+/* old colour 8F55E0 */
+.ds-link-button li:hover a{background-color: #4F2683; color: #FFFFFF; font-size: 1.85rem;}
 .ds-projects-loop:hover .ds-link-button{ opacity: 1 }
-.ds-projects-loop section{ margin-top: 5.875rem }
-.ds-projects-loop section span{width: 100%; font-size: 1.75rem; font-weight: 500; color:#FFFFFF; }
-.ds-projects-loop section h3{font-family: 'Poppins', sans-serif; font-weight: 250; font-size: 1.25rem; color:#FFFFFF; text-transform: none}
+.ds-projects-loop section{ margin-top: 2.875rem }
+.ds-projects-loop section span{width: auto; font-size: 1.75rem; font-weight: 500; color:#000000; }
+.ds-projects-loop section h3{font-weight: 250; font-size: 1.25rem; color:#000000; text-transform: none}
 
 /*-----------------------------------------------------------------
   5. >>> Testimonials Style
@@ -135,7 +143,7 @@ svg,img { max-width: 100%; height: auto; }
 /*-----------------------------------------------------------------
   7. >>> Footer Style
 ----------------------------------------------------------------*/
-.ds-footer{background-color: #000; padding: 2.5rem 0; text-align: center; color: #CECECE; font-size: 1.25rem; overflow: hidden; box-shadow: 0 50vh 0 50vh #000}
+.ds-footer{background-color: #2A2A2A; padding: 1.75rem 0; text-align: center; color: #CECECE; font-family: 'DM Serif'; font-size: 1.25rem; overflow: hidden; box-shadow: 0 50vh 0 50vh #000}
 .ds-footer a{color: #CECECE }
 .ds-footer a::selection{color: white; background-color: #0074ffcc}
 .ds-footer a:hover{color: #CECECE; text-decoration: underline; }
@@ -143,7 +151,7 @@ svg,img { max-width: 100%; height: auto; }
 /*-----------------------------------------------------------------
   8. >>> 404 Style
 ----------------------------------------------------------------*/
-.ds-404 {display: inline-block; background-color: #4F2683; color: #FFFFFF; font-weight: 600; font-family: 'Poppins', sans-serif; text-align: center; padding: 0 0.4375rem; font-size: 3.75rem; width: 100%; margin: auto; margin-top: 8rem; margin-bottom: 4rem}
+.ds-404 {display: inline-block; background-color: #FFFFFF; color: #4F2683; font-weight: 600; font-family: 'Poppins', sans-serif; text-align: center; padding: 0 0.4375rem; font-size: 3.75rem; width: 100%; margin: auto; margin-top: 8rem; margin-bottom: 4rem}
 
 /*-------------------------------------------------------------------------------
  XS Style @media (max-width: 767px) 

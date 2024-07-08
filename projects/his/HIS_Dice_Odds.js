@@ -322,7 +322,7 @@ var tieOdds = 100 - atkWin - defWin
 odds = (atkOdds.concat(defOdds)).sort((a, b) => b[0] - a[0]) // concatenate the attack, defense arrays and sort them so they go from highest to lowest die difference
 
 atkTable.deleteTHead(); // deletes table head if exist already
-
+console.log(atkTable)
 switch (caller){ // uses different column headings depending on whether func was called by getting debate odds or battle odds
   case 'debate':
     generateTableHead(atkTable, ['Hit Difference for ' + atk_debater, 'Chance']); // generate the two tables using the generate table func
