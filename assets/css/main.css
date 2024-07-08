@@ -30,7 +30,7 @@ html {font-family: 'Poppins', sans-serif;background-color:#FFFFFF; user-select: 
 /* Old background color was #2A2A2A */
 /* IBM Plex Serif or EB Garamond work well */
 body {font-family: 'EB Garamond', serif; overflow-x: hidden; background-color:#FFFFFF; 
-	font-weight:400;font-style: normal; color: #1C1C1C; font-size: var(--font_14); user-select:auto;}
+	font-weight:425; font-style: normal; color: #1C1C1C; font-size: var(--font_14); user-select:auto;}
 a,a:hover,a:focus,i,input,button,input:focus,.transition {text-decoration: none;outline: none;transition-delay: 0s;transition-duration: 0.4s;transition-property: all;transition-timing-function: ease;box-shadow: none;}
 a{color: #000}
 iframe {border: 0;outline: none;}
@@ -67,7 +67,7 @@ svg,img { max-width: 100%; height: auto; }
 .ds-banner{ margin-bottom: 7.125rem; user-select: auto;}/* user-select: ‘none’ } */
 .ds-banner-hed{font-family:'DM Serif Display'; font-size: 5.3125rem; line-height:7rem; margin-top: 1.0rem; animation: fadeIn 1.5s; user-select: auto;}/* user-select: ‘none’ } */
 .ds-banner-hed::selection{color: white; background-color: #0074ffcc}
-.ds-image-shadow{box-shadow:20px 20px #8F55E0; animation: animatetop 1.7s}
+.ds-image-shadow{box-shadow:20px 20px #8F55E0; animation: animatetop 1.5s}
 .ds-banner h3{font-family:'Poppins'; font-weight: light; color:#5C5C5C; font-size: 2.65rem; line-height: 3.875rem }
 .ds-banner p{ color:#1c1c1c; font-size: 1.5rem; line-height: 2.0rem }
 .ds-banner p a{color:dodgerblue}
