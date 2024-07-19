@@ -1,2 +1,3 @@
 User-agent: *
 Disallow: /CV/Ian_Chow_CV.pdf
+Disallow: /Research/AST425_Undergraduate_Thesis.pdf
