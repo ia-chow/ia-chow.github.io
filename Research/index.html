@@ -202,11 +202,30 @@
                 </span> 
             </h2>
             <p>
-                WIP
-               <!-- Thesis: -->
+                Dynamical interactions in stellar clusters can sometimes eject stars 
+                from the cluster entirely, at which point they become isolated stars. 
+                While isolated stars are crucial to understanding cluster and galaxy evolution, 
+                identifying their birth environments is difficult. 
+                However, stars generally retain the relative elemental abundances from their birth environments. 
+                If a cluster’s parent molecular cloud has a relatively uniform composition, 
+                an isolated star’s birth cluster can be identified by comparing its chemical “fingerprint” 
+                to those of known clusters. 
+                This technique is called chemical tagging and has been used to associate isolated stars 
+                with their birth clusters. 
+                Dimensionality reduction methods like t-SNE and UMAP have been used in previous 
+                chemical tagging studies to recover clusters from high-dimensional data. 
+                However, these algorithms do not account for measurement uncertainty.
             </p>
             <p>
-              <!-- <i class="fa-solid fa-scroll"></i> <strong>Chow, I.</strong>, et al. (2024). -->
+                For my Statistics undergraduate thesis at the University of Toronto, 
+                I developed a dimensionality reduction method based on a variational autoencoder 
+                (VAE) neural network architecture that explicitly propagates Gaussian error, 
+                unlike t-SNE/UMAP. 
+                Using APOGEE DR17 chemical abundance data, I demonstrated that the VAE-based model 
+                was able to preserve most of the intrinsic information while reproducing the Gaussian error.                
+            </p>
+            <p>
+                Read my <a href="STA498_Undergraduate_Thesis.pdf" target="_blank">undergraduate thesis here.</a>
             </p>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-5 col-xl-5 col-xxl-4" style="padding-left: 4rem;">
