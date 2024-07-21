@@ -35,6 +35,9 @@
     <link rel="manifest" href="/assets/images/site.webmanifest">
     <!-- Font Awesome Icons -->
     <script src="https://kit.fontawesome.com/2ac2247116.js" crossorigin="anonymous"></script>
+    <!-- MathJax -->
+    <script id="MathJax-script" 
+    async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   </head>
   <body>
     <!-- header -->
@@ -81,7 +84,7 @@
               Over the past 30 years, over a dozen decameter-size (~10 meters in diameter) asteroids have been observed impacting the Earth. 
               These objects can explode with energies of up to hundreds of kilotons of TNT (as much as a typical nuclear weapon!), posing 
               a serious hazard if they impact populated areas. 
-              The largest of these impactors, a ~ 20-meter asteroid that exploded over Chelyabinsk, Russia in February 2013, 
+              The largest of these impactors, a ~20-meter asteroid that exploded over Chelyabinsk, Russia in February 2013, 
               damaged thousands of buildings and injured over 1,600 people. 
             </p>
             <p>
@@ -155,10 +158,11 @@
               </h2>
               <p>
                 Ultra-light axions (ULAs) are a type of very low-mass theoretical elementary particles 
-                that are particularly interesting since they can behave either as cold dark matter 
+                that are interesting since they can behave either as cold dark matter 
                 or dark energy. 
                 The distribution of ULAs depends on cosmological parameters like the 
-                axion, dark matter and dark energy density, and the axion mass. 
+                axion, dark matter and dark energy densities 
+                \Omega_a, \Omega_{DM} and \Omega_{DE} respectively, and the axion mass \m_a. 
                 As these parameters affect the cosmic microwave background (CMB), 
                 a synthetic CMB power spectrum can be generated for a given set of parameters 
                 and compared to observations to estimate a posterior axion distribution. 
@@ -167,14 +171,14 @@
               </p>
               <p>
                 I designed a 4-D test distribution qualitatively similar to previous estimates 
-                of the axion distribution to test the ability of Markov chain Monte Carlo (MCMC) 
-                and Nested Sampling to sample the whole parameter space. 
+                of the axion distribution to evaluate the ability of Markov chain Monte Carlo (MCMC) 
+                and Nested Sampling to sample the parameter space. 
                 I then used MCMC sampling in conjunction with a new machine learning method 
                 called <a href="https://github.com/keirkwame/axionEmu"> axionEmu</a>, 
                 a neural network that can compute CMB power spectra much faster 
-                (~10,000 times) than previous methods such as 
-                <a href="https://github.com/cmbant/CAMB"> CAMB</a>, 
-                with the aim of constraining the full ULA distribution for the first time 
+                (~10,000 times!) than previous methods such as 
+                <a href="https://github.com/cmbant/CAMB"> CAMB</a>, to constrain
+                the full ULA distribution for the first time 
                 now that it is computationally feasible.
               </p>
               <p>
@@ -204,6 +208,14 @@
           src="../SURP2023/ULA_distribution_animation.gif"
           width="1024" height="768"
           alt="Ultralight axion distribution">
+          <figcaption>
+            <p>
+                Demonstrating how the 2-D marginal posterior distribution of ULAs in the 
+                \Omega_a — \Omega_{DE}
+                plane changes qualitatively with increasing \m_a and constant \Omega_{DM}. 
+                The units are arbitrary. Image: Own work.
+              </p>
+          </figcaption>
               </figure>
           </div>
         </div>
