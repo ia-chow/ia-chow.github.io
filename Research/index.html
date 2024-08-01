@@ -241,19 +241,21 @@
                 from the cluster entirely to become isolated stars. 
                 While isolated stars are crucial to understanding cluster and galaxy evolution, 
                 identifying their birth environments is difficult. 
-                However, stars generally retain the relative elemental abundances from their birth environments. 
+                However, stars generally retain the elemental abundances from their birth environments. 
                 If a cluster’s parent molecular cloud has a relatively uniform composition, 
-                an isolated star’s birth cluster can be identified by comparing its chemical “fingerprint” 
+                an isolated star’s birth cluster can be identified by comparing its elemental “fingerprint” 
                 to those of known clusters, a technique called chemical tagging. 
-                Dimensionality reduction methods like t-SNE and UMAP have been used in previous 
-                chemical tagging studies to recover clusters from high-dimensional data. 
+                Dimensionality reduction methods like <a href="https://jmlr.org/papers/volume9/vandermaaten08a/vandermaaten08a.pdf">t-SNE</a> 
+                and <a href="https://arxiv.org/pdf/1802.03426">UMAP</a> 
+                have been used in previous 
+                chemical tagging studies to recover clusters. 
                 However, these algorithms do not account for measurement uncertainty.
             </p>
             <p>
                 For my Statistics undergraduate thesis at the University of Toronto, 
-                I developed a dimensionality reduction method based on a variational autoencoder 
-                (VAE) neural network architecture that explicitly propagates Gaussian error, 
-                unlike t-SNE/UMAP. 
+                I developed a dimensionality reduction method based on a 
+                <a href="https://en.wikipedia.org/wiki/Variational_autoencoder"> variational autoencoder (VAE)</a>
+                neural network that explicitly propagates Gaussian error, unlike t-SNE/UMAP. 
                 Using APOGEE DR17 chemical abundance data, I demonstrated that the VAE-based model 
                 was able to preserve most of the intrinsic information while reproducing the Gaussian error.                
             </p>
@@ -313,7 +315,7 @@
                 and are a unique opportunity to study how migration shapes the architecture of planetary systems.
             </p>
             <p>
-                For my Astronomy undergraduate thesis at the University of Toronto, I used <i>N</i>-body simulation to fit radial velocity data for the planetary system
+                For my Astronomy undergraduate thesis at the University of Toronto, I used \(N\)-body simulation to fit radial velocity data for the planetary system
                 <a href="https://exoplanetarchive.ipac.caltech.edu/overview/HD%2045364"> HD 45364</a>, 
                 which has two Jupiter-mass planets in a 3:2 MMR. 
                 Using new data from the HARPS telescope, I derived constraints on the planets’ masses and orbits, 
@@ -359,17 +361,25 @@
 
     <!-- footer -->
     <footer class="ds-footer">
-      <div class="container">
-        <div class="row">
-          <div class="col-6 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 col-xxl-6 text-start">
-            Email: <a href="mailto:ichow9@uwo.ca"> ichow9@uwo.ca </a>
+        <div class="container">
+          <div class="row">
+            <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 col-xxl-3 text-start">
+              Email: <a href="mailto:ichow9@uwo.ca"> ichow9@uwo.ca </a>
           </div>
-          <div class="col-6 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 col-xxl-6 text-end">
-            © Ian Chow 2024
+          <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 col-xxl-6">
+            <ul class="ds-social-link">
+              <li><a href="https://github.com/ia-chow" aria-label="GitHub" target="_blank"><i class="fa-brands fa-github"></i></a></li>
+              <li><a href="mailto:ichow9@uwo.ca" aria-label="Email" target="_blank"><i class="fa fa-envelope"></i></a></li>
+              <li><a href="/CV/Ian_Chow_CV.pdf" aria-label="CV" target="_blank" style="font-family: Poppins"> CV </a></li>
+              <li> <a href="https://meteor.uwo.ca" aria-label="Meteor Physics" target="_blank"><i class="fa-solid fa-meteor"></i></a></li>
+            </ul>
+          </div>
+          <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 col-xxl-3 text-end">
+              © Ian Chow 2024
+          </div>
           </div>
         </div>
-      </div>
-    </footer>
+      </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" 
     integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
   </body>

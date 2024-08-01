@@ -30,7 +30,7 @@ html {font-family: 'Poppins', sans-serif;background-color:#FFFFFF; user-select: 
 /* Old background color was #2A2A2A */
 /* IBM Plex Serif or EB Garamond work well */
 body {font-family: 'EB Garamond', serif; overflow-x: hidden; background-color:#FFFFFF; 
-	font-weight:425; font-style: normal; color: #1C1C1C; font-size: var(--font_14); user-select:auto;}
+	font-weight: 425; font-style: normal; color: #1C1C1C; font-size: var(--font_14); user-select:auto;}
 a,a:hover,a:focus,i,input,button,input:focus,.transition {text-decoration: none;outline: none;transition-delay: 0s;transition-duration: 0.4s;transition-property: all;transition-timing-function: ease;box-shadow: none;}
 a{color: #000}
 iframe {border: 0;outline: none;}
@@ -64,18 +64,18 @@ svg,img { max-width: 100%; height: auto; }
 /*-----------------------------------------------------------------
   2. >>> Banner Style
 ----------------------------------------------------------------*/
-.ds-banner{ margin-bottom: 7.125rem; user-select: auto;}/* user-select: ‘none’ } */
-.ds-banner-hed{font-family:'DM Serif Display'; font-size: 5.3125rem; line-height:7rem; margin-top: 0.5rem; animation: fadeIn 1.5s; user-select: auto;}/* user-select: ‘none’ } */
+.ds-banner{ margin-bottom: 5.0rem; user-select: auto;}/* user-select: ‘none’ } */
+.ds-banner-hed{font-family:'DM Serif Display'; font-size: 4.0rem; line-height:7rem; margin-top: 0.5rem; animation: fadeIn 1.5s; user-select: auto;}/* user-select: ‘none’ } */
 .ds-banner-hed::selection{color: white; background-color: #0074ffcc}
 .ds-image-shadow{box-shadow:20px 20px #8F55E0; animation: animatetop 1.5s}
-.ds-banner h3{font-family:'Poppins'; font-weight: light; color:#5C5C5C; font-size: 2.65rem; line-height: 3.875rem }
-.ds-banner p{ color:#1c1c1c; font-size: 1.5rem; line-height: 2.0rem }
+.ds-banner h3{font-family:'Poppins'; font-weight: light; color:#5C5C5C; font-size: 1.65rem; line-height: 3.875rem }
+.ds-banner p{ color:#1c1c1c; font-size: 1.35rem; line-height: 2.0rem }
 .ds-banner p a{color:dodgerblue; -o-transition: .25s; -ms-transition: .25s; -moz-transition: .25s; -webkit-transition: .25s; transition: .25s;}
 .ds-banner p a:hover{color: #373A9F;}
 /* old colour #9C9C9C */
 /*.ds-banner-left{display: flex; justify-content: space-between; flex-direction: column;}*/
 
-.ds-social-link{ list-style: none; display: flex; align-items: center;margin-top: 3.5rem; animation: fadeIn 1.5s}
+.ds-social-link{ list-style: none; display: flex; align-items: center; margin-top: 3.0rem; animation: fadeIn 2.0s}
 .ds-social-link li{ margin-right: 15px }
 .ds-social-link li:alst-child{ margin-right: 0 }
 .ds-social-link a{ width: 75px; height: 75px; background-color: #FFFFFF; border-radius: 100%; text-align: center; display: flex; justify-content: center; 
@@ -97,15 +97,15 @@ svg,img { max-width: 100%; height: auto; }
 /*-----------------------------------------------------------------
   4. >>> Projects Style
 ----------------------------------------------------------------*/
-.ds-projects-section{padding: 1.5rem 0 }
-.ds-projects-section h2{ font-size: 3.5rem; line-height: 3.375rem; width:auto; max-width:100%; margin: 0}
+.ds-projects-section{margin-bottom: 1.5rem; padding: 1.5rem 0 }
+.ds-projects-section h2{ font-size: 3.25rem; line-height: 3.375rem; width:auto; max-width:100%; margin: 0}
 .ds-projects-section h2 span{ display: block; font-family: 'Poppins', sans-serif; text-transform: uppercase; color: #4F2683; 
 	font-weight: 600; letter-spacing: 3px; font-size: 0.75rem; margin-bottom: 0.625rem}
-.ds-projects-section p{margin-top: 0.8rem; font-family: 'EB Garamond'; font-weight: auto; font-size: 1.5rem; line-height: 2.25rem; color:#000000; text-transform: none}
+.ds-projects-section p{margin-top: 0.8rem; font-family: 'EB Garamond'; font-weight: auto; font-size: 1.35rem; line-height: 2.1rem; color:#000000; text-transform: none}
 .ds-projects-section p a{color: dodgerblue; -o-transition: .25s; -ms-transition: .25s; -moz-transition: .25s; -webkit-transition: .25s; transition: .25s;}
 .ds-projects-section p a:hover{ color:#136ABE }
 .ds-projects-section figure{width: 38.0rem; position: relative; margin-left: 0px; padding-top: 2.0rem;}
-.ds-projects-section figure figcaption{ color: #1C1C1C; font-size: 1.3rem; position: relative; bottom: 0; width: 100%; text-align: center; padding-top:0.5rem  }
+.ds-projects-section figure figcaption{ color: #1C1C1C; font-size: 1.1rem; position: relative; bottom: 0; width: 100%; text-align: center; padding-top:0.5rem  }
 .ds-projects-section figure a{color: dodgerblue; -o-transition: .25s; -ms-transition: .25s; -moz-transition: .25s; -webkit-transition: .25s; transition: .25s;}
 .ds-projects-section figure a:hover{ color:#136ABE}
 .ds-projects-listing-section{ margin-top: 3rem}
@@ -120,10 +120,10 @@ svg,img { max-width: 100%; height: auto; }
 	align-items: center; font-size:2.5rem; color:#FFFFFF } */
 .ds-link-button a{color:dodgerblue}
 /* old colour 8F55E0 */
-.ds-link-button li:hover a{background-color: #136ABE; color: #FFFFFF; font-size: 1.85rem;}
+.ds-link-button li:hover a{background-color: #136ABE; color: #FFFFFF; font-size: 1.75rem;}
 .ds-projects-loop:hover .ds-link-button{ opacity: 1 }
 .ds-projects-loop section{ margin-top: 2.875rem }
-.ds-projects-loop section span{width: auto; font-size: 1.75rem; font-weight: 500; color:#000000; }
+.ds-projects-loop section span{width: auto; font-size: 1.65rem; font-weight: 500; color:#000000; }
 .ds-projects-loop section h3{font-weight: 250; font-size: 1.25rem; color:#000000; text-transform: none}
 
 /*-----------------------------------------------------------------
@@ -150,11 +150,21 @@ svg,img { max-width: 100%; height: auto; }
 /*-----------------------------------------------------------------
   7. >>> Footer Style
 ----------------------------------------------------------------*/
-.ds-footer{background-color: #2A2A2A; padding: 1.75rem 0; text-align: center; color: #CECECE; font-family: 'DM Serif'; font-size: 1.25rem; overflow: hidden; box-shadow: 0 50vh 0 50vh #000}
+.ds-footer{background-color: #1A1A1A; padding: 1.5rem 0; text-align: center; color: #CECECE; font-family: 'DM Serif'; 
+	font-size: 1.25rem; overflow: hidden; box-shadow: 0 50vh 0 50vh #000}
 .ds-footer a{color: #7DEAFB }
 .ds-footer a::selection{color: #7DEAFB; background-color: #0074ffcc}
-.ds-footer a:hover{color: #7DEAFB; text-decoration: underline; }
+.ds-footer a:hover{color: #7DEAFB; text-decoration: underline; text-decoration-thickness: auto;}
 .ds-footer span::selection{color: white; background-color: #0074ffcc}
+
+/* Copied from the header section but changed for footer */
+.ds-footer ul.ds-social-link{padding: 0; list-style: none; display: flex; justify-content: center; text-align: center; align-items: center; 
+	margin-top: 0rem; animation: none;}
+.ds-footer ul.ds-social-link li{ margin-right: 0.5rem; align-items: center; display: inline-block;}
+.ds-footer ul.ds-social-link li:alst-child{ margin-right: 0 }
+.ds-footer ul.ds-social-link a{ width: 3rem; height: 3rem; background-color: #1A1A1A; border-radius: 100%; text-align: center; display: flex; justify-content: center; 
+	align-items: center; font-size: 1.5rem; color:#7DEAFB }
+.ds-footer ul.ds-social-link li:hover a{background-color: #7DEAFB; color: #1A1A1A; text-decoration: none;}
 /*-----------------------------------------------------------------
   8. >>> 404 Style
 ----------------------------------------------------------------*/
