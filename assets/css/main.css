@@ -151,18 +151,18 @@ svg,img { max-width: 100%; height: auto; }
   7. >>> Footer Style
 ----------------------------------------------------------------*/
 .ds-footer{background-color: #1A1A1A; padding: 1.5rem 0; text-align: center; color: #CECECE; font-family: 'DM Serif'; 
-	font-size: 1.25rem; overflow: hidden; box-shadow: 0 50vh 0 50vh #000}
+	font-size: 1.25rem; box-shadow: 0 50vh 0 50vh #000}
 .ds-footer a{color: #7DEAFB }
 .ds-footer a::selection{color: #7DEAFB; background-color: #0074ffcc}
 .ds-footer a:hover{color: #7DEAFB; text-decoration: underline; text-decoration-thickness: auto;}
 .ds-footer span::selection{color: white; background-color: #0074ffcc}
 
 /* Copied from the header section but changed for footer */
-.ds-footer ul.ds-social-link{padding: 0; list-style: none; display: flex; justify-content: center; text-align: center; align-items: center; 
-	margin-top: 0rem; animation: none;}
+.ds-footer ul.ds-social-link{padding: 0; margin-top: 0rem; position: relative; list-style: none; display: flex; justify-content: center; text-align: center; align-items: center; 
+ animation: none;}
 .ds-footer ul.ds-social-link li{ margin-right: 0.5rem; align-items: center; display: inline-block;}
 .ds-footer ul.ds-social-link li:alst-child{ margin-right: 0 }
-.ds-footer ul.ds-social-link a{ width: 3rem; height: 3rem; background-color: #1A1A1A; border-radius: 100%; text-align: center; display: flex; justify-content: center; 
+.ds-footer ul.ds-social-link a{ width: 3rem; height: 3rem; background-color: #1A1A1A; border-radius: 100%; text-align: center; justify-content: center; 
 	align-items: center; font-size: 1.5rem; color:#7DEAFB }
 .ds-footer ul.ds-social-link li:hover a{background-color: #7DEAFB; color: #1A1A1A; text-decoration: none;}
 /*-----------------------------------------------------------------
