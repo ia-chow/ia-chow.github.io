@@ -160,19 +160,23 @@
                 Ultra-light axions (ULAs) are a type of very low-mass theoretical elementary particles 
                 that are interesting since they can behave either as cold dark matter 
                 or dark energy. 
-                The distribution of ULAs depends on cosmological parameters like the 
+                The distribution of ULAs depends on several cosmological parameters,
+                which affect the cosmic microwave background (CMB).
+                <!-- like the 
                 axion, dark matter and dark energy densities 
                 \(\Omega_a\), \(\Omega_{DM}\) and \(\Omega_{DE}\) respectively, 
-                and the axion mass \(m_a\). 
-                As these parameters affect the cosmic microwave background (CMB), 
-                a synthetic CMB power spectrum can be generated for a given set of parameters 
-                and compared to observations to estimate a posterior axion distribution. 
+                and the axion mass \(m_a\).  -->
+                <!-- As these parameters affect the cosmic microwave background (CMB),  -->
+                By generating synthetic CMB power spectra for various parameter values and
+                comparing them to observations, a posterior axion distribution can be estimated.
+                <!-- By generating a synthetic CMB power spectrum can be generated for a given set of parameters 
+                and compared to observations to estimate a posterior axion distribution.  -->
                 Previous studies have only sampled “slices” of this distribution, 
-                fixing certain parameters, because of high computational cost.
+                keeping certain parameters fixed, because of high computational cost.
               </p>
               <p>
-                I designed a 4-D test distribution qualitatively similar to previous estimates 
-                of the axion distribution to evaluate the ability of Markov chain Monte Carlo (MCMC) 
+                I designed a 4-D test distribution qualitatively similar to previous
+                axion distribution estimates to evaluate the ability of Markov chain Monte Carlo (MCMC) 
                 and Nested Sampling to sample the parameter space. 
                 I then used MCMC sampling in conjunction with a new machine learning method 
                 called <a href="https://github.com/keirkwame/axionEmu"> axionEmu</a>, 
@@ -210,10 +214,14 @@
           width="1024" height="768"
           alt="Ultralight axion distribution">
           <figcaption>
-                Demonstrating how the 2-D marginal posterior distribution of ULAs in the 
-                \(\Omega_a\) — \(\Omega_{DE}\)
+                Demonstrating how the distribution of ULAs changes in
+                axion and dark energy densities (\(\Omega_a\) — \(\Omega_{DE}\)),
+                with fixed dark matter density \(\Omega_{DM}\) and increasing axion mass
+                \(m_a\)
+                <!-- Demonstrating how the 2-D marginal posterior distribution of ULAs in the 
+                axion density — dark energy density (\(\Omega_a\) — \(\Omega_{DE}\))
                 plane changes qualitatively with increasing axion mass \(m_a\) 
-                and constant dark matter density \(\Omega_{DM}\). 
+                and constant dark matter density \(\Omega_{DM}\). -->
                 The units are arbitrary. Image: Own work.
           </figcaption>
               </figure>
