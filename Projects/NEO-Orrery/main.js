@@ -29,6 +29,12 @@ const SUNROTPER = 25.05;  // days
 
 const TIMESPEEDS = [-365, -30, -7, -1, -3600 / 86400, -60 / 86400, -1 / 86400, 1 / 86400, 60 / 86400, 3600 / 86400, 1, 7, 30, 365]
 
+// Label text parameters
+const LABEL_SIZE = 0.1; // size of the labels
+const X_OFFSET = 0; // x offset
+const Y_OFFSET = -0.010; // y offset
+const Z_OFFSET = 0; // z offset
+
 //starting time
 let JD = (Date.now() / 86400000) + 2440587.5;
 let MJD = JDToMJD(JD);
@@ -267,6 +273,7 @@ document.addEventListener('pointerup', (event) => {
             document.getElementById('info-name').textContent = '';
             document.getElementById('info-type').textContent = '';
             document.getElementById('info-class').textContent = '';
+            document.getElementById('info-code').textContent = '';
             document.getElementById('info-diameter').textContent = '';
             document.getElementById('info-first-impact').textContent = '';
             document.getElementById('info-impact-period').textContent = '';
@@ -300,8 +307,14 @@ document.addEventListener('pointerup', (event) => {
             if (parentObj !== null && parentObj !== undefined) {
                 const obj_data = parentObj.data;
 
-                document.getElementById('info-name').textContent = parentObj.name;
-
+                // replace with Saturn if rings otherwise use the name
+                if(parentObj.name === 'rings'){
+                    document.getElementById('info-name').textContent = 'Saturn';
+                }
+                else{
+                    document.getElementById('info-name').textContent = parentObj.name;
+                }
+                // object type
                 if (('type' in obj_data.extraParams) && (obj_data.extraParams.type !== undefined)){
                     if (obj_data.extraParams.type == 'NEA')
                         document.getElementById('info-type').textContent = `Type: Asteroid`;
@@ -317,17 +330,19 @@ document.addEventListener('pointerup', (event) => {
                         document.getElementById('info-type').textContent = `Type: Planet`;
                 }
                 if (('class' in obj_data.extraParams) && (obj_data.extraParams.class !== undefined))
-                    document.getElementById('info-class').textContent = `Class: ${obj_data.extraParams.class}`;
+                    document.getElementById('info-class').textContent = `Object class: ${obj_data.extraParams.class}`;
+                if (('Code' in obj_data.extraParams) && (obj_data.extraParams.Code !== undefined))
+                    document.getElementById('info-code').textContent = `Shower code: ${obj_data.extraParams.Code}`;
                 if (('diameter' in obj_data.extraParams) && (obj_data.extraParams.diameter !== undefined) && (obj_data.extraParams.diameter !== null))
                     document.getElementById('info-diameter').textContent = `Diameter: ${obj_data.extraParams.diameter} m`;
-                else if (('diameter_km' in obj_data.extraParams) && (obj_data.extraParams.diameter_km !== undefined))
+                else if (('diameter_km' in obj_data.extraParams) && (obj_data.extraParams.diameter_km !== undefined) && (obj_data.extraParams.diameter_km !== null))
                     document.getElementById('info-diameter').textContent = `Diameter: ${obj_data.extraParams.diameter_km} km`;
                 if (('impact' in obj_data.extraParams) && (obj_data.extraParams.impact !== undefined))
                     document.getElementById('info-first-impact').textContent = `First possible impact: ${obj_data.extraParams.impact}`;
                 if (('years' in obj_data.extraParams) && (obj_data.extraParams.years !== undefined))
                     document.getElementById('info-impact-period').textContent = `Possible impacts between ${obj_data.extraParams.years.split('-')[0]} and ${obj_data.extraParams.years.split('-')[1]}`;
                 if (('PS max' in obj_data.extraParams) && (obj_data.extraParams['PS max'] !== undefined))
-                    document.getElementById('info-risk').textContent = `Risk: ${obj_data.extraParams['PS max']} (Palermo Scale)`;
+                    document.getElementById('info-risk').textContent = `Impact risk: ${obj_data.extraParams['PS max']} (Palermo Scale)`;
                 if (('vel' in obj_data.extraParams) && (obj_data.extraParams.vel !== undefined))
                     document.getElementById('info-vel').textContent = `Velocity: ${obj_data.extraParams.vel} km/s`;
                 
@@ -345,9 +360,9 @@ document.addEventListener('pointerup', (event) => {
                         document.getElementById('info-mass').textContent = `Mass: ${mass.toFixed(3)} M\u{1F728}`;
                 }
                 if (('obliquity' in obj_data.extraParams) && (obj_data.extraParams.obliquity !== undefined))
-                    document.getElementById('info-obl').textContent = `Obliquity: ${obj_data.extraParams.obliquity.toFixed(1)}\u00B0`;
+                    document.getElementById('info-obl').textContent = `Obliquity (axial tilt): ${obj_data.extraParams.obliquity.toFixed(1)}\u00B0`;
                 if (('rotation_period' in obj_data.extraParams) && (obj_data.extraParams.rotation_period !== undefined))
-                    document.getElementById('info-rotper').textContent = `Rotation Period: ${obj_data.extraParams.rotation_period.toFixed(2)} days`;
+                    document.getElementById('info-rotper').textContent = `Rotation period: ${obj_data.extraParams.rotation_period.toFixed(2)} days`;
 
             document.getElementById('info-a').textContent = `Semi-major axis: ${obj_data.orbitParams.a.toFixed(3)} AU`;
             document.getElementById('info-e').textContent = `Eccentricity: ${obj_data.orbitParams.e.toFixed(3)}`;
@@ -359,10 +374,15 @@ document.addEventListener('pointerup', (event) => {
                 document.getElementById('info-epoch').textContent = `Epoch: ${obj_data.orbitParams.epoch} (MJD)`;
             }
             // Update sprite texture
-            updateSpriteTexture(sprite, highlightedObj.userData.parent.name);
+            if (highlightedObj.userData.parent.name == 'rings'){
+                updateSpriteTexture(sprite, 'Saturn');
+            }
+            else{
+                updateSpriteTexture(sprite, highlightedObj.userData.parent.name);
+            }
             // Make visible
-            sprite.scale.set(0.1, 0.1, 0.1);  // Adjust the size of the label
-            sprite.position.set(0, -0.015, 0);  // Move it above the object
+            sprite.scale.set(LABEL_SIZE, LABEL_SIZE, LABEL_SIZE);  // Adjust the size of the label
+            sprite.position.set(X_OFFSET, Y_OFFSET, Z_OFFSET);  // Move it above the object
             highlightedObj.userData.parent.bodyMesh.add(sprite); // add to object
         }
     }
@@ -450,6 +470,9 @@ function addSun() {
     const material = new THREE.MeshBasicMaterial({map: sunTexture});
     var sunMesh = new THREE.Mesh(geometry, material);
     scene.add(sunMesh);
+    // Tilt the Sun based on obliquity
+    const sunTiltAxis = new THREE.Vector3(0, 0, 1).normalize();// z axis is depth
+    sunMesh.rotateOnAxis(sunTiltAxis, SUNOBLIQUITY * DEG_TO_RAD);  // rotate
 
     return sunMesh;
 }
@@ -479,8 +502,8 @@ async function initializePlanets() {
             });
 
             // Create the mesh
-            var mesh = new THREE.Mesh(geometry, material);
-            mesh.rotation.x = Math.PI / 2; //Rotate the rings to be flat
+            var mesh = new THREE.Mesh(geometry, material); 
+            //Rotate the rings to have the appropriate obliquity
         }
         // if not ring do sphere
         else {
@@ -494,6 +517,17 @@ async function initializePlanets() {
         const orbit = createOrbit(orbitParams, planetData.renderParams.color, ORBIT_MESH_POINTS);
         const pos = getOrbitPosition(orbitParams.a, orbitParams.e, 0, orbitParams.transformMatrix);
         mesh.position.set(pos.x, pos.y, pos.z);
+        // Rotate mesh by obliquity
+        // different axes for rings
+        if (planetName === 'rings'){
+            mesh.rotation.x = Math.PI/2; 
+            mesh.rotation.y = planetData.extraParams.obliquity * DEG_TO_RAD;
+        }
+        else{
+            const rotationAxis = new THREE.Vector3(0, 0, 1).normalize();// z axis is depth
+            const planetObliquity = planetData.extraParams.obliquity * DEG_TO_RAD; // obliquity in radians
+            mesh.rotateOnAxis(rotationAxis, planetObliquity);  // rotate
+        }
 
         const body = new Body(planetName, planetData, orbit, mesh);
 
@@ -1024,6 +1058,8 @@ function createTextTexture(message) {
     return texture;
 }
 
+
+
 // Animation loop with FPS control
 function animate(time) {
     requestAnimationFrame(animate);
@@ -1040,14 +1076,10 @@ function animate(time) {
     JD += deltaJulian;
     MJD += deltaJulian;
 
-    // Rotate the Sun
-    // Compute axis of rotation
-    const sunAxis = new THREE.Vector3(
-        Math.sin(SUNOBLIQUITY * DEG_TO_RAD), 
-        Math.cos(SUNOBLIQUITY * DEG_TO_RAD),
-        0).normalize();
+    // define rotation axis
+    const sunRotationAxis = new THREE.Vector3(0, 1, 0).normalize(); // rotate about the new Y axis
     // Set rotation speed of the Sun
-    sunMesh.rotateOnAxis(sunAxis, 
+    sunMesh.rotateOnAxis(sunRotationAxis, 
         (2 * Math.PI/(60 * SUNROTPER)) * 1 * TIMESPEEDS[timeSpeedIndex]);
 
     // Update planet positions and rotation
@@ -1058,20 +1090,26 @@ function animate(time) {
         // Update Position
         const pos = getOrbitPosition(orbitParams.a, orbitParams.e, trueAnomaly, orbitParams.transformMatrix);
         planets[i].setPosition(pos);
-        // Compute normalized axis of rotation
-        const axis = new THREE.Vector3(
-            Math.sin(extraParams.obliquity * DEG_TO_RAD), 
-            Math.cos(extraParams.obliquity * DEG_TO_RAD), 
-            0).normalize();
-        // Set rotation speed
-        // console.log(planets[i], axis, 2 * Math.PI/(60 * extraParams.rotation_period) * TIMESPEEDS[timeSpeedIndex])
-        planets[i].bodyMesh.rotateOnAxis(axis, 
-            (2 * Math.PI/(60 * extraParams.rotation_period)) * 1 * TIMESPEEDS[timeSpeedIndex]);
-
-        // Rotate
-        //planets[i].bodyMesh.rotation.x += orbitParams.rotateX;
-        //planets[i].bodyMesh.rotation.y += orbitParams.rotateY;
-        //planets[i].bodyMesh.rotation.z += orbitParams.rotateZ;
+        // Perform rotation for all planets other than Saturn's rings:
+        if (planets[i].name != 'rings'){
+            // Compute normalized axis of rotation
+            const rotationAxis = new THREE.Vector3(0, 1, 0).normalize(); // rotate about the new Y axis
+            // Set rotation speed
+            planets[i].bodyMesh.rotateOnAxis(rotationAxis, 
+                (2 * Math.PI/(60 * extraParams.rotation_period)) * 1 * TIMESPEEDS[timeSpeedIndex]);
+            // const axis = new THREE.Vector3(
+            //     Math.sin(extraParams.obliquity * DEG_TO_RAD), 
+            //     Math.cos(extraParams.obliquity * DEG_TO_RAD), 
+            //     0).normalize();
+            // // Set rotation speed
+            // // console.log(planets[i], axis, 2 * Math.PI/(60 * extraParams.rotation_period) * TIMESPEEDS[timeSpeedIndex])
+            // planets[i].bodyMesh.rotateOnAxis(axis, 
+            //     (2 * Math.PI/(60 * extraParams.rotation_period)) * 1 * TIMESPEEDS[timeSpeedIndex]);
+            // Rotate
+            //planets[i].bodyMesh.rotation.x += orbitParams.rotateX;
+            //planets[i].bodyMesh.rotation.y += orbitParams.rotateY;
+            //planets[i].bodyMesh.rotation.z += orbitParams.rotateZ;
+        }
     }
 
     // Update NEO positions
@@ -1134,7 +1172,7 @@ function animate(time) {
     if (timeSpeedIndex == 10)  // 1 day/second
         {document.getElementById("timespeed").textContent = `Speed: 1 day/second`}
     else if (timeSpeedIndex == 7){ // Real-time
-        {document.getElementById("timespeed").textContent = `Real-time`}
+        {document.getElementById("timespeed").textContent = `Speed: Real-time`}
     }
     else{
         document.getElementById("timespeed").textContent = `Speed: ${TIMESPEEDS[timeSpeedIndex].toPrecision(3)} days/second`;

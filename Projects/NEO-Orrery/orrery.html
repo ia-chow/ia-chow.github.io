@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Orrery with Real NEO Data</title>
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.js"></script>
 </head>
@@ -14,6 +14,7 @@
         <h1 id="info-name"></h1>
         <p id="info-type"></p>
         <p id="info-class"></p>
+        <p id="info-code"></p>
         <p id="info-diameter"></p>
         <p id="info-first-impact"></p>
         <p id="info-impact-period"></p>
@@ -53,7 +54,7 @@
                 <li><strong>Q:</strong> Decrease precision for selecting orbits</li>
                 <li><strong>E:</strong> Increase precision for selecting orbits</li>
             </ul>
-            <button class="close-btn" id="close-overlay" style="font-family: Verdana">Close</button>
+            <button class="close-btn" id="close-overlay" style="font-family: Verdana; font-size: large;">Close</button>
         </div>
     </div>
 
@@ -95,7 +96,7 @@
             
             <label>
                 <input type="checkbox" name="neos" value="NEO">
-                Near-Earth Objects
+                Near-Earth objects
             </label><br>
             <dev>
                 <div class="slider-container">
@@ -122,11 +123,11 @@
 
             <label>
                 <input type="checkbox" name="showers" value="Shower">
-                Showers
+                Meteor showers and parent bodies
             </label><br>
             <label>
                 <input type="checkbox" name="sporadic" value="Sporadic">
-                Sporadic complex
+                Sporadic meteoroid complex
             </label>
         </form>
     </div>

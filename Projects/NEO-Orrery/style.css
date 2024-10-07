@@ -152,8 +152,8 @@ canvas {
     justify-content: center;
     align-items: center;
     position: fixed;
-    padding: 35px;
-    bottom: 20px;
+    padding: 25px;
+    bottom: 25px;
     left: 50%;
     transform: translateX(-50%);
     gap: 4px;
