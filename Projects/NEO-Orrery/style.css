@@ -1,0 +1,324 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: transparent;
+    pointer-events: none;
+}
+
+canvas {
+    position: absolute;
+    display: block;
+    z-index: -1;
+    pointer-events: auto;
+  }
+
+.selection-panel {
+    float: left;
+    font-size: large;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin: 1%;
+    padding: 15px 20px;
+    border-radius: 7px;
+    white-space: nowrap;
+    border-style: solid;
+    border-width: 2px;
+    background-color: #ffffff20;
+    border-color: #ffffff40;
+    color: white;
+}
+
+
+.selection-panel-button-container {
+    display: flex;
+    width: 100%;
+}
+
+.selection-panel-button {
+    flex: 1;
+    padding: 10px;
+    font-size: large;
+    margin: 5px;
+    background-color: #f9f9f9;
+    color: black;
+    padding: 2px 8px;
+    font-size: large;
+    border: solid;
+    border-color: #00000070;
+    border-width: 2px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.selection-panel-button:disabled {
+    background-color: #888888;
+}
+
+
+.selection-order-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.selection-order-dropdown-button {
+    background-color: #f9f9f9;
+    color: black;
+    padding: 2px 8px;
+    font-size: large;
+    border: solid;
+    border-color: #00000070;
+    border-width: 2px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.selection-order-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 5px;
+}
+
+.selection-order-dropdown-content a {
+    font-size: large;
+    color: black;
+    padding: 4px 10px;
+    text-decoration: none;
+    display: block;
+}
+
+.selection-order-dropdown-content a:hover {
+    background-color: #f1f1f1;
+    border-radius: 5px;
+}
+
+
+.info-panel {
+    display: none;
+    float: right;
+    font-size: large;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin: 1%;
+    padding-left: 15px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    border-radius: 7px;
+    min-height: 100px;
+    white-space: nowrap;
+    border-style: solid;
+    border-width: 2px;
+    background-color: #535353af;
+    border-color: #ffffff40;
+    color: white;
+}
+
+.info-panel p {
+    margin: 0.5%;
+}
+
+.info-panel h1 {
+    font-size: larger;
+}
+
+.info-panel h2 {
+    font-size: large;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.time-control-panel {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    gap: 4px;
+    flex: 2;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.time-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    padding: 35px;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    gap: 4px;
+    flex: 2;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.time-item {
+    color: white;
+    padding: 10px;
+    margin-bottom: 5px; /* Space between stacked items */
+}
+
+.time-control-button {
+    display: block;
+    background: none;
+    border: none;
+    margin: 0px;
+    text-align: center;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+
+.time-control-icon {
+    max-height: 30px;
+    width: auto;
+}
+
+
+.filter-panel {
+    position: fixed;
+    width: 450px;
+    left: 0px;
+    bottom: 0px;
+    font-size: large;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin: 1%;
+    padding-left: 15px;
+    padding-top: 15px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    border-radius: 7px;
+    white-space: nowrap;
+    border-style: solid;
+    border-width: 2px;
+    background-color: #535353af;
+    border-color: #ffffff40;
+    color: white;
+    pointer-events: auto;
+}
+
+/* Full-screen overlay */
+.overlay {
+    position: fixed;        /* Fixed position for overlay */
+    top: 0;
+    left: 0;
+    width: 100%;           /* Cover the entire viewport */
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: white;          /* Text color */
+    display: none;         /* Initially hidden */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;         /* Ensure it's on top of everything */
+}
+
+/* Content inside the overlay */
+.overlay-content {
+    background-color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    text-align: center;
+}
+
+/* Title styling */
+.overlay-title {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+/* List of keyboard controls */
+.keyboard-controls {
+    list-style-type: none; /* Remove bullets */
+    padding: 0;
+}
+
+.keyboard-controls li {
+    font-size: 18px;
+    margin: 10px 0;
+}
+/* Button to open the overlay */
+.open-btn {
+    background-color: darkred;
+    color: #e8e8e8;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 5px;
+    pointer-events: auto;
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+.open-btn:hover {
+    background-color: #e8e8e8; /* Background color on hover */
+    color: darkred;               /* Text color on hover (can change this if needed) */
+}
+
+/* Button to close the overlay */
+.close-btn {
+    background-color: darkred;
+    color: #e8e8e8;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px;
+    pointer-events: auto;
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+.close-btn:hover {
+    background-color: #e8e8e8; /* Background color on hover */
+    color: darkred;               /* Text color on hover (can change this if needed) */
+}
+
+
+/* Optional: Show the overlay when needed */
+.overlay.show {
+    display: flex; /* Make the overlay visible as a flexbox */
+}
+.slider-container {
+    display: flex;
+    align-items: center;
+    width: auto;
+    max-width: 500px;
+    margin: 0px;
+    margin-left: 50px;
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+.noUi-handle {
+    border: 1px solid #D9D9D9;
+    border-radius: 3px;
+    background: #FFF;
+    cursor: default;
+    box-shadow: inset 0 0 1px #FFF;
+}
+
+
+.slider {
+    margin: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 100%;
+}
+.output {
+    display: flex;
+    justify-content: space-between;
+}
+
+[data-value0="5"] .noUi-handle:after {
+    content: "Text only for value 5";
+}
+
