@@ -293,8 +293,8 @@ canvas {
     align-items: center;
     width: auto;
     max-width: 500px;
-    margin: 0px;
-    margin-left: 50px;
+    margin: 2px;
+    margin-left: 20px;
     transition: background-color 0.5s ease, color 0.5s ease;
 }
 

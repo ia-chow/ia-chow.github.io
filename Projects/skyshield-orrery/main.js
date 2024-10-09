@@ -7,10 +7,10 @@ import { JDToMJD, MJDToDatetime, MJDToJD } from './TimeUtils.js'
 
 // Constants
 const DEG_TO_RAD = Math.PI / 180;
-const TA_TIME_SCALE_FACTOR = 0.0001; // This will not be needed when the true anomaly code is included
+// const TA_TIME_SCALE_FACTOR = 0.0001; // This will not be needed when the true anomaly code is included
 
 const DEFAULT_MESH_N = 32;
-const ORBIT_MESH_POINTS = 192; // split the difference
+const ORBIT_MESH_POINTS = 256; // split the difference
 
 const SHOWER_ORBIT_COLOR = 0x5D5CD2; 
 const SHOWER_ORBIT_COLOR_NOTVIS = 0x4b0096; //0x0200b9 0x4b0096
@@ -18,19 +18,28 @@ const PARENT_ORBIT_COLOR = 0x0200b9;
 const NEO_ORBIT_COLOR = 0xcd0000;//0x1e90FF;
 const NEO_COLOR = 0xFFFFFF;
 
-const NEO_RADIUS = 0.01;
+const NEO_RADIUS = 0.004;
 const MAX_VISIBLE_NEOS = 999;
 const MAX_VISIBLE_SHOWERS = 999;
 
 const MOUSE_MIN_MOVE_CLICK = 0.005;
 
+const SUN_RADIUS = 0.030;
 const SUNOBLIQUITY = 7.25; // degrees
 const SUNROTPER = 25.05;  // days
+const MAXIMUM_CAMERA_DISTANCE = 0.5; // maximum distance the camera can be when focused on an object
+
+const BODY_RENDER_SF = 2.0; // size factor to scale all the bodies by
+const TEXT_RENDER_SF = 2.0; // size factor to scale the text by
+
+// constants for haze size for the sun and for the radial gradient plane of the sporadics
+const HAZE_SIZE = 200 * SUN_RADIUS * BODY_RENDER_SF;
+const PLANE_WIDTH = 5.204 * 2;
 
 const TIMESPEEDS = [-365, -30, -7, -1, -3600 / 86400, -60 / 86400, -1 / 86400, 1 / 86400, 60 / 86400, 3600 / 86400, 1, 7, 30, 365]
 
 // Label text parameters
-const LABEL_SIZE = 0.1; // size of the labels
+const LABEL_SIZE = 0.2; // size of the labels
 const X_OFFSET = 0; // x offset
 const Y_OFFSET = -0.010; // y offset
 const Z_OFFSET = 0; // z offset
@@ -137,18 +146,18 @@ window.addEventListener("resize", () => {
 window.addEventListener("keydown", (event) => {
 
     if (event.code === 'Digit1') { //press to show a certain subset of the solar sytem bodies (e.g only planets or only high risk NEOs)
-
+        // console.log('1 is pressed down!');
     }
     else if (event.code === 'Digit2') { //press to show a certain subset of the solar sytem bodies
-        console.log('2 is pressed down!');
+        // console.log('2 is pressed down!');
         
     }
     else if (event.code === 'Digit3') { //press to show a certain subset of the solar sytem bodies
-        console.log('3 is pressed down!');
+        // console.log('3 is pressed down!');
         
     }
     else if (event.code === 'Digit4') { //press to show a certain subset of the solar sytem bodies
-        console.log('4 is pressed down!');
+        // console.log('4 is pressed down!');
         
     }
     else if (event.code === 'KeyQ') { //decrease clicking percision --> increase threshold
@@ -156,7 +165,7 @@ window.addEventListener("keydown", (event) => {
         if (newThreshold <= Math.exp(4)) {
             raycaster.params.Line.threshold = newThreshold;
         }
-        console.log(raycaster.params.Line.threshold);
+        // console.log(raycaster.params.Line.threshold);
 
     }
     else if (event.code === 'KeyE') { //increase clicking percision --> decrease threshold
@@ -164,39 +173,43 @@ window.addEventListener("keydown", (event) => {
         if (newThreshold >= Math.exp(-4)) {
             raycaster.params.Line.threshold = newThreshold;
         }
-        console.log(raycaster.params.Line.threshold);
+        // console.log(raycaster.params.Line.threshold);
         
     }
     else if (event.code === 'KeyA') { //cycle parameter in descending order (e.g. eccentricity)
-        console.log('A key is pressed down!');
+        // console.log('A key is pressed down!');
         
     }
     else if (event.code === 'KeyD') { //cycle parameter in ascending order
-        console.log('D key is pressed down!');
+        // console.log('D key is pressed down!');
         
     }
     else if (event.code === 'KeyW') { //reserved for whatever
-        console.log('W key is pressed down!'); 
+        // console.log('W key is pressed down!'); 
         
     }
     else if (event.code === 'KeyS') { //reserved for whatever
-        console.log('S key is pressed down!');
+        // console.log('S key is pressed down!');
     }
-    else if (event.code === 'KeyT') { //track selected orbit
+    else if (event.code === 'KeyL') { //lock camera on selected orbit
         if (highlightedObj !== null && highlightedObj.userData.parent !== undefined){
             controls.target = highlightedObj.userData.parent.bodyMesh.position;
+            isTracking = true; // set istracking to true
         }
     }
     else if (event.code === 'KeyU') { //untrack selected orbit
         if (highlightedObj !== null && highlightedObj.userData.parent !== undefined){
             controls.target = highlightedObj.userData.parent.bodyMesh.position.clone();
+            isTracking = false; // set istracking to false
         }
     }
     else if (event.code === 'Space') { //recenter on Sun
         controls.target = new THREE.Vector3(0, 0, 0);
+        isTracking = false; // set istracking to false
     }
     else if (event.code === 'Backspace') { //recenter camera to initial settings
         resetCamera();
+        isTracking = false; // set istracking to false
     }
 
 });
@@ -205,7 +218,10 @@ const mouseDownXY = new THREE.Vector2(-10, -10);
 const mouseUpXY = new THREE.Vector2(-10, -10);
 const raycaster = new THREE.Raycaster(); //ray through the screen at the location of the mouse pointer (when the mouse is released)
 raycaster.params.Line = {threshold: 0.05}; //this will just be a user interactive slider
+let isTracking = false;  // flag for whether the camera is tracking the selected object
 let highlightedObj = null;
+let relativePosition = null;
+let previousRelativePosition = null;
 let prevColor = 0;
 let moved = false;
 let stackedObjIndex = 0; //the index of the array of all the uniquely selected objects that the casted ray intersected
@@ -227,7 +243,8 @@ document.addEventListener('pointerdown', (event) => {
 // Create and label sprite with some initial text texture
 const spriteMaterial = new THREE.SpriteMaterial({ 
     map: createTextTexture('Initial'),  // Create texture from canvas text
-    transparent: true 
+    transparent: true,
+    sizeAttenuation: true
 });
 var sprite = new THREE.Sprite(spriteMaterial);
 // Make it invisible to start
@@ -256,11 +273,11 @@ document.addEventListener('pointerup', (event) => {
 
         // calculate objects intersecting the picking ray
         const allselectedObjects = raycaster.intersectObjects(scene.children);
-
         //remove duplicate intersections of the same orbit
         const seen = new Set();
+        // select any orbits or the Sun
         const selectedOrbits = allselectedObjects.filter(item => {
-            if (!seen.has(item.object.uuid) && item.object.type === 'Line') {
+            if ((!seen.has(item.object.uuid) && (item.object.type === 'Line'))||(item.object.name === 'Sun')){
                 seen.add(item.object.uuid);
                 return true; // unique uuid
             }
@@ -296,17 +313,37 @@ document.addEventListener('pointerup', (event) => {
         
         if (selectedOrbits.length != 0){
             if (!moved) { stackedObjIndex = (stackedObjIndex + 1) % selectedOrbits.length; }
-            
             highlightedObj = selectedOrbits[stackedObjIndex].object; //save the highlighted object
             prevColor = highlightedObj.material.color.getHex(); //save the highlighted object's previous color
             highlightedObj.material.color.set(0x00ff00); //highlight the select object if it is an orbit
             document.querySelector('.info-panel').style.display = "block";
             // Update info in the info panel
             const parentObj = highlightedObj.userData.parent;
-            
+            // if sun render Sun panel
+            if (highlightedObj.name === 'Sun'){
+                document.getElementById('info-name').textContent = 'Sun';
+                document.getElementById('info-type').textContent = `Type: Star`;
+                document.getElementById('info-class').textContent = `Object class: G2`;
+                document.getElementById('info-diameter').textContent = `Diameter: 1391000 km`;
+                document.getElementById('info-temp').textContent = `Surface temperature: 5499\u00B0C`;
+                document.getElementById('info-grav').textContent = `Surface gravity: 273.95 m/s\u00B2`;
+                document.getElementById('info-mass').textContent = `Mass: 333000 M\u{1F728}`;
+                // document.getElementById('info-mass').textContent = `Mass: 1.988 \u00D7 10\u00B3\u2070 M\u{1F728}`;
+                document.getElementById('info-obl').textContent = `Obliquity (axial tilt): 7.25\u00B0`;
+                document.getElementById('info-rotper').textContent = `Rotation period: 25.05 days`;
+                
+                // TODO: FIX THIS SO THE LABEL DOESN'T ROTATE AROUND THE SUN
+                // // update to say sun
+                // updateSpriteTexture(sprite, 'Sun');
+                // // Make visible
+                // sprite.scale.set(LABEL_SIZE, LABEL_SIZE, LABEL_SIZE);  // Adjust the size of the label
+                // // scale by the Sun's radius
+                // sprite.position.set(0.05, Y_OFFSET + 1.5 * SUN_RADIUS, 0.0);
+                // highlightedObj.add(sprite); // add to object
+            }
+            // otherwise default
             if (parentObj !== null && parentObj !== undefined) {
                 const obj_data = parentObj.data;
-
                 // replace with Saturn if rings otherwise use the name
                 if(parentObj.name === 'rings'){
                     document.getElementById('info-name').textContent = 'Saturn';
@@ -314,11 +351,10 @@ document.addEventListener('pointerup', (event) => {
                 else{
                     document.getElementById('info-name').textContent = parentObj.name;
                 }
-                // object type
                 if (('type' in obj_data.extraParams) && (obj_data.extraParams.type !== undefined)){
-                    if (obj_data.extraParams.type == 'NEA')
+                    if (obj_data.extraParams.type === 'NEA')
                         document.getElementById('info-type').textContent = `Type: Asteroid`;
-                    else if (obj_data.extraParams.type == 'NEC')
+                    else if (obj_data.extraParams.type === 'NEC')
                         document.getElementById('info-type').textContent = `Type: Comet`;
                     else
                         document.getElementById('info-type').textContent = `Type: ${obj_data.extraParams.type}`;
@@ -331,8 +367,10 @@ document.addEventListener('pointerup', (event) => {
                 }
                 if (('class' in obj_data.extraParams) && (obj_data.extraParams.class !== undefined))
                     document.getElementById('info-class').textContent = `Object class: ${obj_data.extraParams.class}`;
-                if (('Code' in obj_data.extraParams) && (obj_data.extraParams.Code !== undefined))
-                    document.getElementById('info-code').textContent = `Shower code: ${obj_data.extraParams.Code}`;
+                // if (('Code' in obj_data.extraParams) && (obj_data.extraParams.Code !== undefined))
+                    // document.getElementById('info-code').textContent = `Shower code: ${obj_data.extraParams.Code}`;
+                if (('Meteor Stream' in obj_data.extraParams) && (obj_data.extraParams.Code !== undefined))
+                    document.getElementById('info-code').textContent = `Meteor Stream: ${obj_data.extraParams['Meteor Stream']}`;
                 if (('diameter' in obj_data.extraParams) && (obj_data.extraParams.diameter !== undefined) && (obj_data.extraParams.diameter !== null))
                     document.getElementById('info-diameter').textContent = `Diameter: ${obj_data.extraParams.diameter} m`;
                 else if (('diameter_km' in obj_data.extraParams) && (obj_data.extraParams.diameter_km !== undefined) && (obj_data.extraParams.diameter_km !== null))
@@ -373,8 +411,8 @@ document.addEventListener('pointerup', (event) => {
             if (obj_data.orbitParams.epoch != undefined){
                 document.getElementById('info-epoch').textContent = `Epoch: ${obj_data.orbitParams.epoch} (MJD)`;
             }
-            // Update sprite texture
-            if (highlightedObj.userData.parent.name == 'rings'){
+            // if rings say saturn
+            if (highlightedObj.userData.parent.name === 'rings'){
                 updateSpriteTexture(sprite, 'Saturn');
             }
             else{
@@ -382,7 +420,14 @@ document.addEventListener('pointerup', (event) => {
             }
             // Make visible
             sprite.scale.set(LABEL_SIZE, LABEL_SIZE, LABEL_SIZE);  // Adjust the size of the label
-            sprite.position.set(X_OFFSET, Y_OFFSET, Z_OFFSET);  // Move it above the object
+            // if object is planet or dwarf planet, it will have renderparams
+            if ('renderParams' in obj_data){
+                sprite.position.set(X_OFFSET, Y_OFFSET + obj_data.renderParams.radius, Z_OFFSET);  // Move it above the object
+            }
+            // otherwise it's a NEO/stream parent body and should use neo_radius
+            else{
+                sprite.position.set(X_OFFSET, Y_OFFSET + NEO_RADIUS, Z_OFFSET);  // Move it above the object
+            }
             highlightedObj.userData.parent.bodyMesh.add(sprite); // add to object
         }
     }
@@ -466,14 +511,15 @@ function addSun() {
     const sunTextureLoader = new THREE.TextureLoader();
     const sunTexture = sunTextureLoader.load('assets/body_textures/8k_sun.jpg');
 
-    const geometry = new THREE.SphereGeometry(0.02, DEFAULT_MESH_N, DEFAULT_MESH_N);
+    const geometry = new THREE.SphereGeometry(SUN_RADIUS * BODY_RENDER_SF, DEFAULT_MESH_N, DEFAULT_MESH_N);
     const material = new THREE.MeshBasicMaterial({map: sunTexture});
     var sunMesh = new THREE.Mesh(geometry, material);
     scene.add(sunMesh);
     // Tilt the Sun based on obliquity
     const sunTiltAxis = new THREE.Vector3(0, 0, 1).normalize();// z axis is depth
     sunMesh.rotateOnAxis(sunTiltAxis, SUNOBLIQUITY * DEG_TO_RAD);  // rotate
-
+    // name mesh
+    sunMesh.name = "Sun";
     return sunMesh;
 }
 
@@ -493,7 +539,7 @@ async function initializePlanets() {
         // if so, make it a ring geometry with specified parameters -- otherwise, make it a sphere egeometry
         // console.log(planetName)
         if (planetName === 'rings'){
-            const geometry = new THREE.RingGeometry(planetData.renderParams.innerRadius, planetData.renderParams.outerRadius, 64);
+            const geometry = new THREE.RingGeometry(planetData.renderParams.innerRadius * BODY_RENDER_SF, planetData.renderParams.outerRadius * BODY_RENDER_SF, 64);
             const material = new THREE.MeshBasicMaterial({
                 map: planetTexture,
                 side: THREE.DoubleSide,
@@ -507,7 +553,7 @@ async function initializePlanets() {
         }
         // if not ring do sphere
         else {
-            const geometry = new THREE.SphereGeometry(planetData.renderParams.radius, DEFAULT_MESH_N, DEFAULT_MESH_N);
+            const geometry = new THREE.SphereGeometry(planetData.renderParams.radius * BODY_RENDER_SF, DEFAULT_MESH_N, DEFAULT_MESH_N);
             const material = new THREE.MeshBasicMaterial({map: planetTexture}); // add texture
             // console.log(planetName)
             // Create the mesh
@@ -547,7 +593,7 @@ async function initializeNeos() {
         orbitParams.peri *= DEG_TO_RAD;
         orbitParams.ma *= DEG_TO_RAD;
 
-        const geometry = new THREE.SphereGeometry(NEO_RADIUS, DEFAULT_MESH_N / 2, DEFAULT_MESH_N / 2);
+        const geometry = new THREE.SphereGeometry(NEO_RADIUS * BODY_RENDER_SF, DEFAULT_MESH_N / 2, DEFAULT_MESH_N / 2);
         const material = new THREE.MeshBasicMaterial({ color: NEO_COLOR });
         const neoMesh = new THREE.Mesh(geometry, material);
 
@@ -562,7 +608,7 @@ async function initializeNeos() {
         neos.push(body);
 
         i += 1;
-        if (i == MAX_VISIBLE_NEOS) { break };
+        if (i === MAX_VISIBLE_NEOS) { break };
     }
 }
 
@@ -729,8 +775,7 @@ function createBillboardPlane(size) {
 }
 
 // Example usage: Create a billboard plane that follows the camera
-const hazeSize = 2.0;  // Set the size of the haze plane
-const billboardPlane = createBillboardPlane(hazeSize);
+const billboardPlane = createBillboardPlane(HAZE_SIZE);
 scene.add(billboardPlane);
 
 // Function to update the plane to always face the camera (billboarding effect)
@@ -739,15 +784,13 @@ function updateBillboard(plane, camera) {
     plane.lookAt(camera.position);
 }
 
-
-const planeWidth = 5.204 * 2;
-const radialGradientPlane = createRadialGradientPlane(planeWidth, planeWidth);
+const radialGradientPlane = createRadialGradientPlane(PLANE_WIDTH, PLANE_WIDTH);
 
 
 // Data
 // let sunMesh;
 const planets = [];
-const stream = [];
+// const stream = [];
 const neos = [];
 const showers = [];
 
@@ -1044,10 +1087,10 @@ drawNestedEllipses(window.innerWidth / 2, window.innerHeight / 2, 150, 100, 10);
 function createTextTexture(message) {
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
-    const fontSize = 36;
+    const fontSize = 36 * TEXT_RENDER_SF;
 
-    canvas.width = 256;
-    canvas.height = 256;
+    canvas.width = 256 * TEXT_RENDER_SF;
+    canvas.height = 256 * TEXT_RENDER_SF;
 
     context.font = `${fontSize}px Verdana`;
     context.fillStyle = 'white';
@@ -1059,8 +1102,10 @@ function createTextTexture(message) {
 }
 
 
+// const relativePosition = null; // initialize relative position of the camera to the object as null, this is used for tracking
 
 // Animation loop with FPS control
+
 function animate(time) {
     requestAnimationFrame(animate);
 
@@ -1166,22 +1211,109 @@ function animate(time) {
 
     // Update the billboard plane to face the camera
     updateBillboard(billboardPlane, camera);
-
     // Update the current time and time speed displays
     document.getElementById("current-time").textContent = 'Date: ' + MJDToDatetime(MJD) + ' UTC';
-    if (timeSpeedIndex == 10)  // 1 day/second
-        {document.getElementById("timespeed").textContent = `Speed: 1 day/second`}
-    else if (timeSpeedIndex == 7){ // Real-time
+    if (timeSpeedIndex === 0){
+        {document.getElementById("timespeed").textContent = `Speed: -365 days/second`}
+    }
+    else if (timeSpeedIndex === 1){
+        {document.getElementById("timespeed").textContent = `Speed: -30 days/second`}
+    }
+    else if (timeSpeedIndex === 2){ 
+        {document.getElementById("timespeed").textContent = `Speed: -7 days/second`}
+    }
+    else if (timeSpeedIndex === 3){ 
+        {document.getElementById("timespeed").textContent = `Speed: -1 day/second`}
+    }
+    else if (timeSpeedIndex === 4){ 
+        {document.getElementById("timespeed").textContent = `Speed: -1 hour/second`}
+    }
+    else if (timeSpeedIndex === 5){
+        {document.getElementById("timespeed").textContent = `Speed: -1 minute/second`}
+    }
+    else if (timeSpeedIndex === 6){
+        {document.getElementById("timespeed").textContent = `Speed: -1 second/second`}
+    }
+    else if (timeSpeedIndex === 7){ // Real-time
         {document.getElementById("timespeed").textContent = `Speed: Real-time`}
     }
-    else{
-        document.getElementById("timespeed").textContent = `Speed: ${TIMESPEEDS[timeSpeedIndex].toPrecision(3)} days/second`;
+    else if (timeSpeedIndex === 8){
+        {document.getElementById("timespeed").textContent = `Speed: 1 minute/second`}
     }
-    
+    else if (timeSpeedIndex === 9){
+        {document.getElementById("timespeed").textContent = `Speed: 1 hour/second`}
+    }
+    else if (timeSpeedIndex === 10)  // 1 day/second
+        {document.getElementById("timespeed").textContent = `Speed: 1 day/second`}
+
+    else if (timeSpeedIndex === 11){
+        document.getElementById("timespeed").textContent = `Speed: 7 days/second`
+    }
+    else if (timeSpeedIndex === 12){
+        document.getElementById("timespeed").textContent = `Speed: 30 days/second`
+    }
+    else if (timeSpeedIndex === 13){
+        document.getElementById("timespeed").textContent = `Speed: 365 days/second`
+    }
+    // else if (timeSpeedIndex === 7){ // Real-time
+    //     document.getElementById("timespeed").textContent = `Speed: Real-time`
+    // }
+    // else if (timeSpeedIndex === 7){ // Real-time
+    //     document.getElementById("timespeed").textContent = `Speed: Real-time`
+    // }
+    // else{
+    //     document.getElementById("timespeed").textContent = `Speed: ${TIMESPEEDS[timeSpeedIndex].toPrecision(3)} days/second`;
+    // }
+    else{
+        console.warn('Invalid timeSpeedIndex value -- check why this is happening!')
+    }
+    // Make the camera look at object if object is selected and tracking is on
+    if ((highlightedObj !== null) && (isTracking === true)){
+        if (highlightedObj.name === 'Sun'){
+            controls.target = new THREE.Vector3(0, 0, 0);
+            isTracking = false; // set istracking to false
+        }
+        else{
+            controls.target = highlightedObj.userData.parent.bodyMesh.position;
+            // find distance from camera to object
+            const cameraDist = camera.position.distanceTo(highlightedObj.userData.parent.bodyMesh.position);
+            // console.log(cameraDist, MAXIMUM_CAMERA_DISTANCE);
+            // if distance is more than maximum distance set camera position to maximum distance
+            if (cameraDist > MAXIMUM_CAMERA_DISTANCE) {
+                const dir = camera.position.clone().sub(highlightedObj.userData.parent.bodyMesh.position).normalize();
+                camera.position.copy(highlightedObj.userData.parent.bodyMesh.position.clone().add(dir.multiplyScalar(MAXIMUM_CAMERA_DISTANCE)));
+            }
+        }
+
+        // // if no relative position, recompute it
+        //     if (relativePosition === null){
+        //     // console.log(relativePosition);
+        //     // Create vectors to store the world positions of the camera and object
+        //     const objectPosition = new THREE.Vector3();
+        //     const cameraPosition = new THREE.Vector3();
+
+        //     // Get the world position of the object and the camera
+        //     highlightedObj.userData.parent.bodyMesh.getWorldPosition(objectPosition);
+        //     camera.getWorldPosition(cameraPosition);
+
+        //     // Calculate the new relative position by subtracting the object's position from the camera's position
+        //     relativePosition = new THREE.Vector3();
+        //     relativePosition.subVectors(cameraPosition, objectPosition);
+        //     // console.log((relativePosition !== null) && (relativePosition !== undefined));
+        // }
+        // else{
+        //     // Keep the camera at a fixed distance from the object
+        //     camera.position.set(relativePosition.x, relativePosition.y, relativePosition.z);
+        //     // Keep the camera looking at the object
+        //     controls.target.copy(highlightedObj.userData.parent.bodyMesh.position);
+    }
+    // Update controls
     controls.update();
+    // Render
     renderer.render(scene, camera);
 }
 
 
 // Start animation loop
 requestAnimationFrame(animate);
+//animate();
