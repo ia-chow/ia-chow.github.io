@@ -27,7 +27,9 @@ const MOUSE_MIN_MOVE_CLICK = 0.005;
 const SUN_RADIUS = 0.030;
 const SUNOBLIQUITY = 7.25; // degrees
 const SUNROTPER = 25.05;  // days
-const MAXIMUM_CAMERA_DISTANCE = 0.5; // maximum distance the camera can be when focused on an object
+const CAMERA_DISTANCE_SF = 50.0; // scale factor for maximum distance the camera can be when focused on an object
+const MAX_CAMERA_DISTANCE = 1.30;
+const MIN_CAMERA_DISTANCE = 0.60;
 
 const BODY_RENDER_SF = 2.0; // size factor to scale all the bodies by
 const TEXT_RENDER_SF = 2.0; // size factor to scale the text by
@@ -275,9 +277,10 @@ document.addEventListener('pointerup', (event) => {
         const allselectedObjects = raycaster.intersectObjects(scene.children);
         //remove duplicate intersections of the same orbit
         const seen = new Set();
-        // select any orbits or the Sun
+        // select any orbits other than Saturn's rings, or select the Sun
         const selectedOrbits = allselectedObjects.filter(item => {
-            if ((!seen.has(item.object.uuid) && (item.object.type === 'Line'))||(item.object.name === 'Sun')){
+            if ((!seen.has(item.object.uuid) && (item.object.type === 'Line') 
+                && (item.object.userData.parent.name !== 'rings'))||(item.object.name === 'Sun')){
                 seen.add(item.object.uuid);
                 return true; // unique uuid
             }
@@ -407,10 +410,13 @@ document.addEventListener('pointerup', (event) => {
             document.getElementById('info-inc').textContent = `Inclination: ${(obj_data.orbitParams.inc / Math.PI * 180).toFixed(3)}\u00B0`;
             document.getElementById('info-node').textContent = `Longitude of ascending node: ${(obj_data.orbitParams.node / Math.PI * 180).toFixed(3)}\u00B0`;
             document.getElementById('info-peri').textContent = `Argument of perihelion: ${(obj_data.orbitParams.peri / Math.PI * 180).toFixed(3)}\u00B0`;
-            document.getElementById('info-ma').textContent = `Mean anomaly: ${(obj_data.orbitParams.ma / Math.PI * 180).toFixed(3)}\u00B0`;
-            if (obj_data.orbitParams.epoch != undefined){
-                document.getElementById('info-epoch').textContent = `Epoch: ${obj_data.orbitParams.epoch} (MJD)`;
-            }
+            
+            // COMMENT OUT MEAN ANOMALY AND EPOCH FOR NOW
+            // document.getElementById('info-ma').textContent = `Mean anomaly: ${(obj_data.orbitParams.ma / Math.PI * 180).toFixed(3)}\u00B0`;
+            // if (obj_data.orbitParams.epoch != undefined){
+            //     document.getElementById('info-epoch').textContent = `Epoch: ${obj_data.orbitParams.epoch} (MJD)`;
+            // }
+            
             // if rings say saturn
             if (highlightedObj.userData.parent.name === 'rings'){
                 updateSpriteTexture(sprite, 'Saturn');
@@ -1277,11 +1283,21 @@ function animate(time) {
             controls.target = highlightedObj.userData.parent.bodyMesh.position;
             // find distance from camera to object
             const cameraDist = camera.position.distanceTo(highlightedObj.userData.parent.bodyMesh.position);
-            // console.log(cameraDist, MAXIMUM_CAMERA_DISTANCE);
+
+             // if object is planet or dwarf planet, it will have renderparams
+             let maxDistance = null;
+             if ('renderParams' in highlightedObj.userData.parent.data){
+                maxDistance = Math.max(MIN_CAMERA_DISTANCE, Math.min(CAMERA_DISTANCE_SF * highlightedObj.userData.parent.data.renderParams.radius, MAX_CAMERA_DISTANCE));
+            }
+            // otherwise it's a NEO/stream parent body and should use neo_radius
+            else{
+                maxDistance = Math.max(MIN_CAMERA_DISTANCE, Math.min(CAMERA_DISTANCE_SF * NEO_RADIUS, MAX_CAMERA_DISTANCE));
+            }
+
             // if distance is more than maximum distance set camera position to maximum distance
-            if (cameraDist > MAXIMUM_CAMERA_DISTANCE) {
+            if (cameraDist > maxDistance) {
                 const dir = camera.position.clone().sub(highlightedObj.userData.parent.bodyMesh.position).normalize();
-                camera.position.copy(highlightedObj.userData.parent.bodyMesh.position.clone().add(dir.multiplyScalar(MAXIMUM_CAMERA_DISTANCE)));
+                camera.position.copy(highlightedObj.userData.parent.bodyMesh.position.clone().add(dir.multiplyScalar(maxDistance)));
             }
         }
 

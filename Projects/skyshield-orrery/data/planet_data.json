@@ -11,7 +11,7 @@
         },
         "renderParams": {
             "is_dwarf": false,
-            "radius": 0.005,
+            "radius": 0.006,
             "color": "#B7B8B9",
             "texture": "2k_mercury.jpg"
         },
@@ -37,7 +37,7 @@
         },
         "renderParams": {
             "is_dwarf": false,
-            "radius": 0.009,
+            "radius": 0.010,
             "color": "#c18f17",
             "texture": "4k_venus_atmosphere.jpg"
         },
@@ -115,7 +115,7 @@
         },
         "renderParams": {
             "is_dwarf": false,
-            "radius": 0.030,
+            "radius": 0.035,
             "color": "#ffcc00",
             "texture": "2k_jupiter.jpg"
         },
@@ -127,32 +127,6 @@
             "obliquity": 3.13,
             "rotation_period": 0.41354,
             "mass_earth": 317.8302750834259
-        }
-    },
-    "Saturn": {
-        "orbitParams": {
-            "epoch": 2451545,
-            "a": 9.53707032,
-            "e": 0.0541506,
-            "inc": 2.48446,
-            "node": 113.71504,
-            "peri": -21.2831,
-            "ma": -42.48762
-        },
-        "renderParams": {
-            "is_dwarf": false,
-            "radius": 0.024,
-            "color": "#ead6b8",
-            "texture": "2k_saturn.jpg"
-        },
-        "extraParams": {
-            "diameter_km": 116460,
-            "average_temperature_C": -178,
-            "surface_gravity_m_s2": 10.44,
-            "mass_kg": 5.6834e+26,
-            "obliquity": 26.73,
-            "rotation_period": 0.44002,
-            "mass_earth": 95.16155228159006
         }
     },
     "rings": {
@@ -167,11 +141,37 @@
         },
         "renderParams": {
             "is_dwarf": false,
-            "radius": 0.024,
+            "radius": 0.030,
             "innerRadius": 0.048,
-            "outerRadius": 0.068,
+            "outerRadius": 0.074,
             "color": "#ead6b8",
             "texture": "2k_saturn_rings.png"
+        },
+        "extraParams": {
+            "diameter_km": 116460,
+            "average_temperature_C": -178,
+            "surface_gravity_m_s2": 10.44,
+            "mass_kg": 5.6834e+26,
+            "obliquity": 26.73,
+            "rotation_period": 0.44002,
+            "mass_earth": 95.16155228159006
+        }
+    },
+    "Saturn": {
+        "orbitParams": {
+            "epoch": 2451545,
+            "a": 9.53707032,
+            "e": 0.0541506,
+            "inc": 2.48446,
+            "node": 113.71504,
+            "peri": -21.2831,
+            "ma": -42.48762
+        },
+        "renderParams": {
+            "is_dwarf": false,
+            "radius": 0.030,
+            "color": "#ead6b8",
+            "texture": "2k_saturn.jpg"
         },
         "extraParams": {
             "diameter_km": 116460,
@@ -195,7 +195,7 @@
         },
         "renderParams": {
             "is_dwarf": false,
-            "radius": 0.018,
+            "radius": 0.024,
             "color": "#d1e7e7",
             "texture": "2k_uranus.jpg"
         },
@@ -221,7 +221,7 @@
         },
         "renderParams": {
             "is_dwarf": false,
-            "radius": 0.018,
+            "radius": 0.024,
             "color": "#3f54ba",
             "texture": "2k_neptune.jpg"
         },
