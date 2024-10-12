@@ -64,7 +64,7 @@ class FilterConditions{
         this.aRange = [0, 100]
         this.eRange = [0, 1]
         //this.shownNEOClasses = []
-        this.shownTypes = {'Planet': true, 'Dwarf planet':true, 'NEO':false, 'Shower':false, 'Sporadic':false}
+        this.shownTypes = {'Planet': true, 'Dwarf planet': true, 'NEO': false, 'Shower': false, 'Sporadic': false}
     }
 
     checkPassesFilters(object) {
