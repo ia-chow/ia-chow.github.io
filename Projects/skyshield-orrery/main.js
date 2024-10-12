@@ -12,11 +12,15 @@ const DEG_TO_RAD = Math.PI / 180;
 const DEFAULT_MESH_N = 32;
 const ORBIT_MESH_POINTS = 256; // split the difference
 
-const SHOWER_ORBIT_COLOR = 0x5D5CD2; 
+// Colours
+const SHOWER_ORBIT_COLOR = 0xc3f6c3; // 0x5D5CD2; 
 const SHOWER_ORBIT_COLOR_NOTVIS = 0x4b0096; //0x0200b9 0x4b0096
-const PARENT_ORBIT_COLOR = 0x0200b9;
+const PARENT_ORBIT_COLOR = 0x558000; // 0x4ee44e; // 0x0200b9; brat green is 0x8ACE00
 const NEO_ORBIT_COLOR = 0xcd0000;//0x1e90FF;
 const NEO_COLOR = 0xFFFFFF;
+const SELECTED_OBJ_COLOR = 0xffff00; // 0xffff00; yellow  //0x00ff00;  // green
+
+const SUN_INTENSITY = 100;
 
 const NEO_RADIUS = 0.004;
 const MAX_VISIBLE_NEOS = 999;
@@ -60,7 +64,7 @@ class FilterConditions{
         this.aRange = [0, 100]
         this.eRange = [0, 1]
         //this.shownNEOClasses = []
-        this.shownTypes = {'Planet': true, 'Dwarf planet':true, 'NEO':true, 'Shower':true, 'Sporadic':false}
+        this.shownTypes = {'Planet': true, 'Dwarf planet':true, 'NEO':false, 'Shower':false, 'Sporadic':false}
     }
 
     checkPassesFilters(object) {
@@ -95,6 +99,10 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
 const renderer = new THREE.WebGLRenderer({antialias:true, canvas: document.getElementById("orreryCanvas")});
 renderer.setSize(window.innerWidth, window.innerHeight);
 
+// Enable shadows in the renderer
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;  // Use soft shadows (optional)
+
 // Load skybox texture
 scene.background = new THREE.CubeTextureLoader().load([
     'assets/px.png', // Right
@@ -106,8 +114,22 @@ scene.background = new THREE.CubeTextureLoader().load([
 ]);
 
 // Add lighting
-const light = new THREE.AmbientLight(0x404040, 0.5); // Soft white light
+const light = new THREE.AmbientLight(0x404040, 0.01); // Soft white light
 scene.add(light);
+
+// // Create a point light at the center that will cast shadows
+// const pointLight = new THREE.PointLight(0xffffff, SUN_INTENSITY, 0);  // Color, intensity, and distance // 0 is no limit
+// pointLight.position.set(0, 0, 0);  // Same position as the "Sun"
+// pointLight.castShadow = true;  // Enable shadow casting
+
+// // Configure shadow properties for better quality
+// pointLight.shadow.mapSize.width = 2048;  // Shadow resolution
+// pointLight.shadow.mapSize.height = 2048;
+// pointLight.shadow.camera.near = 0.1;  // Closer clipping plane
+// pointLight.shadow.camera.far = 10000000;   // Farther clipping plane
+
+// // Add the point light to the scene
+// scene.add(pointLight);
 
 // Setup Controls
 let controls = null;
@@ -318,14 +340,14 @@ document.addEventListener('pointerup', (event) => {
             if (!moved) { stackedObjIndex = (stackedObjIndex + 1) % selectedOrbits.length; }
             highlightedObj = selectedOrbits[stackedObjIndex].object; //save the highlighted object
             prevColor = highlightedObj.material.color.getHex(); //save the highlighted object's previous color
-            highlightedObj.material.color.set(0x00ff00); //highlight the select object if it is an orbit
+            highlightedObj.material.color.set(SELECTED_OBJ_COLOR); //highlight the select object if it is an orbit
             document.querySelector('.info-panel').style.display = "block";
             // Update info in the info panel
             const parentObj = highlightedObj.userData.parent;
             // if sun render Sun panel
             if (highlightedObj.name === 'Sun'){
                 document.getElementById('info-name').textContent = 'Sun';
-                document.getElementById('info-type').textContent = `Type: Star`;
+                document.getElementById('info-type').textContent = `Object type: Star`;
                 document.getElementById('info-class').textContent = `Object class: G2`;
                 document.getElementById('info-diameter').textContent = `Diameter: 1391000 km`;
                 document.getElementById('info-temp').textContent = `Surface temperature: 5499\u00B0C`;
@@ -356,17 +378,17 @@ document.addEventListener('pointerup', (event) => {
                 }
                 if (('type' in obj_data.extraParams) && (obj_data.extraParams.type !== undefined)){
                     if (obj_data.extraParams.type === 'NEA')
-                        document.getElementById('info-type').textContent = `Type: Asteroid`;
+                        document.getElementById('info-type').textContent = `Object type: Asteroid`;
                     else if (obj_data.extraParams.type === 'NEC')
-                        document.getElementById('info-type').textContent = `Type: Comet`;
+                        document.getElementById('info-type').textContent = `Object type: Comet`;
                     else
-                        document.getElementById('info-type').textContent = `Type: ${obj_data.extraParams.type}`;
+                        document.getElementById('info-type').textContent = `Object type: ${obj_data.extraParams.type}`;
                 }
                 if (('renderParams' in obj_data) && ('is_dwarf' in obj_data.renderParams) && (obj_data.renderParams.is_dwarf !== undefined)){
                     if (obj_data.renderParams.is_dwarf)
-                        document.getElementById('info-type').textContent = `Type: Dwarf planet`;
+                        document.getElementById('info-type').textContent = `Object type: Dwarf planet`;
                     else
-                        document.getElementById('info-type').textContent = `Type: Planet`;
+                        document.getElementById('info-type').textContent = `Object type: Planet`;
                 }
                 if (('class' in obj_data.extraParams) && (obj_data.extraParams.class !== undefined))
                     document.getElementById('info-class').textContent = `Object class: ${obj_data.extraParams.class}`;
@@ -579,6 +601,9 @@ async function initializePlanets() {
             const rotationAxis = new THREE.Vector3(0, 0, 1).normalize();// z axis is depth
             const planetObliquity = planetData.extraParams.obliquity * DEG_TO_RAD; // obliquity in radians
             mesh.rotateOnAxis(rotationAxis, planetObliquity);  // rotate
+            // enable only planets/dwarf planets to cast/receive shadows
+            mesh.castShadow = true;  // Enable shadow casting
+            mesh.receiveShadow = true;  // Enable shadow receiving (for self-shadowing)
         }
 
         const body = new Body(planetName, planetData, orbit, mesh);
@@ -749,7 +774,7 @@ function createSunGradientPlane(width, height) {
                 alpha = clamp(alpha, 0.0, 1.0);
 
                 // Discard very transparent fragments
-                if (alpha < 0.01) {
+                if (alpha < 0.001) {
                     discard;
                 }
 
