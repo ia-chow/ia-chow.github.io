@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HIS Odds Calculator</title>
+    <link rel="stylesheet" href="jekyll-theme-midnight.css">
+    <link rel="stylesheet" href="style.css">
+    <script language="javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script language="javascript" src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
+    <script language="javascript" src="dynhtml.js"></script>
+    <script language="javascript" src="HIS_Dice_Odds.js"></script>
+</head>
+
+<body onload="$(function() {dynamicDropdown('papal')});" > <!-- Maybe fix this jquery so most of it is in the js file! -->
+<h1>Here I Stand Odds Calculator</h1>
+
+    <p> This tool allows you to calculate probabilities for various actions (religious conversions, theological debates, battles, etc.) in the board game 
+        <a href="https://www.gmtgames.com/p-917-here-i-stand-500th-anniversary-reprint-edition-2nd-printing.aspx"> Here I Stand.</a></p>
+
+<h2 style="color:#2DBF3B;"> Reformation/Counter-Reformation Odds Calculator: </h2>
+
+<p>Find the odds of Reformation/Counter-Reformation attempts succeeding</p>
+
+    <label for="attacker_dice">Attacker Dice:</label>
+    <input id="attacker_dice" type="number" value="3" step="1" min="1" max="9999" name="atk_dice">
+    <br><br>
+    <label for="defender_dice">Defender Dice:</label>
+    <input id="defender_dice" type="number" value="3" step="1" min="1" max="9999" name="def_dice">
+    <br><br>
+    Ties won by:
+    <input id="atk_tie" class="radio" type="radio" name="tie_winner" value="atk" checked="checked" onclick="bibleVis()">
+    <label for="atk_tie">Attacker</label>
+    <input id="def_tie" class="radio" type="radio" name="tie_winner" value="def" onclick="bibleVis()">
+    <label for="def_tie">Defender</label>
+    <br><br>
+<div id="bible">
+    <label><input id="bible_trans" class="checkbox" type="checkbox" name="bible_trans" value="bible_trans"> Attacker gets +1 from bible translation/Calvin's Institutes? </label>
+</div>
+<div id="augsburg_reform">
+    <label><input id="augsburg_reform_check" class="checkbox" type="checkbox" name="augsburg_reform" value="augsburg_reform" onclick="augsburgVis()"> Augsburg Confession active? </label>
+</div>
+<div id="pap_augsburg" style="display:none">
+    <br>
+    Papacy is the:
+    <input id="pap_atk" class="radio" type="radio" name="pap_status" value="atk">
+    <label for="pap_atk"> Attacker </label>
+    <input id="pap_def" class="radio" type="radio" name="pap_status" value="def">
+    <label for="pap_def"> Defender </label>
+</div>
+<br>
+<div id="ref_calc">
+    <input id="ref_button" class="button" type="button" value="Calculate Reform Odds" onclick="getReformOdds()" onkeyup="enforceMinMax(this)">
+</div>
+    <br>
+    <div id="ref_results_atk"></div>
+    <div id="ref_results_def"></div>
+
+<h2 style="color:#2DBF3B;"> Theological Debate Odds Calculator: </h2>
+
+    Simulate the odds of the attacker/defender winning theological debates. Positive hit difference means the attacker wins. Negative hit difference means the defender wins.
+
+    <p>Attacking side:</p>
+    <input id="papal" class="radio" type="radio" name="deb_team" value="papal" checked="checked" onclick="dynamicDropdown('papal')">
+    <label for="papal">Papal</label>
+    <input id="protestant" class="radio" type="radio" name="deb_team" value="protestant" onclick="dynamicDropdown('protestant')">
+    <label for="protestant">Protestant</label>
+    <br><br>
+<p><label for="atk_dropdown" name="atk_dropdown">Attacking Debater: </label></p>
+    <select id="atk_dropdown" name="atk_dropdown">
+        <option value="placeholder">Choose sides:</option>
+    </select>
+<p><label for="def_dropdown" name="def_dropdown"> Defending Debater: </label></p>
+    <select id="def_dropdown" name="def_dropdown">
+        <option value="placeholder2">Choose sides:</option>
+    </select>
+<br>
+    <input id="unc" class="radio" type="radio" name="commit" value="unc" checked="checked">
+    <label for="unc">Uncommitted</label>
+    <input id="com" class="radio" type="radio" name="commit" value="com">
+    <label for="com">Committed</label>
+<br><br>
+    <input id="augsburg_debate" class="checkbox" type="checkbox" name="augsburg_debate" value="augsburg_debate">
+    <label for="augsburg_debate">Augsburg Confession active?</label><br>
+    <input id="tmore" class="checkbox" type="checkbox" name="tmore" value="tmore">
+
+    <label for="tmore">Thomas More active?</label><br>
+    <input id="inq" class="checkbox" type="checkbox" name="inq" value="inq">
+    <label for="inq">Papal Inquisition active?</label><br>
+<div id="mary"><label><input id="mary_box" class="checkbox" type="checkbox" name="mary" value="mary"> Mary I rules England?</label></div>
+<br>
+    <input id="debate_button" class="button" type="button" value="Simulate Debate Odds" onclick="getDebaterOdds()">
+<br>
+<div id="deb_summary"></div>
+<br>
+<div id="hit_difference_odds_atk">
+    <table id="deb_hit_difference_atk" style="display:none; width:50%">
+    </table>
+    <br>
+    <section id = "deb_results_atk"> </section>
+    <section id = "deb_results_def"> </section>
+    <section id = "deb_results_tie"> </section>
+</div>
+<br>
+<div id="elim_chance_atk"></div>
+<div id="elim_chance_def"></div>
+
+<h2 style="color:#2DBF3B;"> Battle/Assault Odds Calculator: </h2>
+<p><label for="atk_rms">Attacking Regulars/Mercenaries:</label>
+    <input id="atk_rms" class='number' type="number" value="5" step="1" min="0" max="9999" name="atk_rms">	&nbsp;
+    <label for="atk_cav">Attacking Cavalry:</label>
+    <input id="atk_cav" class="number" type="number" value="0" step="1" min="0" max="9999" name="atk_cav"> &nbsp;
+    <label for="atk_el_cav"> Cavalry to keep (for assaults only): </label>
+    <input id="atk_el_cav" class="number" type="number" value="0" step="1" min="0" max="9999" name="atk_cav_keep">
+    <br><br>
+    <label for="def_rms">Defending Regulars/Mercenaries:</label>
+    <input id="def_rms" class="number" type="number" value="2" step="1" min="0" max="9999" name="def_rms">	&nbsp;
+    <label for="def_cav">Defending Cavalry:</label>
+    <input id="def_cav" class="number" type="number" value="0" step="1" min="0" max="9999" name="def_cav"> &nbsp;
+    <label for="def_el_cav">Cavalry to keep (for assaults only):</label>
+    <input id="def_el_cav" class="number" type="number" value="0" step="1" min="0" max="9999" name="def_cav_keep">
+    <br><br>
+    <label for="atk_br">Battle Rating of best attacking leader: </label>
+    <select id="atk_br" name="atk_br">
+        <option value="0" selected="selected"> 0 </option>
+        <option value="1"> 1 </option>
+        <option value="2"> 2 </option>
+    </select>
+    <br><br>
+    <label for="def_br">Battle Rating of best defending leader: </label>
+    <select id="def_br" name="def_br">
+        <option value="0" selected="selected"> 0 </option>
+        <option value="1"> 1 </option>
+        <option value="2"> 2 </option>
+    </select>
+<br>
+<h3> Field Battles:</h3>
+<p> Simulate the chances of the attacker/defender winning a field battle. Positive hit difference means the attacker wins. Negative or zero hit difference means the defender wins.
+</p>
+<div>
+    <input id="fb_sim" name="fb_sim" class="button" type="button" value="Simulate Field Battle" onclick="simulateBattle('fb')">
+</div>
+<div id="fb_atk">
+    <table id="atk_fb_hit_dif" style="width: 25%;">
+    </table>
+    <br>
+    <section id="atk_fb_odds"></section>
+    <section id="def_fb_odds"></section>
+</div>
+<br>
+
+<h3> Assault: </h3>
+<p> Simulate the chances of capturing a fortified space in a certain number of impulses (assuming no reinforcement by either side):
+</p>
+<div>
+    <input id="assault_sim" name="assault_sim" class="button" type="button" value="Simulate Assault" onclick="simulateBattle('assault')">
+</div>
+<div class='parent' style="display: flex; gap: 4rem; ">
+    <div id="assault_atk">
+        <table id="atk_assault_impulses" style="display:inline-block; width: max-content;">
+        </table>
+        <section id="atk_assault_odds"></section>
+    </div>
+    <div id='assault_def'>
+        <table id="def_assault_impulses" style="display:inline-block; width: max-content;"> <!-- add some css to replace this at some point -->
+        </table>
+        <section id="def_assault_odds"></section>
+    </div>
+</div>
+</body>
+</html>
