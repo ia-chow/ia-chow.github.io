@@ -219,16 +219,19 @@ canvas {
     display: none;         /* Initially hidden */
     justify-content: center;
     align-items: center;
+    text-align: center;
     z-index: 1000;         /* Ensure it's on top of everything */
 }
 
 /* Content inside the overlay */
 .overlay-content {
+    display: flexbox;
     background-color: #333;
     padding: 20px;
     border-radius: 10px;
     width: 400px;
-    text-align: center;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Title styling */
@@ -241,6 +244,7 @@ canvas {
 .keyboard-controls {
     list-style-type: none; /* Remove bullets */
     padding: 0;
+    text-align: left;
 }
 
 .keyboard-controls li {
@@ -252,10 +256,11 @@ canvas {
     background-color: darkred;
     color: #e8e8e8;
     border: none;
-    padding: 5px 10px;
+    padding: 8px 12px;
     cursor: pointer;
     border-radius: 5px;
-    margin-top: 5px;
+    margin-top: 10px;
+    margin-left: 5px;
     pointer-events: auto;
     transition: background-color 0.5s ease, color 0.5s ease;
 }

@@ -117,19 +117,19 @@ scene.background = new THREE.CubeTextureLoader().load([
 const light = new THREE.AmbientLight(0x404040, 0.01); // Soft white light
 scene.add(light);
 
-// // Create a point light at the center that will cast shadows
-// const pointLight = new THREE.PointLight(0xffffff, SUN_INTENSITY, 0);  // Color, intensity, and distance // 0 is no limit
-// pointLight.position.set(0, 0, 0);  // Same position as the "Sun"
-// pointLight.castShadow = true;  // Enable shadow casting
+// Create a point light at the center that will cast shadows
+const pointLight = new THREE.PointLight(0xffffff, SUN_INTENSITY, 0);  // Color, intensity, and distance // 0 is no limit
+pointLight.position.set(0, 0, 0);  // Same position as the "Sun"
+pointLight.castShadow = true;  // Enable shadow casting
 
-// // Configure shadow properties for better quality
-// pointLight.shadow.mapSize.width = 2048;  // Shadow resolution
-// pointLight.shadow.mapSize.height = 2048;
-// pointLight.shadow.camera.near = 0.1;  // Closer clipping plane
-// pointLight.shadow.camera.far = 10000000;   // Farther clipping plane
+// Configure shadow properties for better quality
+pointLight.shadow.mapSize.width = 2048;  // Shadow resolution
+pointLight.shadow.mapSize.height = 2048;
+pointLight.shadow.camera.near = 0.1;  // Closer clipping plane
+pointLight.shadow.camera.far = 10000000;   // Farther clipping plane
 
-// // Add the point light to the scene
-// scene.add(pointLight);
+// Add the point light to the scene
+scene.add(pointLight);
 
 // Setup Controls
 let controls = null;
@@ -244,8 +244,8 @@ const raycaster = new THREE.Raycaster(); //ray through the screen at the locatio
 raycaster.params.Line = {threshold: 0.05}; //this will just be a user interactive slider
 let isTracking = false;  // flag for whether the camera is tracking the selected object
 let highlightedObj = null;
-let relativePosition = null;
-let previousRelativePosition = null;
+// let relativePosition = null;
+// let previousRelativePosition = null;
 let prevColor = 0;
 let moved = false;
 let stackedObjIndex = 0; //the index of the array of all the uniquely selected objects that the casted ray intersected
@@ -459,13 +459,15 @@ document.addEventListener('pointerup', (event) => {
             highlightedObj.userData.parent.bodyMesh.add(sprite); // add to object
         }
     }
-    else { //moved mouse
-        moved = true;
-        stackedObjIndex = 0;
-        // make invisible
-        sprite.scale.set(0, 0, 0);
+        else { //moved mouse
+            moved = true;
+            stackedObjIndex = 0;
+            // make invisible
+            sprite.scale.set(0, 0, 0);
+            // set tracking to false
+            isTracking = false;
+            }
         }
-    }
     }
 );
 

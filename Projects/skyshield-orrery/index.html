@@ -6,6 +6,13 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.js"></script>
+
+    <!-- Icons for the controls
+    <link rel="fastbackward" type="image/png" href="assets/icon-time-fastbackward.png">
+    <link rel="backward" type="image/png" href="assets/icon-time-backward.png">
+    <link rel="current-time" type="image/png" href="assets/icon-time-now.png">
+    <link rel="forward" type="image/png" href="assets/icon-time-forward.png">
+    <link rel="fastforward" type="image/png" href="assets/icon-time-fastforward.png"> -->
 </head>
 <body>
     <canvas id="orreryCanvas"></canvas>
@@ -42,7 +49,7 @@
     <!-- Overlay structure -->
     <div class="overlay" id="keyboardOverlay">
         <div class="overlay-content">
-            <h2 class="overlay-title">Controls</h2>
+            <h2 class="overlay-title" style="text-align: center;">Controls</h2>
             <ul class="keyboard-controls">
                 <li><strong>Scroll:</strong> Zoom </li>
                 <li><strong>Left click drag:</strong> Rotate </li>
@@ -53,6 +60,11 @@
                 <li><strong>U:</strong> (U)nlock camera</li>
                 <li><strong>Q:</strong> Decrease precision for selecting orbits</li>
                 <li><strong>E:</strong> Increase precision for selecting orbits</li>
+                <li><img src="assets/icon-time-fastbackward.png" style="height: 20px;"></img>/
+                    <img src="assets/icon-time-fastforward.png" style="height: 20px;"></img>: Change simulation speed</li>
+                <li><img src="assets/icon-time-backward.png" style="height: 20px;"></img>/
+                    <img src="assets/icon-time-forward.png" style="height: 20px;"></img>: Set speed to real-time backward/forward </li>
+                <li><img src="assets/icon-time-now.png" style="height: 20px;"></img>: Reset to current time </li>
             </ul>
             <button class="close-btn" id="close-overlay" style="font-family: Verdana; font-size: large;">Close</button>
         </div>
