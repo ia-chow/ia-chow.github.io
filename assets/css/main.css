@@ -53,6 +53,18 @@ svg,img { max-width: 100%; height: auto; }
 @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
 @keyframes animatetop{from{margin-top:300%;opacity:0} to{margin-top:0%;opacity:1}}
 
+/* Custom UW icon */
+.uwlogo {
+  display: inline-block;
+  width: 1em;               /* scale with font size */
+  height: 1em;
+  background-color: currentColor; /* use text color */
+  -webkit-mask: url("../images/W-Logo_Purple_vector.svg") no-repeat center;
+  -webkit-mask-size: contain;
+  mask: url("../images/W-Logo_Purple_vector.svg") no-repeat center;
+  mask-size: contain;
+}
+
 /*-----------------------------------------------------------------
   1. >>> Headr Style
 ----------------------------------------------------------------*/
@@ -152,9 +164,14 @@ svg,img { max-width: 100%; height: auto; }
 ----------------------------------------------------------------*/
 .ds-footer{background-color: #1A1A1A; padding: 1.5rem 0; text-align: center; color: #CECECE; font-family: 'DM Serif'; 
 	font-size: 1.25rem; box-shadow: 0 50vh 0 50vh #000}
-.ds-footer a{color: #7DEAFB }
 .ds-footer a::selection{color: #7DEAFB; background-color: #0074ffcc}
-.ds-footer a:hover{color: #7DEAFB; text-decoration: underline; text-decoration-thickness: auto;}
+/* .ds-footer a:hover{color: #7DEAFB; text-decoration: underline; text-decoration-thickness: auto;} */
+.ds-footer a{color:#7DEAFB; -o-transition: .25s; -ms-transition: .25s; -moz-transition: .25s; -webkit-transition: .25s; transition: .25s;}
+.ds-footer a:hover{color: #48a0f7}
+
+/* .ds-link-button a{color:dodgerblue}
+/* old colour 8F55E0 */
+.ds-link-button li:hover a{background-color: #136ABE; color: #FFFFFF; font-size: 1.75rem;} */
 .ds-footer span::selection{color: white; background-color: #0074ffcc}
 
 /* Copied from the header section but changed for footer */
